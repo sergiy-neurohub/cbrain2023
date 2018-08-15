@@ -49,7 +49,6 @@ module LicenseAgreements
   # Can be provided with an array of license names, or a single string with
   # a space-or-comma-separated list of license names.
   def license_agreements=(agreements)
-    raise "Cannot set license agreements to a #{self.class} which hasn't been saved yet." if self.new_record?
     license_agreements # loads them if not already loaded
     agrs = agreements
     unless agrs.is_a? Array
