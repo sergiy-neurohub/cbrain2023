@@ -38,36 +38,53 @@ module ExceptionHelpers
 
   # Record not accessible.
   def record_not_found(exception)
-    raise unless Rails.env == 'production' #Want to see stack trace in dev.
-    flash[:error] = "The object you requested does not exist or is not accessible to you."
+    raise if Rails.env == 'development' #Want to see stack trace in dev.
+    message = "The object you requested does not exist or is not accessible to you."
+    flash[:error] = message
     respond_to do |format|
       format.html { redirect_to default_redirect }
       format.js   { render :partial  => "shared/flash_update",     :status => 404 }
       format.xml  { render :xml =>  {:error => exception.message}, :status => 404 }
-      format.json { render :json => {:error => exception.message}, :status => 404 }
+      format.json { render :json => {:error => "The #{exception.model} with id = #{exception.id} doesn't exist",
+                                     :message => message,
+                                     :type => "object not found",
+                                     :model => exception.model,
+                                     :id => exception.id
+                                     },
+                           :status => 404 }
     end
   end
 
   def record_not_deleted(exception)
-    raise unless Rails.env == 'production' #Want to see stack trace in dev.
-    flash[:error] = "The requested object could not be deleted"
+    raise if Rails.env == 'development' #Want to see stack trace in dev.
+    message = "The requested object could not be deleted"
+    flash[:error] = message
     respond_to do |format|
       format.html { redirect_to default_redirect }
       format.js   { render :partial  => "shared/flash_update",     :status => 403 }
       format.xml  { render :xml =>  {:error => exception.message}, :status => 403 }
-      format.json { render :json => {:error => exception.message}, :status => 403 }
+      format.json { render :json => {:error => "The #{exception.model} with id = #{exception.id}} fails to delete",
+                                     :message => message,
+                                     :type => "delete failed",
+                                     :model => exception.model,
+                                     :id => expectation.id
+                                     },
+                           :status => 403 }
     end
   end
 
   # Action not accessible.
   def unknown_action(exception)
-    raise unless Rails.env == 'production' #Want to see stack trace in dev.
+    raise if Rails.env == 'development' #Want to see stack trace in dev.
     flash[:error] = "The page you requested does not exist."
     respond_to do |format|
       format.html { redirect_to default_redirect }
       format.js   { render :partial  => "shared/flash_update",     :status => 400 }
       format.xml  { render :xml =>  {:error => exception.message}, :status => 400 }
-      format.json { render :json => {:error => exception.message}, :status => 400 }
+      format.json { render :json => {:error => exception.message,
+                                     :message => flash[:error]
+                                     },
+                           :status => 400 }
     end
   end
 
