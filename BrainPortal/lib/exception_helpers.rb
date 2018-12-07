@@ -36,17 +36,24 @@ module ExceptionHelpers
 
   protected
 
+  def ExceptionHelpers.NOT_FOUND_MSG
+    "The object you requested does not exist or is not accessible to you."
+  end
+
+  def ExceptionHelpers.CANNOT_DELETE_MSG
+    "The requested object could not be deleted."
+  end
   # Record not accessible.
   def record_not_found(exception)
     raise if Rails.env == 'development' #Want to see stack trace in dev.
-    message = "The object you requested does not exist or is not accessible to you."
-    flash[:error] = message
+
+    flash[:error] = NOT_FOUND_MSG
     respond_to do |format|
       format.html { redirect_to default_redirect }
       format.js   { render :partial  => "shared/flash_update",     :status => 404 }
       format.xml  { render :xml =>  {:error => exception.message}, :status => 404 }
       format.json { render :json => {:error => "The #{exception.model} with id = #{exception.id} doesn't exist",
-                                     :message => message,
+                                     :message => ExceptionHelpers.NOT_FOUND_MSG,
                                      :type => "object not found",
                                      :model => exception.model,
                                      :id => exception.id
@@ -57,14 +64,13 @@ module ExceptionHelpers
 
   def record_not_deleted(exception)
     raise if Rails.env == 'development' #Want to see stack trace in dev.
-    message = "The requested object could not be deleted"
-    flash[:error] = message
+    flash[:error] = CANNOT_DELETE_MSG
     respond_to do |format|
       format.html { redirect_to default_redirect }
       format.js   { render :partial  => "shared/flash_update",     :status => 403 }
       format.xml  { render :xml =>  {:error => exception.message}, :status => 403 }
       format.json { render :json => {:error => "The #{exception.model} with id = #{exception.id}} fails to delete",
-                                     :message => message,
+                                     :message => CANNOT_DELETE_MSG,
                                      :type => "delete failed",
                                      :model => exception.model,
                                      :id => expectation.id
