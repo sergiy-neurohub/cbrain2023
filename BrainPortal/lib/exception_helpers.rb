@@ -20,6 +20,8 @@
 #
 
 # Controller helpers to elegantly handle and log runtime exceptions.
+#
+X = 1
 module ExceptionHelpers
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
@@ -34,15 +36,19 @@ module ExceptionHelpers
     end
   end
 
+  NOT_FOUND_MSG = "The object you requested does not exist or is not accessible to you."
+  CANNOT_DELETE_MSG = "The requested object could not be deleted."
+
+
   protected
-
-  def ExceptionHelpers.NOT_FOUND_MSG
-    "The object you requested does not exist or is not accessible to you."
-  end
-
-  def ExceptionHelpers.CANNOT_DELETE_MSG
-    "The requested object could not be deleted."
-  end
+  #
+  # def ExceptionHelpers.NOT_FOUND_MSG
+  #   "The object you requested does not exist or is not accessible to you."
+  # end
+  #
+  # def ExceptionHelpers.CANNOT_DELETE_MSG
+  #   "The requested object could not be deleted."
+  # end
   # Record not accessible.
   def record_not_found(exception)
     raise if Rails.env == 'development' #Want to see stack trace in dev.
@@ -53,7 +59,7 @@ module ExceptionHelpers
       format.js   { render :partial  => "shared/flash_update",     :status => 404 }
       format.xml  { render :xml =>  {:error => exception.message}, :status => 404 }
       format.json { render :json => {:error => "The #{exception.model} with id = #{exception.id} doesn't exist",
-                                     :message => ExceptionHelpers.NOT_FOUND_MSG,
+                                     :message => NOT_FOUND_MSG,
                                      :type => "object not found",
                                      :model => exception.model,
                                      :id => exception.id

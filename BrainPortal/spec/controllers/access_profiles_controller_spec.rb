@@ -21,7 +21,6 @@
 #
 
 require 'rails_helper'
-require_relative '../../lib/exception_helpers'
 
 RSpec.describe AccessProfilesController, :type => :controller do
 
@@ -88,7 +87,7 @@ RSpec.describe AccessProfilesController, :type => :controller do
       end
       it "should fail on a unknown profile ID" do
         get :show, params: {:id => -987}
-        expect(flash[:error]).to eq(NOT_FOUND_MSG)
+        expect(flash[:error]).to eq(ExceptionHelpers::NOT_FOUND_MSG)
       end
     end
 
@@ -129,7 +128,7 @@ RSpec.describe AccessProfilesController, :type => :controller do
       end
       it "should fail on a unknown profile ID" do
         post :update, params: {:id => -987}
-        expect(flash[:error]).to eq(NOT_FOUND_MSG)
+        expect(flash[:error]).to eq(ExceptionHelpers::NOT_FOUND_MSG)
       end
       it "should change standard attributes" do
         new_att = { :name => 'new_name', :description => 'new_desc', :color => '#cababe' }
