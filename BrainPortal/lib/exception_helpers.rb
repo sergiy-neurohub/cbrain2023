@@ -21,7 +21,7 @@
 
 # Controller helpers to elegantly handle and log runtime exceptions.
 #
-X = 1
+
 module ExceptionHelpers
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
@@ -41,15 +41,7 @@ module ExceptionHelpers
 
 
   protected
-  #
-  # def ExceptionHelpers.NOT_FOUND_MSG
-  #   "The object you requested does not exist or is not accessible to you."
-  # end
-  #
-  # def ExceptionHelpers.CANNOT_DELETE_MSG
-  #   "The requested object could not be deleted."
-  # end
-  # Record not accessible.
+
   def record_not_found(exception)
     raise if Rails.env == 'development' #Want to see stack trace in dev.
 
