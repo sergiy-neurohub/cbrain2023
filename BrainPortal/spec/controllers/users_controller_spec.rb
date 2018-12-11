@@ -22,8 +22,6 @@
 
 require 'rails_helper'
 
-
-
 RSpec.describe UsersController, :type => :controller do
   let(:admin)        { create(:admin_user) }
   let(:site_manager) { create(:site_manager) }
@@ -588,7 +586,8 @@ RSpec.describe UsersController, :type => :controller do
         end
 
         it "should not allow site manager to destroy a user not from the site" do
-          expect { delete :destroy, params: {:id => user.id }}
+          delete :destroy, params: {:id => user.id }
+          expect(flash['error']).to eq(ExceptionHelpers::NOT_FOUND_MSG)
         end
 
       end
