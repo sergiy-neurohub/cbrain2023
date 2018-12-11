@@ -26,10 +26,8 @@ module ExceptionHelpers
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
-
-  NOT_FOUND_MSG = "The object you requested does not exist or is not accessible to you."
-  CANNOT_DELETE_MSG = "The requested object could not be deleted." #  An UI message indicating that object cannot be deleted
-
+  NOT_FOUND_MSG = "The object you requested does not exist or is not accessible to you." #:nodoc:
+  CANNOT_DELETE_MSG = "The requested object could not be deleted." #  An UI message indicating that object cannot be deleted #:nodoc:
 
   def self.included(includer) #:nodoc:
     includer.class_eval do
