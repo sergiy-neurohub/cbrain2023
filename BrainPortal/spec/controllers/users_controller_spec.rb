@@ -648,7 +648,6 @@ RSpec.describe UsersController, :type => :controller do
         it "should not allow switching to a user not from the site" do
           post :switch, params: {:id => user.id }
           expect(flash[:error]).to eq(ExceptionHelpers::NOT_FOUND_MSG)
-
           expect(cbrain_session[:user_id]).not_to eq(user.id)
         end
       end

@@ -20,8 +20,6 @@
 #
 
 # Controller helpers to elegantly handle and log runtime exceptions.
-#
-
 module ExceptionHelpers
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
@@ -44,7 +42,6 @@ module ExceptionHelpers
   # Record not accessible.
   def record_not_found(exception)
     raise if Rails.env == 'development' #Want to see stack trace in dev.
-
     flash[:error] = NOT_FOUND_MSG
     respond_to do |format|
       format.html { redirect_to default_redirect }
