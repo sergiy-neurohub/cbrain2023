@@ -1,0 +1,127 @@
+{
+    "command-line": "/bin/bash /DrawEM/pipelines/neonatal-pipeline-v1.1.sh [INPUT_FILE] [AGE] [T] > [OUTPUT1]",
+    "container-image": {
+        "entrypoint": false,
+        "image": "cnbp/mirtk:v1.1.1",
+        "type": "docker",
+        "working-directory": "/data"
+    },
+    "description": "Executes the Draw-EM pipeline script neonatal-pipeline-v1.1.sh. The pipeline performs all the steps for the automatic segmentation of neonatal brain MR images into the major tissue classes and a detailed structural segmentation.",
+    "error-codes": [
+        {
+            "code": 1,
+            "description": "Crashed"
+        }
+    ],
+    "groups": [
+        {
+            "all-or-none": false,
+            "id": "group1",
+            "members": [
+                "input_file"
+            ],
+            "mutually-exclusive": false,
+            "name": "the param group",
+            "one-is-required": false
+        }
+    ],
+    "inputs": [
+        {
+            "id": "input_file",
+            "name": "Input image or transformation or point set file.",
+            "optional": false,
+            "type": "File",
+            "value-key": "[INPUT_FILE]"
+        },
+        {
+            "id": "age",
+            "name": "Age, the age of the subject in weeks",
+            "optional": false,
+            "type": "Number",
+            "integer": true,
+            "value-key": "[AGE]"
+        },
+        {
+            "id": "t",
+            "name": "Number of threads",
+            "optional": true,
+            "type": "Number",
+            "value-key": "[T]"
+        }
+   
+    ],
+    "name": "mirtk_draw-em-pipeline-v1_1_0912_9am",
+    "output-files": [
+        {
+            "id": "output1",
+            "name": "STDOUT written to a file",
+            "optional": true,
+            "path-template": "[INPUT_FILE]_draw-em_pipeline.txt",
+            "path-template-stripped-extensions": [
+                ".log",".nii.gz"
+            ],
+            "value-key": "[OUTPUT1]"
+        },
+        {
+            "id": "bias_files",
+            "name": "The bias files and folders",
+            "optional": true,
+            "path-template": "bias"
+        },
+        {
+            "id": "dofs_files",
+            "name": "The dofs files and folders",
+            "optional": true,
+            "path-template": "dofs"
+        },
+        {
+            "id": "n4_files",
+            "name": "The N4 files and folders",
+            "optional": true,
+            "path-template": "N4"
+        },
+        {
+            "id": "segmentations_files",
+            "name": "The segmentations files and folders",
+            "optional": true,
+            "path-template": "segmentations"
+        },
+        {
+            "id": "segmentations_data_files",
+            "name": "The dofs files and folders",
+            "optional": true,
+            "path-template": "segmentations-data"
+        },
+        {
+            "id": "t2_files",
+            "name": "The T2 files and folders",
+            "optional": true,
+            "path-template": "T2"
+        }
+    ],
+    "schema-version": "0.5",
+    "suggested-resources": {
+        "cpu-cores": 4,
+        "ram": 32,
+        "walltime-estimate": 720
+    },
+    "tags": {
+        "mirtk": "draw-em-pipeline",
+        "purpose": "testing",
+        "status": "example"
+    },
+    "tool-version": "v1.1.1",
+    "tests": [
+        {
+	     "name": "test1",
+	     "invocation": {
+                "input_file":"/test-data/20180815125814_Sag_CUBE_T2_7.nii.gz",
+                "age":4,
+                "t": 4
+                },
+            "assertions": {
+                "exit-code": 0
+                }
+    }
+   ]
+}

@@ -1,0 +1,1449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3aa136ed-da4d-42fc-9de6-ba9b124766e5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/BrainPortal/public/swagger/cbrain-5.1.0-swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/BrainPortal/public/swagger/cbrain-5.1.0-swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/02-patch.in.json" beforeDir="false" afterPath="$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/02-patch.in.json" afterDir="false" />
+    </list>
+    <list id="0b0d4c9b-a0e6-4410-b043-6e17c266663a" name="Revert &quot;controller change&quot;" comment="Revert &quot;controller change&quot;&#10;&#10;This reverts commit 54f4132" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/cbrain@application_controller.rcov" NAME="application_controller Coverage Results" MODIFIED="1531949195224" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Bourreau/app/controllers" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_be_able_able_remove_license_from_a_tool__cbrain.rcov" NAME="Tool should be able able remove license from a tool: cbrain Coverage Results" MODIFIED="1534785076232" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_change_license__cbrain.rcov" NAME="Tool should change license: cbrain Coverage Results" MODIFIED="1538073978814" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_let_change_saved_license_after_save__cbrain.rcov" NAME="Tool should let change saved license after save: cbrain Coverage Results" MODIFIED="1534788997844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_invalidate_incorrect_license_after_save__cbrain.rcov" NAME="Tool should invalidate incorrect license after save: cbrain Coverage Results" MODIFIED="1538154925341" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_keep_license_if_present__cbrain.rcov" NAME="Tool should keep license if present: cbrain Coverage Results" MODIFIED="1538157782077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool__cbrain.rcov" NAME="Tool: cbrain Coverage Results" MODIFIED="1538159224923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_validate_license___cbrain.rcov" NAME="Tool should validate license : cbrain Coverage Results" MODIFIED="1538156751754" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@.rcov" NAME=" Coverage Results" MODIFIED="1532019601182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_invalidated_incorrect_license__cbrain.rcov" NAME="Tool should invalidated incorrect license: cbrain Coverage Results" MODIFIED="1538155731832" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@All_tests_in_controllers__cbrain.rcov" NAME="All tests in controllers: cbrain Coverage Results" MODIFIED="1534454814460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_be_able_able_remove_license_from_a_new_tool__cbrain.rcov" NAME="Tool should be able able remove license from a new tool: cbrain Coverage Results" MODIFIED="1534782805156" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_invalidate_incorrect_license__cbrain.rcov" NAME="Tool should invalidate incorrect license: cbrain Coverage Results" MODIFIED="1538154208616" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@license_agreements.rcov" NAME="license_agreements Coverage Results" MODIFIED="1538068935184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal/lib" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@seeds_test_api.rcov" NAME="seeds_test_api Coverage Results" MODIFIED="1544133503846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal/db" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@All_tests_in_test__cbrain.rcov" NAME="All tests in test: cbrain Coverage Results" MODIFIED="1534454759817" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@UsersController_member_action_destroy_with_site_manager__cbrain.rcov" NAME="UsersController member action destroy with site manager: cbrain Coverage Results" MODIFIED="1545066436305" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Tool_should_be_able_assign_multiple_license_to_a_tool__cbrain.rcov" NAME="Tool should be able assign multiple license to a tool: cbrain Coverage Results" MODIFIED="1534799226661" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Run_spec__tool_spec___cbrain.rcov" NAME="Run spec 'tool_spec': cbrain Coverage Results" MODIFIED="1543444566261" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@All_tests_in_spec__cbrain.rcov" NAME="All tests in spec: cbrain Coverage Results" MODIFIED="1544198501109" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Run_spec__users_controller_spec___cbrain.rcov" NAME="Run spec 'users_controller_spec': cbrain Coverage Results" MODIFIED="1544456053059" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@Run_spec__access_profiles_controller_spec___cbrain.rcov" NAME="Run spec 'access_profiles_controller_spec': cbrain Coverage Results" MODIFIED="1544457212904" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@All_tests_in_boutiques__cbrain.rcov" NAME="All tests in boutiques: cbrain Coverage Results" MODIFIED="1544198508598" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" MODULE_NAME="cbrain" />
+    <SUITE FILE_PATH="coverage/cbrain@UsersController_member_action_switch_with_site_manager__cbrain.rcov" NAME="UsersController member action switch with site manager: cbrain Coverage Results" MODIFIED="1544458114058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="rcov" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/BrainPortal" MODULE_NAME="cbrain" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/app/views/tool_configs/show.html.erb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1330">
+              <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/app/controllers/tool_configs_controller.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4503">
+              <caret line="237" column="9" selection-start-line="237" selection-start-column="9" selection-end-line="237" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/app/views/access_profiles/show.html.erb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="779">
+              <caret line="41" selection-start-line="41" selection-end-line="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/app/helpers/show_table_helper.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="209">
+              <caret line="11" column="15" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/app/views/tool_configs/_env_key_value_pair.erb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/lib/cbrain_task_generators/schemas/boutiques.schema.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/app/controllers/users_controller.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="380">
+              <caret line="330" column="26" selection-start-line="330" selection-start-column="26" selection-end-line="330" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/BrainPortal/app/models/user.rb">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="258">
+              <caret line="190" column="25" lean-forward="true" selection-start-line="190" selection-start-column="25" selection-end-line="190" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>ApplicationController</find>
+      <find>../../lib/exception_helpers</find>
+      <find>ExceptionHelpers</find>
+      <find>ExceptionHelpers::NOT_FOUND_MSG</find>
+      <find>MSG</find>
+      <find>_MSG</find>
+      <find>FOUND</find>
+      <find>enum</find>
+      <find>NOT</find>
+      <find>enum:</find>
+      <find>require 'spe</find>
+      <find>expect { delete :destroy, params: {:id =&gt; user.id }}</find>
+      <find>expect { delete :destroy, params: {:id =&gt; user.id }}require 'rails_helper'</find>
+      <find>NOT_FOUND_MSG</find>
+      <find>CANNOT_DELETE_MSG</find>
+      <find>\[.*</find>
+      <find>Controller helpers to elegantly handle and log runtime exceptions.</find>
+      <find>NOT_FOUND</find>
+      <find>expect(cbrain_session</find>
+      <find>See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration</find>
+      <find>&quot;error&quot;:&quot;The Group with id = 103 doesn't exist&quot;</find>
+      <find># Controller helpers to elegantly handle and log runtime exceptions.</find>
+      <find>boolean</find>
+      <find>format: boolean</find>
+      <find>format</find>
+      <find>group_id</find>
+      <find>021-get</find>
+      <find>rails-api</find>
+      <find>archive</find>
+      <find>password</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>|f| f.text_field \:$2</replace>
+      <replace>do |f| \%\&gt;\n$1\&lt;\%\= f\.</replace>
+      <replace>|fff| fff.$1 \:$3</replace>
+      <replace>do \%\&gt;\n$1\&lt;\%\= \|f\| f\.</replace>
+      <replace>do \|fff\| \%\&gt;\n( +)\&lt;\%\=  f\.</replace>
+      <replace>do \|f\| \%\&gt;\n($1)\&lt;\%\= f\.</replace>
+      <replace>do \|f\| \%\&gt;\n$1\&lt;\%\= f\.</replace>
+      <replace>do \|f\|\n$1\%\&gt;\n$1\&lt;\%\= f\.select</replace>
+      <replace>do \|f\|\%\&gt;\n$1\&lt;\%\= f\.select</replace>
+      <replace>$1 \|f\| \%\&gt;\n$1\&lt;\%\= f\.select</replace>
+      <replace>$1 |f| $2 f.select</replace>
+      <replace>|f| f.$1 \:$3</replace>
+      <replace>|f| %&gt;</replace>
+      <replace>$1</replace>
+      <replace>@tool_config</replace>
+      <replace>tool_glob_config</replace>
+      <replace />
+      <replace>value</replace>
+      <replace>&lt;% end %&gt;</replace>
+      <replace>@tool_local_config</replace>
+      <replace>$1\n  &lt;% end %&gt;</replace>
+      <replace>&lt;% t.edit_cell</replace>
+      <replace>show_table(\1) do</replace>
+      <replace>show_table($1) do</replace>
+      <replace>show_table(@userfil, :form_helper =&gt; cf</replace>
+      <replace>&lt;%= show_table(@task, :form_helper =&gt; cf</replace>
+      <replace>puts &quot;</replace>
+      <replace>date-time</replace>
+      <replace>ExceptionHelpers.NOT_FOUND_MSG</replace>
+      <replace>&quot;enum&quot;: [&quot;true&quot;, &quot;false&quot;]</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/BrainPortal/app/controllers</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/users</dir>
+      <dir>$PROJECT_DIR$/Bourreau/cbrain_plugins</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/sites</dir>
+      <dir>$PROJECT_DIR$/Bourreau/cbrain_plugins/installed-plugins/cbrain_task/bash_scriptor/portal</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/portal</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/help_documents</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/signups</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/exception_logs</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views</dir>
+      <dir>$PROJECT_DIR$/BrainPortal</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/app/views/tool_configs</dir>
+      <dir>$PROJECT_DIR$/BrainPortal/spec</dir>
+      <dir>$PROJECT_DIR$</dir>
+    </dirStrings>
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="ONTO" value="refs/remotes/origin/dev" />
+  </component>
+  <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="MERGE" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="apierror" />
+      </map>
+    </option>
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/BrainPortal/public/licenses/cbrain_1.html" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/bourreaux/show.html.erb" />
+        <option value="$PROJECT_DIR$/Bourreau/lib/license_agreements.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tools/new.html.erb" />
+        <option value="$PROJECT_DIR$/Bourreau/cbrain_plugins/cbrain-plugins-bids_apps/cbrain-task_descriptor/ndmg_descriptior.json" />
+        <option value="$PROJECT_DIR$/Bourreau/cbrain_plugins/cbrain-plugins-bids_ndmg/cbrain_task_descriptors/bids_ndmg.json" />
+        <option value="$PROJECT_DIR$/Bourreau/cbrain_plugins/installed-plugins/cbrain_task_descriptors/bids_ndmg.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tasks/cbrain_plugins/cbrain-plugins-bids_apps/cbrain-task_descriptor/ndmg_descriptior.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tasks/cbrain_plugins/cbrain-plugins-bids_ndmg/cbrain_task_descriptors/bids_ndmg.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tasks/cbrain_plugins/installed-plugins/cbrain_task_descriptors/bids_ndmg.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/cbrain_plugins/cbrain-plugins-bids_apps/cbrain-task_descriptor/ndmg_descriptior.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/cbrain_plugins/cbrain-plugins-bids_ndmg/cbrain_task_descriptors/bids_ndmg.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/controllers/test.py" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tool_configs/_env_key_value_pair_2.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tool_configs/_field_explanation.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/cbrain_plugins/cbrain-plugins-cnbp/cbrain_task_descriptors/mirtk_draw-em-pipeline-v1_1sergefolderfix_nocontainer.json" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/BrainPortal/cbrain_plugins/cbrain-plugins-bids/cbrain_task_descriptors/ndmg_bids_cbrain2o.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tools/_form_fields.html.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tasks/show.html.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/userfiles/show.html.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tool_configs/_config_table.html.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/config/routes.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tool_configs/show.html.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/views/tool_configs/_form_fields.html.erb" />
+        <option value="$PROJECT_DIR$/BrainPortal/app/controllers/tool_configs_controller.rb" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+        <option value="$PROJECT_DIR$/Bourreau/Gemfile" />
+        <option value="$PROJECT_DIR$/BrainPortal/lib/license_agreements.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/spec/models/tool_spec.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/config/database.yml" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/bourreaux/badget_notok/req" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/bourreaux/badget_notok/out" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/bourreaux/badget_badtoken/out" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/bourreaux/badget_noresult/req" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/bourreaux/badget_noresult/out" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/groups/get/req" />
+        <option value="$PROJECT_DIR$/BrainPortal/public/swagger/cbrain-5.1.0.1-swagger.yaml" />
+        <option value="$PROJECT_DIR$/BrainPortal/db/seeds_test_api.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/public/swagger/cbrain-5.1.0-swagger.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/README.md" />
+        <option value="$PROJECT_DIR$/BrainPortal/spec/controllers/access_profiles_controller_spec.rb" />
+        <option value="$PROJECT_DIR$/Bourreau/spec/spec_helper.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/groups/badget/out" />
+        <option value="$PROJECT_DIR$/BrainPortal/spec/controllers/users_controller_spec.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/spec/spec_helper.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/lib/exception_helpers.rb" />
+        <option value="$PROJECT_DIR$/BrainPortal/public/swagger/cbrain-5.1.0-swagger.yaml" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/02-patch.in.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/02-patch.in.json" />
+        <option value="$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/03-patch.in.json" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="92" />
+    <option name="y" value="52" />
+    <option name="width" value="1800" />
+    <option name="height" value="930" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State />
+          <State>
+            <id>Gems</id>
+          </State>
+          <State>
+            <id>JavaScript</id>
+          </State>
+          <State>
+            <id>JavaScript function metricsJavaScript</id>
+          </State>
+          <State>
+            <id>Ruby</id>
+          </State>
+        </expanded-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <autoscrollToSource ProjectPane="true" />
+      <autoscrollFromSource ProjectPane="true" />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="cbrain_task_generators" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="cbrain_task_generators" type="462c0819:PsiDirectoryNode" />
+              <item name="schemas" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="log" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="seeds_dev_support_dir" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="spec" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="test_api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="cbrain" type="462c0819:PsiDirectoryNode" />
+              <item name="BrainPortal" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="cbrain" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python&#10;XML" />
+    <property name="full.screen.before.presentation.mode" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../boutiques" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="two.files.diff.last.used.file" value="$PROJECT_DIR$/BrainPortal/app/views/sites/show.html.erb" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/my_plugins" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str" />
+      <recent name="$PROJECT_DIR$/BrainPortal/test_api/req_files" />
+      <recent name="$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles" />
+      <recent name="$PROJECT_DIR$/BrainPortal/public/swagger" />
+      <recent name="$PROJECT_DIR$/BrainPortal/test_api/req_files/bourreaux" />
+    </key>
+  </component>
+  <component name="RubyModuleManagerSettings">
+    <option name="blackListedRootsPaths">
+      <list>
+        <option value="$PROJECT_DIR$/Bourreau" />
+        <option value="$PROJECT_DIR$/BrainPortal" />
+      </list>
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="RSpec.Tool should be able assign multiple license to a tool: cbrain">
+    <configuration name="Run spec 'tool_spec': cbrain" type="RSpecRunConfigurationType" factoryName="RSpec" temporary="true">
+      <module name="cbrain" />
+      <predefined_log_file enabled="true" id="RUBY_RSPEC" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$MODULE_DIR$/BrainPortal" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs>
+        <env name="JRUBY_OPTS" value="-X+O" />
+      </envs>
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="$MODULE_DIR$/BrainPortal/spec/models/tool_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_RUNNER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_EXAMPLE_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_SPEC_RUNNER" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Tool should be able assign multiple license to a tool: cbrain" type="RSpecRunConfigurationType" factoryName="RSpec" temporary="true">
+      <module name="cbrain" />
+      <predefined_log_file enabled="true" id="RUBY_RSPEC" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$MODULE_DIR$/BrainPortal" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs>
+        <env name="JRUBY_OPTS" value="-X+O" />
+      </envs>
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="$MODULE_DIR$/BrainPortal/spec/models/tool_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_RUNNER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_EXAMPLE_NAME" VALUE="Tool should be able assign multiple license to a tool" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_SPEC_RUNNER" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Tool: cbrain" type="RSpecRunConfigurationType" factoryName="RSpec" temporary="true">
+      <module name="cbrain" />
+      <predefined_log_file enabled="true" id="RUBY_RSPEC" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$MODULE_DIR$/BrainPortal" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs>
+        <env name="JRUBY_OPTS" value="-X+O" />
+      </envs>
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="$MODULE_DIR$/BrainPortal/spec/models/tool_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_RUNNER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_EXAMPLE_NAME" VALUE="Tool" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_SPEC_RUNNER" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="rspec spec brainportal" type="RSpecRunConfigurationType" factoryName="RSpec" temporary="true">
+      <module name="cbrain" />
+      <predefined_log_file enabled="true" id="RUBY_RSPEC" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$MODULE_DIR$/BrainPortal" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs>
+        <env name="JRUBY_OPTS" value="-X+O" />
+      </envs>
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="$MODULE_DIR$/BrainPortal/spec" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_RUNNER_PATH" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/*_spec.rb" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_EXAMPLE_NAME" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPEC_ARGS" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_VERSION" VALUE="" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="USE_CUSTOM_SPEC_RUNNER" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RSPEC_RUN_CONFIG_SETTINGS_ID NAME="FULL_BACKTRACE" VALUE="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="RailsRunConfigurationType" factoryName="Rails">
+      <module name="cbrain" />
+      <predefined_log_file enabled="true" id="RUBY_RAILS_SERVER" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="SCRIPT_ARGS" VALUE="" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="PORT" VALUE="3000" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="IP" VALUE="0.0.0.0" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="DUMMY_APP" VALUE="test/dummy" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="RAILS_SERVER_TYPE" VALUE="puma" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="ENVIRONMENT_TYPE" VALUE="development" />
+      <RAILS_SERVER_CONFIG_SETTINGS_ID NAME="LAUNCH_JS" VALUE="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="All tests in spec: cbrain" type="TestUnitRunConfigurationType" factoryName="Test::Unit/Shoulda/Minitest" temporary="true">
+      <module name="cbrain" />
+      <predefined_log_file enabled="true" id="RUBY_TESTUNIT" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUBY_ARGS" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="WORK DIR" VALUE="$MODULE_DIR$/BrainPortal" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SHOULD_USE_SDK" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ALTERN_SDK_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="myPassParentEnvs" VALUE="true" />
+      <envs>
+        <env name="JRUBY_OPTS" value="-X+O" />
+      </envs>
+      <EXTENSION ID="BundlerRunConfigurationExtension" bundleExecEnabled="false" />
+      <EXTENSION ID="JRubyRunConfigurationExtension" NailgunExecEnabled="false" />
+      <EXTENSION ID="RubyCoverageRunConfigurationExtension" track_test_folders="true" runner="rcov">
+        <COVERAGE_PATTERN ENABLED="true">
+          <PATTERN REGEXPS="/.rvm/" INCLUDED="false" />
+        </COVERAGE_PATTERN>
+      </EXTENSION>
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TESTS_FOLDER_PATH" VALUE="$MODULE_DIR$/BrainPortal/spec" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPT_PATH" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="**/{*_test,test_*,*_spec}.rb" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_METHOD_NAME" VALUE="" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="ALL_IN_FOLDER" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="RUNNER_OPTIONS" VALUE="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="RSpec.Tool: cbrain" />
+      <item itemvalue="RSpec.rspec spec brainportal" />
+      <item itemvalue="RSpec.Run spec 'tool_spec': cbrain" />
+      <item itemvalue="RSpec.Tool should be able assign multiple license to a tool: cbrain" />
+      <item itemvalue="Test::Unit/Shoulda/Minitest.All tests in spec: cbrain" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="RSpec.Tool should be able assign multiple license to a tool: cbrain" />
+        <item itemvalue="RSpec.Run spec 'tool_spec': cbrain" />
+        <item itemvalue="Test::Unit/Shoulda/Minitest.All tests in spec: cbrain" />
+        <item itemvalue="RSpec.rspec spec brainportal" />
+        <item itemvalue="RSpec.Tool: cbrain" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpringUtil" SPRING_PRE_LOADER_OPTION="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3aa136ed-da4d-42fc-9de6-ba9b124766e5" name="Default Changelist" comment="" />
+      <created>1529589590254</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1529589590254</updated>
+      <workItem from="1529589591389" duration="105000" />
+      <workItem from="1529607285405" duration="12416000" />
+      <workItem from="1530652652186" duration="28583000" />
+      <workItem from="1530825209290" duration="124215000" />
+      <workItem from="1531945930571" duration="857000" />
+      <workItem from="1531948306441" duration="1626000" />
+      <workItem from="1532009382243" duration="6803000" />
+      <workItem from="1532365813333" duration="412902000" />
+      <workItem from="1534194195876" duration="22242000" />
+      <workItem from="1534428548862" duration="435000" />
+      <workItem from="1534430355926" duration="29792000" />
+      <workItem from="1535047891007" duration="3889000" />
+      <workItem from="1535560709210" duration="8234000" />
+      <workItem from="1536096400187" duration="350000" />
+      <workItem from="1536169140419" duration="32308000" />
+      <workItem from="1536589771928" duration="37485000" />
+      <workItem from="1537195270599" duration="119000" />
+      <workItem from="1537195414762" duration="14000" />
+      <workItem from="1537195539970" duration="6000" />
+      <workItem from="1537195560235" duration="37000" />
+      <workItem from="1537195597837" duration="78000" />
+      <workItem from="1537195687485" duration="19425000" />
+      <workItem from="1537282808909" duration="2103000" />
+      <workItem from="1537297457490" duration="84615000" />
+      <workItem from="1541008971060" duration="601000" />
+      <workItem from="1541010800373" duration="1522000" />
+      <workItem from="1542310294548" duration="4447000" />
+      <workItem from="1543349895622" duration="121166000" />
+      <workItem from="1544731108342" duration="21744000" />
+      <workItem from="1546888651220" duration="2388000" />
+      <workItem from="1546900240743" duration="44000" />
+      <workItem from="1547583201841" duration="796000" />
+      <workItem from="1548282160221" duration="87000" />
+      <workItem from="1548283434161" duration="1675000" />
+    </task>
+    <task id="LOCAL-00047" summary="remove root for edit tool config (border corrected) #650">
+      <created>1534187023905</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1534187023905</updated>
+    </task>
+    <task id="LOCAL-00048" summary="beatifying text for bash prologue preview #650">
+      <created>1534188935636</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1534188935636</updated>
+    </task>
+    <task id="LOCAL-00049" summary="start tool show page refactoring #650">
+      <created>1534194527667</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1534194527667</updated>
+    </task>
+    <task id="LOCAL-00050" summary="make new tool grey #650">
+      <created>1534259686354</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1534259686355</updated>
+    </task>
+    <task id="LOCAL-00051" summary="a link variable id and licence list corrected #650">
+      <created>1534264680499</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1534264680499</updated>
+    </task>
+    <task id="LOCAL-00052" summary="remove raising exception for creating objects with license agreements #766">
+      <created>1534365826332</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1534365826332</updated>
+    </task>
+    <task id="LOCAL-00053" summary="remove raising exception for creating objects with license agreements #766">
+      <created>1534450517631</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1534450517632</updated>
+    </task>
+    <task id="LOCAL-00054" summary="remove raising exception for creating objects with license agreements #766">
+      <created>1534451280992</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1534451280992</updated>
+    </task>
+    <task id="LOCAL-00055" summary="test remove raising exception for creating objects with license agreements #766">
+      <created>1534793851411</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1534793851411</updated>
+    </task>
+    <task id="LOCAL-00056" summary="test remove raising exception for creating objects with license agreements #766">
+      <created>1534798758758</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1534798758759</updated>
+    </task>
+    <task id="LOCAL-00057" summary="test remove raising exception for creating objects with license agreements #766">
+      <created>1535057630355</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1535057630356</updated>
+    </task>
+    <task id="LOCAL-00058" summary="new fields, ux/refactoring to table helper for config/version show and new page and tool show #650">
+      <created>1536257036124</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1536257036125</updated>
+    </task>
+    <task id="LOCAL-00059" summary="new fields, ux/refactoring to table helper for config/version show and new page and tool show #650">
+      <created>1536257341194</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1536257341194</updated>
+    </task>
+    <task id="LOCAL-00060" summary="style improvements in config controller #650">
+      <created>1536270321015</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1536270321015</updated>
+    </task>
+    <task id="LOCAL-00061" summary="style improvements in config controller #650">
+      <created>1536275133797</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1536275133797</updated>
+    </task>
+    <task id="LOCAL-00062" summary="simplification and style improvements for toolconfig show template #650">
+      <created>1536277102137</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1536277102137</updated>
+    </task>
+    <task id="LOCAL-00063" summary="close a div toolconfig show template #650">
+      <created>1536356591131</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1536356591131</updated>
+    </task>
+    <task id="LOCAL-00064" summary="remove a div, few empty space etc #650">
+      <created>1536357169036</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1536357169036</updated>
+    </task>
+    <task id="LOCAL-00065" summary="remove a div, few empty space etc #650">
+      <created>1536691497204</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1536691497205</updated>
+    </task>
+    <task id="LOCAL-00066" summary="correct a global tool config link #650">
+      <created>1536691560713</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1536691560713</updated>
+    </task>
+    <task id="LOCAL-00067" summary="add the context table form and revert confirm merge logic #650">
+      <created>1536695709916</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1536695709916</updated>
+    </task>
+    <task id="LOCAL-00068" summary="adjust new tool config redirects #650">
+      <created>1536763607118</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1536763607118</updated>
+    </task>
+    <task id="LOCAL-00069" summary="delete a template #650">
+      <created>1536956805820</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1536956805820</updated>
+    </task>
+    <task id="LOCAL-00070" summary="remove raw from tool show #650">
+      <created>1537211561262</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1537211561262</updated>
+    </task>
+    <task id="LOCAL-00071" summary="formatting fixes (breaklines, etc) #650">
+      <created>1537214519138</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1537214519138</updated>
+    </task>
+    <task id="LOCAL-00072" summary="debuging config controller, minor template correction #650">
+      <created>1537309500630</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1537309500630</updated>
+    </task>
+    <task id="LOCAL-00073" summary="put back error message placeholder #650">
+      <created>1537369192668</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1537369192668</updated>
+    </task>
+    <task id="LOCAL-00074" summary="put back error message for config show #650">
+      <created>1537377603491</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1537377603491</updated>
+    </task>
+    <task id="LOCAL-00075" summary="move merge config toward the end #650">
+      <created>1537466263771</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1537466263771</updated>
+    </task>
+    <task id="LOCAL-00076" summary="move merge config toward the end #650">
+      <created>1537466826465</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1537466826465</updated>
+    </task>
+    <task id="LOCAL-00077" summary="add a div to merge #650">
+      <created>1537471432253</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1537471432253</updated>
+    </task>
+    <task id="LOCAL-00078" summary="merge show with new template #650">
+      <created>1537482239091</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1537482239091</updated>
+    </task>
+    <task id="LOCAL-00079" summary="merge show with new template #650">
+      <created>1537482333268</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1537482333268</updated>
+    </task>
+    <task id="LOCAL-00080" summary="reallow the nil id in tool update #650">
+      <created>1537556853803</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1537556853804</updated>
+    </task>
+    <task id="LOCAL-00081" summary="correct depricated File.exists #650">
+      <created>1538158210309</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1538158210309</updated>
+    </task>
+    <task id="LOCAL-00082" summary="replace deprecated File.exists method #650">
+      <created>1538158312082</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1538158312083</updated>
+    </task>
+    <task id="LOCAL-00083" summary="fix license tests">
+      <created>1538158354913</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1538158354914</updated>
+    </task>
+    <task id="LOCAL-00084" summary="add few 'bad' api tests (error codes)">
+      <created>1543448130134</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1543448130134</updated>
+    </task>
+    <task id="LOCAL-00085" summary="add few 'bad' api tests (error codes)&#10;Merge https://github.com/erinb90/boutiques-descriptors">
+      <created>1543448218547</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1543448218547</updated>
+    </task>
+    <task id="LOCAL-00086" summary="fix error 500 api instead 404 occuring on test  evn. fixes #785">
+      <created>1544133772995</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1544133772995</updated>
+    </task>
+    <task id="LOCAL-00087" summary="improve/standardize swagger sting format">
+      <created>1544134814620</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1544134814620</updated>
+    </task>
+    <task id="LOCAL-00088" summary="work in progress on unittest #785">
+      <created>1544222474053</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1544222474053</updated>
+    </task>
+    <task id="LOCAL-00089" summary="fixed unittest for #785">
+      <created>1544458330959</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1544458330960</updated>
+    </task>
+    <task id="LOCAL-00090" summary="clean up exception helper #785">
+      <created>1544466122602</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1544466122602</updated>
+    </task>
+    <task id="LOCAL-00091" summary="fixing formating #785">
+      <created>1544561395790</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1544561395790</updated>
+    </task>
+    <task id="LOCAL-00092" summary="fixing formating #785">
+      <created>1544561501974</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1544561501974</updated>
+    </task>
+    <task id="LOCAL-00093" summary="simplify a bad get test by dropping a regex #785">
+      <created>1544565635929</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1544565635929</updated>
+    </task>
+    <task id="LOCAL-00094" summary="empty lines deleted #785">
+      <created>1544566174492</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1544566174493</updated>
+    </task>
+    <task id="LOCAL-00095" summary="remove a comment #785">
+      <created>1544634148713</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1544634148713</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="All_tests_in_spec__cbrain - 2018.12.07 at 11h 01m 41s.xml">
+      <configuration name="All tests in spec: cbrain" configurationId="TestUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="All_tests_in_boutiques__cbrain - 2018.12.07 at 11h 01m 49s.xml">
+      <configuration name="All tests in boutiques: cbrain" configurationId="TestUnitRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Run_spec_'users_controller_spec'__cbrain - 2018.12.10 at 10h 34m 21s.xml">
+      <configuration name="Run spec 'users_controller_spec': cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Run_spec_'access_profiles_controller_spec'__cbrain - 2018.12.10 at 10h 53m 05s.xml">
+      <configuration name="Run spec 'access_profiles_controller_spec': cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+    <history-entry file="Run_spec_'access_profiles_controller_spec'__cbrain - 2018.12.10 at 10h 53m 36s.xml">
+      <configuration name="Run spec 'access_profiles_controller_spec': cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+    <history-entry file="UsersController_member_action_switch_with_site_manager__cbrain - 2018.12.10 at 11h 08m 37s.xml">
+      <configuration name="UsersController member action switch with site manager: cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+    <history-entry file="UsersController_member_action_destroy_with_site_manager__cbrain - 2018.12.11 at 15h 38m 37s.xml">
+      <configuration name="UsersController member action destroy with site manager: cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+    <history-entry file="UsersController_member_action_destroy_with_site_manager__cbrain - 2018.12.11 at 15h 39m 02s.xml">
+      <configuration name="UsersController member action destroy with site manager: cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+    <history-entry file="UsersController_member_action_destroy_with_site_manager__cbrain - 2018.12.17 at 12h 04m 32s.xml">
+      <configuration name="UsersController member action destroy with site manager: cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+    <history-entry file="UsersController_member_action_destroy_with_site_manager__cbrain - 2018.12.17 at 12h 07m 19s.xml">
+      <configuration name="UsersController member action destroy with site manager: cbrain" configurationId="RSpecRunConfigurationType" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="983109000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="92" y="52" width="1800" height="930" extended-state="0" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18611111" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49694276" weight="0.43945068" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6141515" visible="true" weight="0.5280899" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32960895" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49907464" weight="0.474407" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50305724" side_tool="true" weight="0.7178527" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32833958" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.7565314" weight="0.42696628" />
+      <window_info anchor="bottom" id="Python Console" order="13" />
+      <window_info anchor="bottom" id="Inspection Results" order="14" weight="0.3732834" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" weight="0.0050027794" />
+    </layout>
+    <layout-to-restore>
+      <window_info content_ui="combo" id="Project" order="0" weight="0.18621457" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49694276" weight="0.30586767" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6141515" weight="0.52827764" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32960895" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49907464" weight="0.4755784" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50305724" side_tool="true" weight="0.7178527" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32833958" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="12" sideWeight="0.7565314" visible="true" weight="0.4307116" />
+      <window_info anchor="bottom" id="Python Console" order="13" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" weight="0.0050027794" />
+    </layout-to-restore>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="HEAD" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="swagger_format" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="apierror" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="dev_aces" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="delete a template #650" />
+    <MESSAGE value="remove raw from tool show #650" />
+    <MESSAGE value="formatting fixes (breaklines, etc) #650" />
+    <MESSAGE value="debuging config controller, minor template correction #650" />
+    <MESSAGE value="put back error message placeholder #650" />
+    <MESSAGE value="put back error message for config show #650" />
+    <MESSAGE value="move merge config toward the end #650" />
+    <MESSAGE value="add a div to merge #650" />
+    <MESSAGE value="merge show config with new template #650" />
+    <MESSAGE value="merge show with new template #650" />
+    <MESSAGE value="correct depricated File.exists #650" />
+    <MESSAGE value="reallow the nil id in tool update #650" />
+    <MESSAGE value="replace deprecated File.exists method #650" />
+    <MESSAGE value="fix license tests" />
+    <MESSAGE value="add few 'bad' api tests (error codes)" />
+    <MESSAGE value="add few 'bad' api tests (error codes)&#10;Merge https://github.com/erinb90/boutiques-descriptors" />
+    <MESSAGE value="fix error 500 api instead 404 occuring on test  evn. fixes #785" />
+    <MESSAGE value="improve/standardize swagger sting format" />
+    <MESSAGE value="work in progress on unittest #785" />
+    <MESSAGE value="fixed unittest for #785" />
+    <MESSAGE value="clean up exception helper #785" />
+    <MESSAGE value="fixing formating #785" />
+    <MESSAGE value="simplify a bad get test by dropping a regex #785" />
+    <MESSAGE value="empty lines deleted #785" />
+    <MESSAGE value="remove a comment #785" />
+    <option name="LAST_COMMIT_MESSAGE" value="remove a comment #785" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/01-get.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/01-get.out" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/00-list.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/00-list.out" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/02-patch.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/02-patch.in.rb" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/02-patch.out">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/020-list.out">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="659" selection-start-line="1" selection-start-column="659" selection-end-line="1" selection-end-column="659" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/13-dp-unregister.in.rb" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/020-list.req">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles/02-patch.in.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/03-deletemult.in.json" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/03-deletemult.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/03-deletemult.in.rb" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/01-get.out">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/05-sync.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/08-changedp.in.rb" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/08-changedp.in.json" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/08-changedp.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/13-dp-unregister.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/controllers/userfiles_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="1249" column="13" selection-start-line="1249" selection-start-column="13" selection-end-line="1249" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/05-sync.in.rb" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/04-create.out" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/04-create.in.rb" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/05-sync.in.json" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/06-content.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/04-create.in.form" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/04-create.in.data" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/020-list.out">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/021-get.req">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/021-get.out">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/04-create.req" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/06-content.out" />
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/02-patch.req">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/03-patch.req">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/05-get.out">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/05-get.req">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/03-patch.in.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="17" selection-start-line="3" selection-start-column="17" selection-end-line="3" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/02-patch.in.rb">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/02-patch.out">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/01-get.req">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/03-patch.in.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/test_api/req_files/userfiles_bool_str/02-patch.in.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/views/tool_configs/show.html.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1330">
+          <caret line="70" column="9" selection-start-line="70" selection-start-column="9" selection-end-line="70" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/controllers/tool_configs_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4503">
+          <caret line="237" column="9" selection-start-line="237" selection-start-column="9" selection-end-line="237" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/views/access_profiles/show.html.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="779">
+          <caret line="41" selection-start-line="41" selection-end-line="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/helpers/show_table_helper.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="15" selection-start-line="11" selection-start-column="14" selection-end-line="11" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/views/tool_configs/_env_key_value_pair.erb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/lib/cbrain_task_generators/schemas/boutiques.schema.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="16" selection-start-line="14" selection-start-column="16" selection-end-line="14" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/controllers/users_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="330" column="26" selection-start-line="330" selection-start-column="26" selection-end-line="330" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BrainPortal/app/models/user.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="190" column="25" lean-forward="true" selection-start-line="190" selection-start-column="25" selection-end-line="190" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
