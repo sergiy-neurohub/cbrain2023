@@ -6,6 +6,14 @@ This directory contains several frameworks for testing the network API for CBRAI
 - A testing script in perl which invokes curl(1) commands
 - A Ruby class used by a rake task which invokes CbrainClient methods (from the gem 'cbrain_client')
 
+You must start a server with tes environment locally
+
+```bash
+rake db:seed:test:api
+```
+
+
+
 Alongside these, a subdirectory called __req_files__ contains a set of short text
 files that specify, in a framework-independent way, the tests to run.
 More information about them can be found in the included [README.md](req_files/README.md) file.
