@@ -286,14 +286,14 @@ Rails.application.routes.draw do
     end
     resources :nh_projects do
       member do
-        get  :files
-        post :nh_files_per_page
-        get  :new_license
-        post :add_license
-        get  :show_license
-        post :sign_license
-        get  :new_file
-        post :upload_file
+        get   :files
+        patch :nh_files_per_page
+        get   :new_license
+        post  :add_license
+        get   :show_license
+        post  :sign_license
+        get   :new_file
+        post  :upload_file
       end
     end
 

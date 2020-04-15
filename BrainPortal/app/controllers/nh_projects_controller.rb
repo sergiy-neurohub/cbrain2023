@@ -100,8 +100,9 @@ class NhProjectsController < NeurohubApplicationController
     @pagy, @files = pagy(@nh_project.userfiles, :items => @current_user.meta['nh_files_per_page'].to_i)
   end
 
-  def nh_files_per_page #:nodoc:
-    add_meta_data_from_form(@user, ['nh_files_per_page']) if 1 < params['nh_files_per_page'].to_i < 101
+  def nh_files_per_page #:nodoc:met
+    add_meta_data_from_form(@current_user, ['nh_files_per_page']) if (2...100) === params['nh_files_per_page'].to_i
+    redirect_to :action => :files
   end
 
   def new_license #:nodoc:
