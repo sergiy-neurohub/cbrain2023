@@ -31,7 +31,10 @@
     </div>
     <div class="nh_table_scroll">
       <%== pagy_nav(@pagy) %>
-      <table>
+      <%= form_for @current_user, :as => :user, :url => { :action => :nh_files_per_page }, :datatype => "script" do |f| -%>
+        <%= number_field_tag "meta['nh_files_per_page']", @current_user.meta['nh_files_per_page'],  min: 2, max: 100, step: 1, method: :post%>
+      <% end %>
+  <table>
       <thead>
           <tr>
             <th>Name</th>
