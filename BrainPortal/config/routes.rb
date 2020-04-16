@@ -295,6 +295,9 @@ Rails.application.routes.draw do
         get   :new_file
         post  :upload_file
       end
+      collection do
+        patch  :nh_projects_per_page
+      end
     end
 
     # Temporary development route

@@ -54,7 +54,8 @@ class NhProjectsController < NeurohubApplicationController
 
   def index  #:nodoc:
     # Note: Should refactor to use session object instead of scope to store button state in the future.
-    @nh_projects = find_nh_projects(current_user)
+    cbrain_session['nh_projects_per_page'] = Pagy::VARS[:items] if cbrain_session['nh_projects_per_page'].blank?
+    @pagy, @nh_projects = pagy(find_nh_projects(current_user), :items => cbrain_session['nh_projects_per_page'].to_i)
     @scope = scope_from_session
     @scope.custom[:button] = true if
       current_user.has_role?(:normal_user) && @scope.custom[:button].nil?
@@ -103,6 +104,11 @@ class NhProjectsController < NeurohubApplicationController
   def nh_files_per_page #:nodoc:met
     cbrain_session['nh_files_per_page'] = params['meta']['nh_files_per_page'] if (2...100) === params['meta']['nh_files_per_page'].to_i
     redirect_to :action => :files
+  end
+
+  def nh_projects_per_page #:nodoc:met
+    cbrain_session['nh_projects_per_page'] = params['meta']['nh_projects_per_page'] if (2...100) === params['meta']['nh_projects_per_page'].to_i
+    redirect_to :action => :index
   end
 
   def new_license #:nodoc:
