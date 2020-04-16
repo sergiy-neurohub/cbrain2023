@@ -287,7 +287,7 @@ Rails.application.routes.draw do
     resources :nh_projects do
       member do
         get   :files
-        patch :nh_files_per_page
+        post :nh_files_per_page
         get   :new_license
         post  :add_license
         get   :show_license
@@ -296,7 +296,7 @@ Rails.application.routes.draw do
         post  :upload_file
       end
       collection do
-        patch  :nh_projects_per_page
+        post  :nh_projects_per_page
       end
     end
 

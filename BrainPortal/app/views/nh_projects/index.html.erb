@@ -69,7 +69,7 @@ viewBox="0 0 383.947 383.947" style="enable-background:new 0 0 383.947 383.947;"
     </div>
     <%== pagy_nav(@pagy) %>
     <%= form_for @pagy, :url => { :action => :nh_projects_per_page }, :datatype => "script" do -%>
-      <%= number_field_tag "meta[nh_projects_per_page]", @pagy.items,  min: 2, max: 100, step: 1, method: :patch %>
+      <%= number_field_tag "meta[nh_projects_per_page]", @pagy.items,  min: 2, max: 100, step: 1 %>
     <% end %>
     <% if button_view %>
       <div class="grid">
