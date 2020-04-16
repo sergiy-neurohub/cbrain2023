@@ -68,10 +68,9 @@ viewBox="0 0 383.947 383.947" style="enable-background:new 0 0 383.947 383.947;"
       <%= link_to "+ Add project", {:action => :new }, :method  => :get, :class => "btn-solid-secondary nh_action"  %>
     </div>
     <%== pagy_nav(@pagy) %>
-    <%= form_for @current_user, :as => :user, :url => { :action => :nh_projects_per_page }, :datatype => "script" do |f| -%>
-      <%= number_field_tag "meta[nh_projects_per_page]", @current_user.meta['nh_projects_per_page'],  min: 2, max: 100, step: 1, method: :patch %>
+    <%= form_for @pagy, :url => { :action => :nh_projects_per_page }, :datatype => "script" do -%>
+      <%= number_field_tag "meta[nh_projects_per_page]", @pagy.items,  min: 2, max: 100, step: 1, method: :patch %>
     <% end %>
-
     <% if button_view %>
       <div class="grid">
         <% @nh_projects.each do |project| %>
