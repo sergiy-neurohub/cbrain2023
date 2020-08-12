@@ -30,11 +30,15 @@
   <%= content_tag :div, (h(msg.to_s.strip).gsub(/\n/, '<BR/>')).html_safe, :class => "flash_#{name}" %>
 <%- end -%>
 
-<% unless @display_messages.blank? %>
-  <table class="message_display_table">
-    <% for mess in @display_messages %>
-      <%= render(:partial  => "messages/message_details", :locals  => { :mess  => mess } ) rescue "Oh oh. Talk to devs!" %>
+<div class="card">
+<%- unless @display_messages.blank? %>
+
+    <%- for mess in @display_messages %>
+      <p>
+      <div class="nh-invitations card-item"%>
+      <%= render(:partial  => "nh_invitations/message_details", :locals  => { :mess  => mess } ) rescue "Oh oh. your message was not rendered. Talk to devs!" %>
+      </div>>
     <% end %>
-  </table>
-  <P>
-<%- end -%>
+
+<% end %>
+</div>
