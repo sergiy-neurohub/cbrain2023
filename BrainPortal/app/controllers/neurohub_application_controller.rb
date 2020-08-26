@@ -98,7 +98,7 @@ class NeurohubApplicationController < ApplicationController
   # below a method is overwritten to render only non-invite message, filtered by type (for now)
   
   def unread_messages_to_display #:nodoc:
-    current_user.messages.where( :read => false, :type => 'Message' ).order( "last_sent DESC" )
+    current_user.messages.where( :read => false, :type => nil ).order( "last_sent DESC" )
   end
 
   # Check if password need to be reset.
