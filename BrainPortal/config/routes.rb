@@ -292,6 +292,7 @@ Rails.application.routes.draw do
     resources :nh_users,       :only => [ :myaccount, :edit, :update] do
       collection do
         get  'change_password'
+        post 'new_token'
       end
     end
     resources :nh_storages do # yeah pluralized, looks weird because it's uncountable
@@ -311,9 +312,15 @@ Rails.application.routes.draw do
         post :upload_file
       end
     end
+    resources :nh_messages,        :except => [ :edit, :show ] do
+      # collection do
+      #   delete 'delete_messages'
+      # end
+    end
     resources :nh_loris_hooks, :only => [] do
       collection do
         post :file_list_maker
+        post :csv_data_maker
       end
     end
 
