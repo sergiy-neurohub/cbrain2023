@@ -145,4 +145,10 @@ module NeurohubHelpers
     return report
   end
 
+  # filter neurohub relevant messages
+  def neurohub_messages
+    Message.where(:user_id        => current_user.available_users.map(&:id),
+                  :message_type   => [:communication, :notice, :system, :error])
+  end
+
 end

@@ -31,7 +31,7 @@ class NhMessagesController < NeurohubApplicationController
   # GET /messages
   # GET /messages.xml
   def index #:nodoc:
-    @messages = Message.where(:user_id => current_user.available_users.map(&:id))
+    @messages = neurohub_messages
     @messages_count = @messages.count
 
     @page, @per_page = pagination_check(@messages, :nh_messages)
@@ -43,7 +43,7 @@ class NhMessagesController < NeurohubApplicationController
 
   def new #:nodoc:
     @message       = Message.new # blank object for new() form.
-    @message.message_type = :correspondence
+    @message.message_type = :communication
     @message.header = "A personal message from #{current_user.full_name || current_user.login}"
     @nh_projects   = find_nh_projects(current_user)
   end
