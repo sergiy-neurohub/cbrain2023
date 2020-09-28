@@ -51,8 +51,8 @@ class NhMessagesController < NeurohubApplicationController
   def create #:nodoc:
     @message = Message.new(message_params)
     @message.message_type = :communication
-    [:header, :description, :variable].each do |section|
-      if @message.send(section)
+    [:header, :description, :variable_text].each do |section|
+      if @message.send(section).include '['
         txt = 'Temporary square brackets are not supported in Neurohub messaging'
         @message.errors.add(section, txt)
       end
