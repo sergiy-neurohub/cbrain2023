@@ -31,36 +31,31 @@ class NhMessagesController < NeurohubApplicationController
   # GET /messages
   # GET /messages.xml
   def index #:nodoc:
+    # keep separate
     @messages = neurohub_messages
     @messages_count = @messages.count
-
-    @page, @per_page = pagination_check(@messages, :nh_messages)
-    @pagy, @messages = pagy(@messages, :items => @per_page)
-
     @read_count   = @messages.where(:user_id => current_user.id, :read => true).count
     @unread_count = @messages.where(:user_id => current_user.id, :read => false).count
+    @page, @per_page = pagination_check(@messages, :nh_messages)
+    @pagy, @messages = pagy(@messages, :items => @per_page)
   end
 
   def new #:nodoc:
-    @message       = Message.new # blank object for new() form.
-    @message.message_type = :communication
-    @message.header = "A personal message from #{current_user.full_name || current_user.login}"
-    @nh_projects   = find_nh_projects(current_user)
+    @message              = Message.new # blank object for new() form.
+    @message.header       = "A personal message from #{current_user.full_name || current_user.login}"
+    @nh_projects          = find_nh_projects(current_user)
   end
 
   # POST /messages
   # POST /messages.xml
   def create #:nodoc:
     @message = Message.new(message_params)
-
-    date = params[:expiry_date] || ""
-    hour = params[:expiry_hour] || "00"
-    min  = params[:expiry_min]  || "00"
-    date = Date.today if date.blank? && (hour != "00" || min != "00")
-    unless date.blank?
-      string_time = "#{date} #{hour}:#{min} #{Time.now.in_time_zone.formatted_offset}"
-      full_date = DateTime.parse(string_time)
-      @message.expiry = full_date
+    @message.message_type = :communication
+    [:header, :descripton, :variable].each do |section|
+      if @message.send(section)
+        txt = 'Temporary square brackets are not supported in Neurohub messaging'
+        @message.errors.add(section, txt)
+      end
     end
 
     if @message.header.blank?
@@ -105,26 +100,6 @@ class NhMessagesController < NeurohubApplicationController
     end
   end
 
-  # todo serge delete?
-
-  # # Delete multiple messages.
-  # def delete_messages
-  #   id_list = params[:message_ids] || []
-  #   if current_user.has_role?(:admin_user)
-  #     message_list = Message.where(:id => id_list).all
-  #   else
-  #     message_list = current_user.messages.where(:id => id_list).all
-  #   end
-  #   deleted_count = 0
-  #
-  #   message_list.each do |message_item|
-  #     deleted_count += 1
-  #     message_item.destroy
-  #   end
-  #
-  #   flash[:notice] = "#{view_pluralize(deleted_count, "item")} deleted.\n"
-  #   redirect_to :action => :index
-  # end
 
   # DELETE /messages/1
   # DELETE /messages/1.xml

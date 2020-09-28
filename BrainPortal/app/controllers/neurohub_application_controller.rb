@@ -93,12 +93,8 @@ class NeurohubApplicationController < ApplicationController
     nh_new_invites        = Invitation.where(user_id: current_user.id, active: true, read: false).all || [];
     @nh_invites_count     = nh_invites.count
     @nh_new_invites_count = nh_new_invites.count
-  end
-
-  # below a method is overwritten to render only non-invite message, filtered by type (for now)
-  
-  def unread_messages_to_display #:nodoc:
-    current_user.messages.where( :read => false, :type => nil ).order( "last_sent DESC" )
+    @nn_adjust_nh_message_count = Invitation.where(user_id: current_user.id, read: false).count
+    @nh_new_invites_ack   = current_user.messages.where( :read => false, :header => 'Invitation Accepted' ).order( "last_sent DESC" ).all()
   end
 
   # Check if password need to be reset.

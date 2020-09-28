@@ -22,8 +22,7 @@
 #
 -%>
 
-
-<% title 'New Message' %>
+<% title 'New Message', "" %>
 <div class="nh_content">
   <div class="nh_form">
     <%= error_messages_for @nh_project, :header_message => "Project could not be created." %>
@@ -41,12 +40,6 @@
            )
       %>
       </fieldset>
-
-<%# todo serge get feedback the need for that field with team %>
-<!--      <fieldset>-->
-        <%#= f.label :send_email, "Send E-mail" %>
-        <%#= check_box_tag "message[send_email]", 1, false %>
-<!--      </fieldset>-->
 
       <fieldset>
         <%= f.label :header %>

@@ -22,15 +22,16 @@
 #
 -%>
 
+
 <% unless mess.description.blank? %>
-  <p class="<%= mess.message_type.to_s %>">
-    <%= Message.parse_markup( mess.description ).gsub(/\n/,"<BR>").html_safe %>
+  <p class="<%= flash_{mess.message_type.to_s} %>">
+    <%= Message.parse_markup( mess.description ).gsub(/\n/,"<BR>") %>
   </p>
 <% end %>
 
 <% unless mess.variable_text.blank? %>
     <p class="<%= mess.message_type.to_s %>">
-      <%= Message.parse_markup( mess.variable_text ).gsub(/\n/,"<BR>").html_safe -%>
+      <%= Message.parse_markup( mess.variable_text ).gsub(/\n/,"<BR>") -%>
     </p>
 <% end %>
 

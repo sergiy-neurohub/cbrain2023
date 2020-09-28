@@ -23,13 +23,13 @@
 -%>
 
 <div id="nh_invitations" class="nh_content nh_messages">
-
+  <!--  You have <%#= @read_count %> read message and  <%#= @unread_count %> unread messages-->
   <%- # actions -%>
   <div class="nh_actions">
     <%= link_to nh_icon_add + "New message", {:action => :new }, :method  => :get, :class => "btn-solid primary nh_action"  %>
   </div>
 
-  You have <%= @read_count %> read message and  <%= @unread_count %> unread messages
+
 
   <%- # pagination -%>
   <div class="nh_pagination">
@@ -46,18 +46,22 @@
   </div>
 </div>
 
-<% if @messages_count > 0 %>
+
+
+
+  <% if @messages_count > 0 %>
     <div class="section primary">
       <p class="section-title">Messages | <%= @unread_count %></p>
       <% @messages.each do |message| %>
+
         <div class="card">
           <div class="card-row header">
             <p class="card-item"><%= message.header.html_safe %></p>
           </div>
-          <div class="card">
+          <div class= <%= "flash_#{message.message_type}" %>
             <%= render :partial  => 'messages/message_details', :locals  => { :mess  => message } %>
           </div>
-          <%= render :partial  => 'messages/message_details', :locals  => { :mess  => message } %>
+          <%#= render :partial  => 'messages/message_details', :locals  => { :mess  => message } %>
           <div class="btn-section">
             <%= button_to 'Delete', nh_message_path(message.id), :method => :delete, :class => "btn-solid secondary wash btn" %>
            </div>
