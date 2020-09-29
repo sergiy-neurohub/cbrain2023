@@ -22,14 +22,18 @@
   #
 -%>
 
-<div id="nh_invitations" class="nh_content nh_messages">
+<div id="nh_messages" class="nh_content nh_invitations">
   <!--  You have <%#= @read_count %> read message and  <%#= @unread_count %> unread messages-->
+
+  <!--  <p class="section-title">Not-read Messages | <%#= @unread_count %> unread</p>-->
+
   <%- # actions -%>
   <div class="nh_actions">
     <%= link_to nh_icon_add + "New message", {:action => :new }, :method  => :get, :class => "btn-solid primary nh_action"  %>
   </div>
+  <div class="section primary">
 
-
+  <% if @messages_count > 0 %>
 
   <%- # pagination -%>
   <div class="nh_pagination">
@@ -44,14 +48,10 @@
       </div>
     </div>
   </div>
-</div>
 
 
 
 
-  <% if @messages_count > 0 %>
-    <div class="section primary">
-      <p class="section-title">Messages | <%= @unread_count %> unread</p>
       <% @messages.each do |message| %>
 
         <div class="card">

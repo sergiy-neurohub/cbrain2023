@@ -25,7 +25,7 @@
 <% title 'New Message', "" %>
 <div class="nh_content">
   <div class="nh_form">
-    <%= error_messages_for @message %>, :header_message => "Message could not be send." %>
+    <%= error_messages_for @message, :header_message => "Message could not be send." %>
     <p class="nh_form_title">Send Message</p>
 
 <%= form_for @message, :as => :message, :url => { :action => "create" }, :datatype => "script" do |f| -%>
