@@ -93,7 +93,7 @@ class NeurohubApplicationController < ApplicationController
     nh_new_invites        = Invitation.where(user_id: current_user.id, active: true, read: false).all || [];
     @nh_invites_count     = nh_invites.count
     @nh_new_invites_count = nh_new_invites.count
-    @nn_adjust_nh_message_count = Invitation.where(user_id: current_user.id, read: false).count
+    @nh_adjust_message_count = Invitation.where(user_id: current_user.id, read: false).count
     @nh_new_invites_ack   = current_user.messages.where( :read => false, :header => 'Invitation Accepted' ).order( "last_sent DESC" ).all()
   end
 
