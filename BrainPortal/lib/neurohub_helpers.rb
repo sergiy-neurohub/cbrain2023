@@ -145,19 +145,11 @@ module NeurohubHelpers
     return report
   end
 
-  # todo serge is it needed?
-
   # filter neurohub relevant messages
   def neurohub_messages
     Message.where(:user_id        => current_user.available_users.map(&:id),
-                  # :message_type   => [:correspondance, :communication, :notice, :system, :error],
                   :type           => nil  #  filter out invites
                   ).order( "last_sent DESC" )
-  end
-
-  # new neurohub reatled messages
-  def new_neurohub_messages
-    neurohub_messages.where(:read => false)
   end
 
 end
