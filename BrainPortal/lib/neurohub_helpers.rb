@@ -152,7 +152,7 @@ module NeurohubHelpers
     Message.where(:user_id        => current_user.available_users.map(&:id),
                   # :message_type   => [:correspondance, :communication, :notice, :system, :error],
                   :type           => nil  #  filter out invites
-                  )
+                  ).order( "last_sent DESC" )
   end
 
   # new neurohub reatled messages
