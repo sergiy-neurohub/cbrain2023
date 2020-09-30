@@ -36,6 +36,10 @@ class Message < ApplicationRecord
 
   attr_accessor :send_email
 
+  has_many                :resource_usage
+  before_save             :track_resource_usage_update
+  after_destroy           :track_resource_usage_destroy
+
   # Send a new message to a user, the users of a group, or a site.
   #
   # The +destination+ argument can be a User, a Group, a Site,
@@ -327,6 +331,28 @@ class Message < ApplicationRecord
       arr[i] = "<a href=\"#{link}\" data-method=\"#{method.downcase}\" class=\"action_link\">#{name}</a>"
     end
     arr.join.html_safe
+  end
+
+  def track_resource_usage_update
+    if self.message_type == "communication"
+      CountResourceUsageForUserMessage.create(
+        :value              => 1,
+        :user_id            => self.sender_id,
+        :group_id           => self.group_id
+      )
+    end
+    true
+  end
+
+  def track_resource_usage_destroy
+    if self.message_type == "communication"
+      CountResourceUsageForUserMessage.create(
+        :value              => -1,
+        :user_id            => self.sender_id,
+        :group_id           => self.group_id
+      )
+    end
+    true
   end
 
 end
