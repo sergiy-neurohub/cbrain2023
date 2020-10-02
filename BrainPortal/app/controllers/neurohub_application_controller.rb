@@ -99,8 +99,8 @@ class NeurohubApplicationController < ApplicationController
     nh_new_invites        = Invitation.where(user_id: current_user.id, active: true, read: false).all || [];
     @nh_invites_count     = nh_invites.count
     @nh_new_invites_count = nh_new_invites.count
-    @nh_message_count     = neurohub_messages.count
-    @nh_new_message_count = neurohub_messages.where(:read => false).count  # differs from cbrain, as invites are shown separately
+    @nh_message_count     = find_nh_messages.count
+    @nh_new_message_count = find_nh_messages.where(:read => false).count  # differs from cbrain, as invites are shown separately
     @nh_new_invites_ack   = current_user.messages.where( :read => false, :header => 'Invitation Accepted' ).order( "last_sent DESC" ).all()
   end
   

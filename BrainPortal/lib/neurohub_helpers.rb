@@ -146,10 +146,15 @@ module NeurohubHelpers
   end
 
   # filter NeuroHub messages (no invites)
-  def neurohub_messages
-    Message.where(:user_id        => current_user.available_users.map(&:id),
+  def find_nh_messages(user=current_user)
+    Message.where(:user_id        => user.available_users.map(&:id),
                   :type           => nil  #  filter out invites
                   ).order( "last_sent DESC" )
+  end
+
+  def find_nh_contacts(user)
+    nh_projects     = find_nh_projects(user)
+    nh_projects.map { |x| x.users }.flatten.uniq.map { |x| x.own_group }.sort_by { |g| g.name }
   end
 
 end
