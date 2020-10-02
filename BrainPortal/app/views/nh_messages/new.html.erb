@@ -31,7 +31,9 @@
     <%= form_for @message, :as => :message, :url => {:action => "create"}, :datatype => "script" do |f| -%>
 
       <fieldset>
-        To all members of project ( or an individual user ):
+
+        <%= f.label :destination_id,
+            "To a user or a group (project members):" %>
         <%= group_select( :group_id,
                           {
                             :groups   => @recepients,

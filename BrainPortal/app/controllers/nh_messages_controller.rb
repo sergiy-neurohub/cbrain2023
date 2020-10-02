@@ -30,7 +30,7 @@ class NhMessagesController < NeurohubApplicationController
   # GET /messages
   # GET /messages.xml
   def index #:nodoc:
-    @messages        = neurohub_messages
+    @messages        = find_nh_messages(current_user)
     @messages_count  = @messages.count
     @read_count      = @messages.where(:user_id => current_user.id, :read => true).count
     @unread_count    = @messages.where(:user_id => current_user.id, :read => false).count
@@ -39,11 +39,10 @@ class NhMessagesController < NeurohubApplicationController
   end
 
   def new #:nodoc:
-    @message        = Message.new # blank object for new() form.
-    @message.header = "A personal message from #{current_user.full_name.presence || current_user.login}"
-    nh_projects     = find_nh_projects(current_user)
-    contacts        = nh_projects.map { |x| x.users }.flatten.uniq.map { |x| x.own_group }
-    @recepients     = (current_user.assignable_groups.order(:name) & nh_projects | contacts).sort_by { |g| g.name }
+    @message        =   Message.new # blank object for new() form.
+    @message.header =   "A personal message from #{current_user.full_name.presence || current_user.login}"
+    @recepients     =   find_nh_contacts(current_user)
+    @recepients     |= find_nh_messages(current_user) && current_user.assignable_groups
   end
 
   # POST /messages
@@ -53,28 +52,29 @@ class NhMessagesController < NeurohubApplicationController
     @message.message_type = :communication
     @message.sender_id    = current_user.id
 
+    @recepients =   find_nh_contacts(current_user)
+    @recepients |= find_nh_projects(current_user) && current_user.assignable_groups || contacts
+
     if @message.header.blank?
       @message.errors.add(:header, "cannot be left blank.")
     end
 
     @group_id = params[:group_id]
     if @group_id.blank?
-      @message.errors.add(:base, "You need to specify the project whose members will receive this message.")
+      @message.errors.add(:destination_id, "You need to specify the project whose members will receive this message.")
     elsif @message.errors.empty?
-      group = current_user.assignable_groups.find(@group_id)
-      if group
-        @message.send_me_to(group)
-      else
-        @message.errors.add(:base, "Invalid project specified for message destination.")
+      if @recepients.any? { |x| x.id == @group_id }
+        @message.send_me_to(Group.find(id))
+
+        @message.errors.add(:destination_id, "Invalid message destination.")
       end
     end
-    # prepare_messages
-
+    prepare_messages
     if @message.errors.empty?
       flash.now[:notice] = 'Message was successfully sent.'
       redirect_to :action => :index
-    else
-      render :action => :new
+      else
+        render :action => :new
     end
   end
 
