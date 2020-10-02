@@ -18,21 +18,20 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 -%>
 
-
-<% unless mess.description.blank? %>
-  <p class="<%= flash_{mess.message_type.to_s} %>">
-    <%= Message.parse_markup( mess.description ).gsub(/\n/,"<BR>") %>
+<% if mess.description.present? %>
+  <p class="flash_<%= mess.message_type.to_s %>">
+    <%= mess.parse_links(:description).gsub(/\n/, "<BR>") %>
   </p>
 <% end %>
 
-<% unless mess.variable_text.blank? %>
-    <p class="<%= mess.message_type.to_s %>">
-      <%= Message.parse_markup( mess.variable_text ).gsub(/\n/,"<BR>") -%>
-    </p>
+<% if mess.variable_text.present? %>
+  <p class="flash_<%= mess.message_type.to_s %>">
+    <%= mess.parse_links(:variable_text).gsub(/\n/, "<BR>") %>
+  </p>
 <% end %>
 
 <% if mess.description.blank? && mess.variable_text.blank? %>

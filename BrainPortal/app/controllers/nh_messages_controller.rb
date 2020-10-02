@@ -30,7 +30,6 @@ class NhMessagesController < NeurohubApplicationController
   # GET /messages
   # GET /messages.xml
   def index #:nodoc:
-    # keep separate
     @messages        = neurohub_messages
     @messages_count  = @messages.count
     @read_count      = @messages.where(:user_id => current_user.id, :read => true).count
@@ -41,7 +40,7 @@ class NhMessagesController < NeurohubApplicationController
 
   def new #:nodoc:
     @message        = Message.new # blank object for new() form.
-    @message.header = "A personal message from #{current_user.full_name || current_user.login}"
+    @message.header = "A personal message from #{current_user.full_name.presence || current_user.login}"
     nh_projects     = find_nh_projects(current_user)
     contacts        = nh_projects.map { |x| x.users }.flatten.uniq.map { |x| x.own_group }
     @recepients     = (current_user.assignable_groups.order(:name) & nh_projects | contacts).sort_by { |g| g.name }
@@ -53,12 +52,6 @@ class NhMessagesController < NeurohubApplicationController
     @message              = Message.new(message_params)
     @message.message_type = :communication
     @message.sender_id    = current_user.id
-    [:header, :description, :variable_text].each do |section|
-      if @message.send(section).include? '['
-        txt = 'Square brackets are not supported. Please use curly or round brackets only.'
-        @message.errors.add(section, txt)
-      end
-    end
 
     if @message.header.blank?
       @message.errors.add(:header, "cannot be left blank.")
@@ -79,7 +72,6 @@ class NhMessagesController < NeurohubApplicationController
 
     if @message.errors.empty?
       flash.now[:notice] = 'Message was successfully sent.'
-
       redirect_to :action => :index
     else
       render :action => :new
@@ -120,6 +112,6 @@ class NhMessagesController < NeurohubApplicationController
   private
 
   def message_params
-    params.require(:message).permit(:header, :description, :variable_text, :message_type, :read, :user_id, :expiry, :last_sent, :critical, :display, :send_email, :group_id, :sender_id)
+    params.require(:message).permit(:header, :description, :variable_textent, :group_id)
   end
 end

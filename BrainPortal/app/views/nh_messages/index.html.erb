@@ -49,17 +49,21 @@
       <% @messages.each do |message| %>
         <div class="card">
           <div class="card-row header">
+            <%
+              header = message.header
+              header.html_safe unless message.message_type == "communication"
+            %>
             <% if message.read %>
-              <p class="card-item"> <%= message.header.html_safe %> </p>
+              <p class="card-item"> <%= header %> </p>
             <% else %>
-              <p class="card-item"><em> <%= message.header.html_safe %> </em></p>
+              <p class="card-item"><em> <%= header %> </em></p>
             <% end %>
             <% if message.read %>
               <p class="card-item"> Read </p>
             <% else %>
               <p class="card-item"> Not read </p>
             <% end %>
-            <p class="card-item"> from  <%= message.sender || "unknown" %> </p>
+            <p class="card-item"> from  <%= message.sender.try(:login) || "system" %> </p>
             <div class="card-item">
               <%= button_to 'Delete', nh_message_path(message.id), :method => :delete, :class => "btn-solid secondary wash btn" %>
             </div>

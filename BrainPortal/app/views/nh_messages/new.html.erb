@@ -28,17 +28,18 @@
     <%= error_messages_for @message, :header_message => "Message could not be send." %>
     <p class="nh_form_title">Send Message</p>
 
-    <%= form_for @message, :as => :message, :url => { :action => "create" }, :datatype => "script" do |f| -%>
+    <%= form_for @message, :as => :message, :url => {:action => "create"}, :datatype => "script" do |f| -%>
 
       <fieldset>
-      To all members of project ( or an individual user ): <%= group_select(:group_id,
-           {
-             :groups  => @recepients,
-             :selector => @group_id, # :group_id is not an attribute of Message.
-           },
-           { :include_blank => true }
-           )
-      %>
+        To all members of project ( or an individual user ):
+        <%= group_select( :group_id,
+                          {
+                            :groups   => @recepients,
+                            :selector => @group_id, # :group_id is not an attribute of Message.
+                          },
+                          {:include_blank => true}
+            )
+         %>
       </fieldset>
       <fieldset>
         <%= f.label :header %>
@@ -53,10 +54,10 @@
         <%= f.text_area :variable_text, :rows => 5, :cols => 80 %>
       </fieldset>
       <div class="btn-section">
-        <%= f.submit "Send", :class=>"btn-solid primary" %>
+        <%= f.submit "Send", :class => "btn-solid primary" %>
       </div>
     </p>
-  </div>
-<% end %>
+
+    <% end %>
   </div>
 </div>
