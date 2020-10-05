@@ -41,8 +41,7 @@ class NhMessagesController < NeurohubApplicationController
   def new #:nodoc:
     @message        =   Message.new # blank object for new() form.
     @message.header =   "A personal message from #{current_user.full_name.presence || current_user.login}"
-    @recepients     =   find_nh_contacts(current_user)
-    @recepients     |= find_nh_messages(current_user) && current_user.assignable_groups
+    @recipients     =   find_nh_messages(current_user) && current_user.assignable_groups || contacts_nh_contacts(current_user)
   end
 
   # POST /messages
@@ -52,8 +51,7 @@ class NhMessagesController < NeurohubApplicationController
     @message.message_type = :communication
     @message.sender_id    = current_user.id
 
-    @recepients =   find_nh_contacts(current_user)
-    @recepients |= find_nh_projects(current_user) && current_user.assignable_groups || contacts
+    @recipients           = find_nh_projects(current_user) && current_user.assignable_groups || find_nh_contacts(current_user)
 
     if @message.header.blank?
       @message.errors.add(:header, "cannot be left blank.")
@@ -63,7 +61,7 @@ class NhMessagesController < NeurohubApplicationController
     if @group_id.blank?
       @message.errors.add(:destination_id, "You need to specify the project whose members will receive this message.")
     elsif @message.errors.empty?
-      if @recepients.any? { |x| x.id == @group_id }
+      if @recipients.any? { |x| x.id == @group_id }
         @message.send_me_to(Group.find(id))
       else
         @message.errors.add(:destination_id, "Invalid message destination.")
