@@ -41,7 +41,7 @@ class NhMessagesController < NeurohubApplicationController
   def new #:nodoc:
     @message        =   Message.new # blank object for new() form.
     @message.header =   "A personal message from #{current_user.full_name.presence || current_user.login}"
-    @recipients     =   find_nh_messages(current_user) && current_user.assignable_groups || contacts_nh_contacts(current_user)
+    @recipients     =   find_nh_projects(current_user) & current_user.assignable_groups | contacts_nh_contacts(current_user)
   end
 
   # POST /messages
@@ -51,7 +51,7 @@ class NhMessagesController < NeurohubApplicationController
     @message.message_type = :communication
     @message.sender_id    = current_user.id
 
-    @recipients           = find_nh_projects(current_user) && current_user.assignable_groups || find_nh_contacts(current_user)
+    @recipients           = find_nh_projects(current_user) & current_user.assignable_groups | find_nh_contacts(current_user)
 
     if @message.header.blank?
       @message.errors.add(:header, "cannot be left blank.")
