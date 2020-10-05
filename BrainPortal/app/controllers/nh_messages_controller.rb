@@ -65,7 +65,7 @@ class NhMessagesController < NeurohubApplicationController
     elsif @message.errors.empty?
       if @recepients.any? { |x| x.id == @group_id }
         @message.send_me_to(Group.find(id))
-
+      else
         @message.errors.add(:destination_id, "Invalid message destination.")
       end
     end
