@@ -62,7 +62,7 @@ class NhMessagesController < NeurohubApplicationController
       @message.errors.add(:destination_id, "You need to specify the project whose members will receive this message.")
     elsif @message.errors.empty?
       if @recipients.any? { |x| x.id.to_s == @group_id }
-        @message.send_me_to(Group.find(id))
+        @message.send_me_to(Group.find(@group_id))
       else
         @message.errors.add(:destination_id, "Invalid message destination.")
       end
