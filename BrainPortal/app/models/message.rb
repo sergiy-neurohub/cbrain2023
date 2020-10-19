@@ -38,6 +38,7 @@ class Message < ApplicationRecord
 
   has_many                :resource_usage
   before_create           :track_resource_usage_create
+  validate                :valid_communication_message
   after_destroy           :track_resource_usage_destroy
 
   # Send a new message to a user, the users of a group, or a site.
@@ -295,8 +296,13 @@ class Message < ApplicationRecord
     self.variable_text = current_text
   end
 
-  def validate_input  # checks user input for empty field in the header, add error messages (presently used in nh only)
-    self.errors.add(:header, "cannot be left blank.") if self.header.blank?    
+  def valid_communication_message  # checks user input for empty field in the header, add error messages (presently only for user to user communication)
+    if self.header.blank? && self.message_type == 'communication'
+      self.errors.add(:header, "cannot be left blank.")
+      false
+    else
+      true
+    end
   end
 
   private

@@ -50,10 +50,9 @@ class NhMessagesController < NeurohubApplicationController
     @message              = Message.new(message_params)
     @message.message_type = :communication
     @message.sender_id    = current_user.id
-
+    @message.valid_communication_message
     @recipients = find_nh_destinations(current_user)
 
-    @message.validate_input
     @destination_group_id = params['destination_group_id']
     if @destination_group_id.present?
       destination_group = find_nh_destination(@destination_group_id)
