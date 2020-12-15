@@ -40,7 +40,7 @@ require_relative 'test_helpers'
 # Gain access to the rails environment
 require 'rails_helper'
 require 'spec_helper'
-
+require 'pry'
 # Add helper methods for performing tests
 include TestHelpers
 
@@ -75,6 +75,7 @@ describe "BrainPortal Boutiques Tests" do
       text = mangler.( text ) unless mangler.nil?
       flist.cache_writehandle { |t| t.write( text ) }
       task.params[:interface_userfile_ids] << flist.id if addToIuids
+      task.tool_config = ToolConfig.new
       flist # return the cbcsv object
     }
     # Helper for generating and sending userfiles to tasks
@@ -82,10 +83,12 @@ describe "BrainPortal Boutiques Tests" do
       uf = SingleFile.new({data_provider_id: dp.id, name: name, group_id: group.id, user_id: user.id})
       uf.save!
       task.params[:interface_userfile_ids] << uf.id if addToUids
+      task.tool_config = ToolConfig.new
       uf
     }
     # Checks after_form output. Checks both the number or errors and ascertains at least one of their contents.
     @checkAfterForm = -> (task, checkVal=0, atLeastOneErrWith=nil, runBeforeForm=false) {
+      task.tool_config = ToolConfig.new
       task.before_form if runBeforeForm
       task.after_form # Run the method
       errMsgs = task.params_errors.full_messages # Get any error messages
@@ -159,7 +162,13 @@ describe "BrainPortal Boutiques Tests" do
       @task          = CbrainTask::BoutiquesTest.new
       @task.bourreau = execer
       @task.user_id, @task.group_id, @task.params = @user.id, @group.id, {}
-      # Setup for holding the files the user had selected in the UI
+      @task.tool_config = ToolConfig.new
+      @task.tool_config.bourreau = execer
+      @task.tool_config.group = @task.group
+      @task.tool_config.version_name = 'version1'
+      @task.tool_config.description = 'this is a tool config'
+
+          # Setup for holding the files the user had selected in the UI
       @task.params[:interface_userfile_ids] = []
       # Create userfiles for C, d, j, f (used to convert the ids from strings to numbers)
       @file_C, @file_d, @file_j = @addUserFile.('c',@task), @addUserFile.('d',@task), @addUserFile.('j',@task)
@@ -417,6 +426,12 @@ describe "BrainPortal Boutiques Tests" do
         genTask = SchemaTaskGenerator.generate(SchemaTaskGenerator.default_schema, @descriptor, false).integrate
         task = CbrainTask::MinimalTest.new
         task.params = useDefaults ? task.class.default_launch_args : params
+        task.tool_config = ToolConfig.new
+        task.tool_config.bourreau = FactoryBot.create(:bourreau)
+        task.tool_config.group = task.group
+        task.tool_config.version_name = 'version1'
+        task.tool_config.description = 'this is a tool config'
+        task.tool_config.tool = FactoryBot.create(:tool)
         task
       }
     end
@@ -508,6 +523,8 @@ describe "BrainPortal Boutiques Tests" do
       describe "has final_task_list that" do
         it "works with no cbcsvs" do
           @addUserFile.('t.txt',@task); @addUserFile.('r.txt',@task)
+          binding.pry
+          @task.final_task_list
           expect( @task.final_task_list.length ).to eq( 2 )
         end
         it "works with one cbcsv" do

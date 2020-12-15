@@ -32,7 +32,6 @@ describe ToolConfig do
     let(:no_b_tool_config)  { create(:tool_config, :bourreau => nil) }
     let(:no_t_tool_config)  { create(:tool_config, :tool => nil) }
 
-
     it "should allow admin user to access a tool config even if they don't belong to its group" do
       expect(tool_config.can_be_accessed_by?(user)).to be_truthy
     end

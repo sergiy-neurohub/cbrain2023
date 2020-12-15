@@ -116,7 +116,7 @@ module SchemaTaskGenerator
     # Integrates the encapsulated CbrainTask in this CBRAIN installation.
     # Unless +register+ is specified to be false, this method will add the
     # required Tool if necessary for the CbrainTask to be
-    # useable right away (since almost all information required to make the
+    # usable right away (since almost all information required to make the
     # Tool and ToolConfig objects is available in the spec).
     # Also, if +multi_version+ is specified, this method will wrap the
     # encapsulated CbrainTask in a version switcher class to allow different

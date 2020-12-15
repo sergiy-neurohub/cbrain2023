@@ -287,6 +287,7 @@ FactoryBot.define do
   factory :tool_config do
     description  { "desc1" }
     version_name { "1.1.12" }
+    inputs_readonly { false }
     association  :bourreau
     association  :tool
     association  :group

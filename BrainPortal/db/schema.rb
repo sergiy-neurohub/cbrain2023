@@ -437,7 +437,7 @@ ActiveRecord::Schema.define(version: 20201123133913) do
     t.string   "container_index_location"
     t.text     "singularity_overlays_specs",  limit: 65535
     t.string   "container_exec_args"
-    t.boolean  "inputs_readonly",                                 default: false
+    t.boolean  "read_only_input",                           default: false
     t.index ["bourreau_id"], name: "index_tool_configs_on_bourreau_id", using: :btree
     t.index ["tool_id"], name: "index_tool_configs_on_tool_id", using: :btree
   end
