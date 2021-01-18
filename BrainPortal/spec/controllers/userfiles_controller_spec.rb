@@ -21,6 +21,7 @@
 #
 
 require 'rails_helper'
+require 'pry'
 
 def mock_upload_file_param(name = "dummy_file")
   file_name = "cbrain_test_file_#{name}"
@@ -887,15 +888,17 @@ RSpec.describe UserfilesController, :type => :controller do
       end
 
     end
-
+    binding.pry
     describe "create file list" do
       before(:each) do
         session[:session_id] = 'session_id'
         allow(controller).to      receive(:current_user).and_return(user)
+        allow(controller).to      receive(:current_project).and_return(readonly_group)
       end
       it "unassignable dataprovider does not get file list" do
         post :export_file_list, params: {:file_ids => [readonly_group_userfile.id]}
-        expect Userfile.last.group_id != readonly_group_userfile.id
+        expect(Userfile.last.group_id).not_to eql(readonly_group_userfile.id)
+        Userfile.last.destroy
       end
     end
 
