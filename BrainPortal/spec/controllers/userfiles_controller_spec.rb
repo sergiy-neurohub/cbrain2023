@@ -888,7 +888,7 @@ RSpec.describe UserfilesController, :type => :controller do
       end
 
     end
-    binding.pry
+    # binding.pry
     describe "create file list" do
       before(:each) do
         session[:session_id] = 'session_id'
