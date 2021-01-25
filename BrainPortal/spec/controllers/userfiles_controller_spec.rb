@@ -21,7 +21,6 @@
 #
 
 require 'rails_helper'
-require 'pry'
 
 def mock_upload_file_param(name = "dummy_file")
   file_name = "cbrain_test_file_#{name}"
@@ -43,9 +42,6 @@ RSpec.describe UserfilesController, :type => :controller do
   let(:user_userfile)         { create(:single_file, :user => user, :data_provider => data_provider) }
   let(:child_userfile)        { create(:single_file, :user => admin, :parent_id => admin_userfile.id) }
   let(:group_userfile)        { create(:single_file, :group_id => user.group_ids.last, :data_provider => dp_user) }
-  let(:readonly_group)        { create(:group, :assignable => true, user_ids => [user.id, admin.id], :creator_id => admin_id )}
-  let(:readonly_group_file)   { create(:single_file, :user=> user, :group_id => readonly_group.id, :data_provider => data_provider)}
-
   let(:mock_userfile)         { mock_model(TextFile, :id => 1).as_null_object }
   let(:mock_userfile2)        { mock_model(TextFile, :id => 2).as_null_object }
   let(:data_provider)         { create(:flat_dir_local_data_provider, :user => user, :online => true, :read_only => false) }
@@ -888,19 +884,7 @@ RSpec.describe UserfilesController, :type => :controller do
       end
 
     end
-    # binding.pry
-    describe "create file list" do
-      before(:each) do
-        session[:session_id] = 'session_id'
-        allow(controller).to      receive(:current_user).and_return(user)
-        allow(controller).to      receive(:current_project).and_return(readonly_group)
-      end
-      it "unassignable dataprovider does not get file list" do
-        post :export_file_list, params: {:file_ids => [readonly_group_userfile.id]}
-        expect(Userfile.last.group_id).not_to eql(readonly_group_userfile.id)
-        Userfile.last.destroy
-      end
-    end
+
 
     describe "compress" do
       before(:each) do
