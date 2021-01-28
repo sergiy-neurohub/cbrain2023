@@ -1333,7 +1333,11 @@ class UserfilesController < ApplicationController
     # Create the new file list
     file_list = CbrainFileList.new(
       :user_id          => current_user.id,
-      :group_id         => current_assignable_group_id,
+      :group_id         => if current_project.public
+                             current_user.own_group
+                           else
+                             current_assignable_group_id
+                           end,
       :name             => "file_list.#{Process.pid}.#{Time.now.to_i}.cbcsv",
       :data_provider_id => dest_dp_id,
     )
@@ -1342,7 +1346,7 @@ class UserfilesController < ApplicationController
     if file_list.save
       csv_text = CbrainFileList.create_csv_file_from_userfiles(userfiles)
       file_list.cache_writehandle { |fh| fh.write(csv_text) }
-      flash[:notice] = "Created file list named '#{file_list.name}'."
+      flash[:notice] = "Created file list named '#{file_list.name}' in '#{file_list.group.name}' group. Make sure that it is what you want."
       redirect_to(:controller => :userfiles, :action => :show, :id => file_list.id)
     else
       flash[:error] = "Could not create file list. Contact the admins."
