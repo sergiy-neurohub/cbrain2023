@@ -687,6 +687,7 @@ RSpec.describe UserfilesController, :type => :controller do
       it "file list does not go public project" do
         post :export_file_list, params: {:file_ids => [public_group_file.id]}
         expect Userfile.last.group_id != public_group.id
+        Message.last.delete if Message.last
       end
     end
 
