@@ -42,6 +42,8 @@ RSpec.describe UserfilesController, :type => :controller do
   let(:user_userfile)         { create(:single_file, :user => user, :data_provider => data_provider) }
   let(:child_userfile)        { create(:single_file, :user => admin, :parent_id => admin_userfile.id) }
   let(:group_userfile)        { create(:single_file, :group_id => user.group_ids.last, :data_provider => dp_user) }
+  let(:public_group)          { create(:group, :public => true, :creator_id => admin.id )}
+  let(:public_group_file)     { create(:single_file, :user=> user, :group_id => public_group.id, :data_provider => data_provider)}
   let(:mock_userfile)         { mock_model(TextFile, :id => 1).as_null_object }
   let(:mock_userfile2)        { mock_model(TextFile, :id => 2).as_null_object }
   let(:data_provider)         { create(:flat_dir_local_data_provider, :user => user, :online => true, :read_only => false) }
@@ -640,6 +642,7 @@ RSpec.describe UserfilesController, :type => :controller do
         post :create_collection, params: {:file_ids => [1], :data_provider_id_for_collection => data_provider.id}
       end
 
+
       it "should merge the collections into a single one" do
         expect(mock_userfile).to receive(:merge_collections)
         post :create_collection, params: {:file_ids => [1], :data_provider_id_for_collection => data_provider.id}
@@ -671,6 +674,20 @@ RSpec.describe UserfilesController, :type => :controller do
       it "should redirect to the index" do
         post :create_collection, params: {:file_ids => [1], :data_provider_id_for_collection => data_provider.id}
         expect(response).to redirect_to(:action => :index)
+      end
+    end
+
+
+
+    describe "create_file_list" do
+      before(:each) do
+        session[:session_id] = 'session_id'
+        allow(controller).to      receive(:current_user).and_return(user)
+        allow(controller).to      receive(:current_project).and_return(1010)
+      end
+      it "file list does not go public project" do
+        post :export_file_list, params: {:file_ids => [public_group_file.id]}
+        expect Userfile.last.group_id != public_group.id
       end
     end
 
