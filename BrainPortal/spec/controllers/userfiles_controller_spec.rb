@@ -642,7 +642,6 @@ RSpec.describe UserfilesController, :type => :controller do
         post :create_collection, params: {:file_ids => [1], :data_provider_id_for_collection => data_provider.id}
       end
 
-
       it "should merge the collections into a single one" do
         expect(mock_userfile).to receive(:merge_collections)
         post :create_collection, params: {:file_ids => [1], :data_provider_id_for_collection => data_provider.id}
