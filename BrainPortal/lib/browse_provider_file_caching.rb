@@ -27,7 +27,9 @@
 # Note: this entire class should be re-engineered to use Rails.cache
 class BrowseProviderFileCaching
 
-  Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
+  Revision_info = CbrainFileRevision[__FILE__] #:nodoc:
+
+  Expires_in    = 60.seconds # The time provider file info cache is expiring in
 
   # Contacts the +provider+ side with provider_list_all(as_user) and
   # caches the resulting array of FileInfo objects for 60 seconds.
@@ -39,47 +41,35 @@ class BrowseProviderFileCaching
     refresh = false if refresh.blank? || refresh.to_s == 'false'
 
     # Check to see if we can simply reload the cached copy
-    cache_file = self.cache_file(as_user, provider)
-    if ! refresh && File.exist?(cache_file) && File.mtime(cache_file) > 60.seconds.ago
-       filelisttext = File.read(cache_file)
-       fileinfolist = YAML.load(filelisttext)
-       return fileinfolist
+    if refresh
+      save_cache(as_user, provider)
+    else
+      Rails.cache.fetch(provider_key(as_user, provider), expires_in: Expires_in, race_condition_ttl: 10.seconds) do
+        return save_cache(as_user, provider)
+      end
     end
 
-    # Get info from provider
-    fileinfolist = provider.provider_list_all(as_user)
-
-    # Write a new cached copy
-    save_cache(as_user, provider, fileinfolist)
-
-    # Return it
-    fileinfolist
   end
 
-  # Saves the array of FileInfo object in a file in /tmp. See
-  # also the method cache_file for the file's name.
-  def self.save_cache(user, provider, fileinfolist) #:nodoc:
-    cache_file = self.cache_file(user, provider)
-    tmpcachefile = cache_file + ".#{Process.pid}.tmp";
-    File.open(tmpcachefile,"w") do |fh|
-       fh.write(YAML.dump(fileinfolist))
-    end
-    File.rename(tmpcachefile,cache_file) rescue true  # crush it
+  # Saves the array of FileInfo object
+  def self.save_cache(user, provider) #:nodoc:
+    # Get info from provider
+    fileinfolist = provider.provider_list_all(user)
+    # Write a new cached copy
+    Rails.cache.write(provider_key(user, provider), fileinfolist, expires_in: Expires_in)
+    # return it
+    fileinfolist
   end
 
   # Clear the cache file.
   def self.clear_cache(user, provider) #:nodoc:
-    cache_file = self.cache_file(user, provider)
-    File.unlink(cache_file) rescue true
+    Rails.cache.delete(provider_key(user, provider))
   end
 
   private
 
-  # Generates a file name for a cache file; the name is
-  # specific to both the provider and the user accessing it.
-  def self.cache_file(user, provider) #:nodoc:
-    cache_file = "/tmp/dp_cache_list_all_#{user.id}.#{provider.id}"
-    cache_file
+  def self.provider_key(user, provider)
+    "dp_file_list_#{user.try(:id)}_#{provider.id}"
   end
 
 end
