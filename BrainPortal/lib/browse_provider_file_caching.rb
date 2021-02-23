@@ -40,7 +40,7 @@ class BrowseProviderFileCaching
     refresh = false if refresh.blank? || refresh.to_s == 'false'
 
     Rails.cache.fetch(dp_cache_key(as_user, provider), force: refresh, expires_in: BROWSE_CACHE_EXPIRATION, race_condition_ttl: RACE_CONDITION_DELAY) do
-      provider.provider_list_all(as_user) # return prevents saving
+      provider.provider_list_all(as_user)
     end
   end
 
