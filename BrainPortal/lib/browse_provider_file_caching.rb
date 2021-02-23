@@ -28,7 +28,7 @@ class BrowseProviderFileCaching
 
   # How long we cache the results of provider_list_all();
   BROWSE_CACHE_EXPIRATION = 60.seconds #:nodoc:
-  RACE_CONDITION_DELAY    = nil        # Short delay for a concurrent threads
+  RACE_CONDITION_DELAY    = 10.seconds # Short delay for a concurrent threads
 
   # Contacts the +provider+ side with provider_list_all(as_user) and
   # caches the resulting array of FileInfo objects for 60 seconds.
@@ -39,24 +39,9 @@ class BrowseProviderFileCaching
 
     refresh = false if refresh.blank? || refresh.to_s == 'false'
 
-    if refresh
-      save_cache(as_user, provider)
-    else
-      Rails.cache.fetch(provider_key(as_user, provider), expires_in: BROWSE_CACHE_EXPIRATION, race_condition_ttl: RACE_CONDITION_DELAY) do
-        return save_cache(as_user, provider)
-      end
+    Rails.cache.fetch(provider_key(as_user, provider),  force: refresh, expires_in: BROWSE_CACHE_EXPIRATION, race_condition_ttl: RACE_CONDITION_DELAY) do
+      provider.provider_list_all(user) # return prevents saving
     end
-
-  end
-
-  # Saves FileInfo cache
-  def self.save_cache(user, provider) #:nodoc:
-    # Get info from provider
-    fileinfolist = provider.provider_list_all(user)
-    # Write a new cached copy
-    Rails.cache.write(provider_key(user, provider), fileinfolist, expires_in: BROWSE_CACHE_EXPIRATION)
-    # return it
-    fileinfolist
   end
 
   # Clear the cache file.
@@ -67,7 +52,7 @@ class BrowseProviderFileCaching
   private
 
   def self.provider_key(user, provider)
-    "dp_file_list_#{user.try(:id)}_#{provider.id}"
+    "dp_file_list_#{user.try(:id)}_#{provider.try(:id)}"
   end
 
 end
