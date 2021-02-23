@@ -35,24 +35,27 @@ class BrowseProviderFileCaching
   # Returns that array. If refresh is set to true, it will force the
   # refresh of the array, otherwise any array that was generated less
   # than 60 seconds ago is returned again.
-  def self.get_recent_provider_list_all(provider, as_user = current_user, refresh = false) #:nodoc:
+  def self.get_recent_provider_list_all(provider, as_user = current_user, browse_path = nil, refresh = false) #:nodoc:
 
     refresh = false if refresh.blank? || refresh.to_s == 'false'
-
-    Rails.cache.fetch(dp_cache_key(as_user, provider), force: refresh, expires_in: BROWSE_CACHE_EXPIRATION, race_condition_ttl: RACE_CONDITION_DELAY) do
+    key     = dp_cache_key(as_user, provider, browse_path)
+    Rails.cache.fetch(key,
+                      force:              refresh,
+                      expires_in:         BROWSE_CACHE_EXPIRATION,
+                      race_condition_ttl: RACE_CONDITION_DELAY) do
       provider.provider_list_all(as_user)
     end
   end
 
   # Clear the cache file.
-  def self.clear_cache(user, provider) #:nodoc:
-    Rails.cache.delete(dp_cache_key(user, provider))
+  def self.clear_cache(user, provider, browse_path = nil) #:nodoc:
+    Rails.cache.delete(dp_cache_key(user, provider, browse_path))
   end
 
   private
 
-  def self.dp_cache_key(user, provider)
-    "dp_file_list_#{user.try(:id)}_#{provider.try(:id)}"
+  def self.dp_cache_key(user, provider, browse_path)
+    "dp_file_list_#{user.try(:id)}-#{provider.try(:id)}-#{browse_path}"
   end
 
 end
