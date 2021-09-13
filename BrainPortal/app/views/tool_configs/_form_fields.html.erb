@@ -196,8 +196,8 @@
       </div>
     <% end %>
 
-    <% t.edit_cell(:singularity_overlays_specs, :header => "Singularity Overlays", :show_width => 2) do |f| %>
-      <%= f.text_area :singularity_overlays_specs, :rows => 4, :cols => 120 %>
+    <% t.edit_cell(:singularity_overlays_specs, :header => "Singularity Overlays", :show_width => 2, :content => full_description(@tool_config.singularity_overlays_specs)) do |f| %>
+      <%= f.text_area :singularity_overlays_specs, :rows => 6, :cols => 120 %>
         <div class="wide_field_explanation">
         This field can contain one or several specifications for data overlays
         to be included when the task is started with Singularity.
