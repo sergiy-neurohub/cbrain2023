@@ -301,7 +301,7 @@
 <%%# Generate a parameter's description block for +desc+ %>
 <%% description = lambda do |desc, isGroupMember = false| %>
   <span class="tsk-prm-desc">
-    <%%= desc.split("\n").map { |s| h(s) }.join("<br>").html_safe if desc %><<%%= "<br><br>".html_safe if isGroupMember %>
+    <%%= desc.split("\n").map { |s| h(s) }.join("<br>").html_safe if desc %><%%= "<br><br>".html_safe if isGroupMember %>
   </span>
 <%% end %>
 
@@ -450,9 +450,7 @@
         <%= name %> <%% groupCheckbox.('<%= id %>',<%= defaultChecked %>) %>
       </h3>
       <h5 style="font-size : 9.5pt; font-weight: normal; padding-top: 2px;" class="grp-desc">
-        <% groupDescription.split('\n') do |paragraph|%>
-          <%= paragraph %>
-        <% end %>
+        groupDescription.split("\n").map { |s| h(s) }.join("<br>").html_safe if groupDescription
       </h5>
     </div><%%= "<br>".html_safe %>
     <%# Write group parameters (required ones first) %>
