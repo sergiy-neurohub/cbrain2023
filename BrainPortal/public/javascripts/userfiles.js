@@ -82,6 +82,7 @@ $(function() {
     rename:  '/userfiles/:id',
     update:  $('#prop-dialog > form').attr('action'),
     tags:    '/tags/:id',
+    set_tags: $('#tags-dialog' > 'form').attr('actions'),
     create_collection: $('#collection-dialog > form').attr('action')
   };
 
@@ -886,6 +887,153 @@ $(function() {
           .dialog('option', 'title', title)
           .dialog('option', 'buttons', buttons);
       });
+
+    /* Tags by pattern dialog */
+    $('#tags-dialog')
+        .dialog('option', 'buttons', {
+          'Done': function (event) {
+            $(this).trigger('close.uf');
+          }
+        })
+        /* remove the initial button focus */
+        .unbind('open.uf.tag-button-focus')
+        .bind(  'open.uf.tag-button-focus', function () {
+          $(this).find('button').blur();
+        })
+        /* refresh the main index if tags changed (dirty flag) */
+        .unbind('close.uf.tag-refresh')
+        .bind(  'close.uf.tag-refresh', function () {
+          var dialog = $(this);
+
+          if (dialog.data('dirty'))
+            userfiles.refresh().then(function () {
+              dialog.removeData('dirty');
+            });
+        })
+        /* swap a tag's name label for an input textbox on click */
+        .undelegate('.tag-body .tag-txt-name', 'click.uf.tag-swap-iname')
+        .delegate(  '.tag-body .tag-txt-name', 'click.uf.tag-swap-iname', function () {
+          var input = $('<input type="text" />')
+              .addClass('tag-in-name')
+              .data('old-value', $(this).text())
+              .val($(this).text());
+
+          $('#tag-dialog').find('.tag-body .tag-in-name').blur();
+
+          $(this).replaceWith(input);
+          input.focus();
+        })
+        /* swap the name label back when done editing */
+        .undelegate('.tag-body .tag-in-name', 'blur.uf.tag-swap-lname, keyup.uf.tag-swap-lname')
+        .delegate(  '.tag-body .tag-in-name', 'blur.uf.tag-swap-lname, keyup.uf.tag-swap-lname', function (event) {
+          if (typeof event.keyCode !== 'undefined' && event.keyCode !== 13)
+            return;
+
+          var id   = $(this).closest('.tag-row').data('id'),
+              name = $(this).val(),
+              old  = $(this).data('old-value');
+
+          $(this)
+              .removeData('old-value')
+              .replaceWith(
+                  $('<span class="tag-txt-name">')
+                      .text(name)
+              );
+
+          if (name === old) return;
+
+          userfiles.tags.update(id, { name: name })
+              .done(function () { $('#tag-dialog').data('dirty', 1);    })
+              .fail(function () { $('#tag-dialog').trigger('close.uf'); });
+        })
+        /* swap a tag's project label for a drop-down menu on click */
+        .undelegate('.tag-body .tag-txt-prj', 'click.uf.tag-swap-iprj')
+        .delegate(  '.tag-body .tag-txt-prj', 'click.uf.tag-swap-iprj', function () {
+          $(this).replaceWith(
+              $('#tag-mov-prj')
+                  .trigger('blur.uf')
+                  .data('old-value', $(this).data('value'))
+                  .val($(this).data('value'))
+                  .show()
+          );
+        })
+        /* swap the project label back when done editing */
+        .undelegate('.tag-body .tag-in-prj', 'blur.uf.tag-swap-lprj')
+        .delegate(  '.tag-body .tag-in-prj', 'blur.uf.tag-swap-lprj', function () {
+          var id    = $(this).closest('.tag-row').data('id'),
+              group = $(this).val(),
+              old   = $(this).data('old-value');
+
+          $(this)
+              .removeData('old-value')
+              .replaceWith(
+                  $('<span class="tag-txt-prj">')
+                      .text($(this).find(':selected').text())
+                      .data('value', group)
+              )
+              .appendTo('#tag-dialog > form')
+              .hide();
+
+          if (group === old) return;
+
+          userfiles.tags.update(id, { group_id: group })
+              .done(function () { $('#tag-dialog').data('dirty', 1);    })
+              .fail(function () { $('#tag-dialog').trigger('close.uf'); });
+        })
+        /* remove an existing tag */
+        .undelegate('.tag-body .tag-act', 'click.uf.tag-remove')
+        .delegate(  '.tag-body .tag-act', 'click.uf.tag-remove', function (event) {
+          var row = $(this).closest('.tag-row');
+          event.preventDefault();
+
+          $('#tag-del-confirm').trigger('open.uf', [this, {
+            name:   row.find('.tag-name').text().trim(),
+            accept: function (event) {
+              userfiles.tags.remove(row.data('id'))
+                  .done(function () {
+                    $('#tag-dialog').data('dirty', 1);
+                    row.remove();
+                  })
+                  .fail(function () {
+                    $('#tag-dialog').trigger('close.uf');
+                  });
+            }
+          }]);
+        })
+        /* validate the tag name to activate the add-tag button */
+        .undelegate('.tag-add .tag-in-name', 'input.uf.tag-name-check')
+        .delegate(  '.tag-add .tag-in-name', 'input.uf.tag-name-check', function (event) {
+          var valid = /^\w+$/.test($(this).val());
+
+          $(this)
+              .toggleClass('tag-invalid', !valid && !!$(this).val())
+              .closest('.tag-row')
+              .find('.tag-act > .ui-icon')
+              .removeAttr('disabled')
+              .prop('disabled', !valid);
+        })
+        /* add a new tag */
+        .undelegate('.tag-add .tag-act', 'click.uf.tag-add')
+        .delegate(  '.tag-add .tag-act', 'click.uf.tag-add', function (event) {
+          var form      = $(this).closest('form'),
+              indicator = $(this).siblings('.tag-ind').find('.ui-icon');
+          event.preventDefault();
+
+          indicator.css({ visibility: 'visible' });
+          userfiles.tags.add({
+            name:     form.find('.tag-add .tag-in-name').val(),
+            group_id: form.find('.tag-add .tag-in-prj').val()
+          })
+              .done(function () {
+                userfiles.refresh().then(function () {
+                  indicator.css({ visibility: 'hidden' });
+                });
+              })
+              .fail(function () {
+                $('#tag-dialog').trigger('close.uf');
+                indicator.css({ visibility: 'hidden' });
+              });
+        });
 
     /* Tags dialog */
     $('#tag-dialog')

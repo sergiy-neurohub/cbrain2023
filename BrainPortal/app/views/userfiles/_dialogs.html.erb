@@ -192,6 +192,38 @@
   </form>
 </div>
 
+
+<div id="tags-dialog" class="dlg-dialog" title="Tag Files">
+  <span id="pp-fcs" autofocus="autofocus"></span>
+
+  <form action="<%= set_tags_userfiles_path %>" method="put">
+    <label for="pp-tag-pat" class="dlg-fld-lbl">Pattern(s)</label>
+    <textarea id="pp-tag-pat" class="dlg-fld" name="pattern"></textarea>
+    <label for="pp-tag" class="dlg-fld-lbl">Tags</label>
+    <select id="pp-tag"
+            class="dlg-fld dlg-chosen"
+            name="tags[]"
+            multiple="multiple"
+            data-default-project="<%= default_project.id %>"
+    >
+      <%= options_from_collection_for_select(current_user.available_tags, 'id', 'name') %>
+    </select>
+    <br /><br />
+
+    <input id="pp-tag-clr" class="dlg-chk" type="checkbox" />
+    <label for="pp-tag-clr" class="dlg-chk-icon">
+      <span class="ui-icon ui-icon-check"></span>
+    </label>
+    <label for="pp-tag-clr" class="dlg-chk-lbl">
+      Clear tags
+    </label>
+    <br />
+
+    <br />
+  </form>
+</div>
+
+
 <div id="prop-dialog" class="dlg-dialog" title="File properties">
   <span id="pp-fcs" autofocus="autofocus"></span>
 

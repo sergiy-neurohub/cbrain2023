@@ -38,7 +38,7 @@ class UserfilesController < ApplicationController
   around_action :permission_check, :only => [
       :download, :update_multiple, :delete_files,
       :create_collection, :change_provider, :quality_control,
-      :export_file_list
+      :export_file_list, :set_tags, :tags, :pattern
   ]
 
   MAX_DOWNLOAD_MEGABYTES = 400
@@ -1100,6 +1100,52 @@ class UserfilesController < ApplicationController
         format.html { redirect_to :action => :index }
         format.json { render :json => { :success_list => success_list.map(&:id), :failed_list => failed_list.values.flatten.map(&:id) } }
     end
+  end
+
+  # sets tags to files
+  def set_tags #:nodoc:
+
+    # Destination provider
+    files =
+    pattern = params[:pattern]
+    if pattern.blank?
+      flash[:error] = "No pattern provided.\n"
+      redirect_to :action => :index
+      return
+      ## else
+
+    end
+
+    ## File.fnmatch("foo*", "food")
+
+    # Option for move or copy.
+
+    # File list to apply operation
+    filelist    = params[:file_ids] || [] # filter using pattern File.fnmatch(pattern, "food")
+    filelist    = filelist.select {|x| File.fnmatch(pattern, x)} unless pattern.blank?
+    success     = 0
+    failure     = 0
+    filelist.each do |f|
+      # can user tag without write access?
+      file = Userfile.find_accessible_by_user(f, current_user, :access_requested => :write)
+      if file
+        file.set_tags_for_user(current_user, tags) if file
+        success += 1
+      else
+        failure += 1
+      end
+    end
+    if failure > 0
+      flash[:notice] = "#{failure} files were not tagged, likely your access rights are insufficient.\n"
+    respond_to do |format|
+      format.html { redirect_to :action => :index }
+      format.json { render :json => { :success => success,
+                                      :failure => failure
+      }
+      }
+      end
+    end
+
   end
 
   # Delete the selected files.

@@ -129,6 +129,7 @@ Rails.application.routes.draw do
       delete 'delete_files'
       post   'create_collection'
       put    'update_multiple'
+      put    'set_tags'
       post   'change_provider'
       post   'compress'
       post   'uncompress'
