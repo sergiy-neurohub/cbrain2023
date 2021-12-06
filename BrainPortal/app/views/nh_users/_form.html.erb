@@ -114,11 +114,17 @@
       <% glob_user = @user.meta[:globus_preferred_username] %>
       <% glob_prov = @user.meta[:globus_provider_name] %>
       <% if glob_user.blank? %>
-        <p class="btn-solid globus">
-          <%= link_to @globus_uri, :class => "" do %>
-            Connect your NeuroHub account to a Globus identity provider
-          <% end %>
-        </p>
+        <% if @user.id == current_user.id  # no button when viewing another user %>
+          <p class="btn-solid globus">
+            <%= link_to @globus_uri, :class => "" do %>
+                Connect your NeuroHub account to a Globus identity provider
+            <% end %>
+          </p>
+        <% else %>
+          <p class="field_note">
+            Only user himself is allowed to connect his NeuroHub account to Globus
+          </p>
+        <% end %>
         <p class="field_note">
           Globus is a non-profit service for secure, reliable research data management.
           <br>
@@ -158,4 +164,3 @@
   </div>
 
 <% end %>
-

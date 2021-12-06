@@ -172,13 +172,16 @@
                :class  => "button",
                :method => :post,
                :data   => { :confirm => "Are you sure you want to unlink your account with this Globus identity?" }
-             )
-         %>
-       <% else %>
-         (No Globus identity linked to your account)<br>
-         <%= link_to 'Link a Globus identity', @globus_uri, :class => 'button globus_button' %>
-       <% end %>
-    <% end %>
+              )
+          %>
+         <% elsif @user.id == current_user.id  # hide when viewing another user %>
+           (No Globus identity linked to your account)<br>
+           <%= link_to 'Link a Globus identity', @globus_uri, :class => 'button globus_button' %>
+         <% else %>
+           Globus linkage can be performed only by user himself.
+           Learn more about Globus at <%= link_to "www.globus.org", "https://www.globus.org/", :class => "globus_home_link" %>
+         <% end %>
+      <% end %>
     <% end %>
 
     <%
@@ -371,4 +374,3 @@
   <p>
   <%= render :partial => "layouts/log_report", :locals  => { :log  => @log, :title => 'User activity report' } %>
 </div>
-
