@@ -338,7 +338,7 @@ class ToolConfig < ApplicationRecord
     return [] if specs.blank?
 
     # break onto commands based on comas, whitespace or comments
-    specs = specs.split(/([\s,]|#.*$)+/).map(&:presence).compact
+    specs = parsed_overlay_specs
     specs.map do |spec|
       # Full path or pattern (legacy)
       next spec if spec =~ /^\// # just use that - FIXME remove after successful migration
@@ -375,7 +375,7 @@ class ToolConfig < ApplicationRecord
     return @_data_providers_with_overlays_ if @_data_providers_with_overlays_
     specs = self.singularity_overlays_specs.presence
     return [] if specs.blank?
-    specs = specs.split(/([\s,]|#.*$)+/).map(&:presence).compact
+    specs = parsed_overlay_specs
     @_data_providers_with_overlays_ = specs.map do |spec|
       next nil unless spec =~ /^dp:/i
       id_or_name = spec.sub(/^dp:/i,"")
@@ -420,11 +420,33 @@ class ToolConfig < ApplicationRecord
     return errors.empty?
   end
 
+  # synchronize userfiles in tool config overlay specification
+  def sync_overlay_userfiles
+
+    specs = self.singularity_overlays_specs.presence
+    return if specs.blank?
+
+    specs = parsed_overlay_specs
+
+    # Iterate over each spec and validate them
+    specs.each do |spec|
+      if  "userfile" == spec.split(':') # db-registered file specification: "userfile:ID" e.g. "userfile:42"
+        userfile.sync_to_cache() rescue nil
+      end
+    end
+  end
+
+  # breaks overlay spec on statements
+  def parsed_overlay_specs
+    lines = specs.split(/([\s,]|(([\n^]+#.*$)))+/).map(&:presence).compact
+  end
+
   # Verify that the admin has entered a set of
   # overlay specifications properly. One or several of:
   #
   #    file:/full/path/to/something.squashfs
   #    file:/full/path/to/pattern*/data?.squashfs
+  #    userfile:333
   #    dp:123
   #    dp:dp_name
   #
@@ -432,7 +454,7 @@ class ToolConfig < ApplicationRecord
     specs = self.singularity_overlays_specs.presence
     return if specs.blank?
 
-    specs = specs.split(/([\s,]|#.*$)+/).map(&:presence).compact
+    specs = parsed_overlay_specs
 
     # Iterate over each spec and validate them
     specs.each do |spec|
