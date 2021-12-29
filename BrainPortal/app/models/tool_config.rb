@@ -429,8 +429,8 @@ class ToolConfig < ApplicationRecord
     specs = parsed_overlay_specs
 
     # Iterate over each spec and validate them
-    specs.each do |spec|
-      if  "userfile" == spec.split(':') # db-registered file specification: "userfile:ID" e.g. "userfile:42"
+    specs.each do |kind, id_or_name|
+      if  kind == "userfile"  # db-registered file specification: "userfile:ID" e.g. "userfile:42"
         userfile.sync_to_cache() rescue nil
       end
     end
@@ -438,7 +438,15 @@ class ToolConfig < ApplicationRecord
 
   # breaks overlay spec on statements
   def parsed_overlay_specs
-    lines = specs.split(/([\s,]|(([\n^]+#.*$)))+/).map(&:presence).compact
+
+    specs.split(/(^s+)(^#.+)(\s*)/)
+    # split on statement (non-comment lines)
+      specs.split(/([\s,]|(([\n^]+#.*$)))+/).map(&:presence).compact.map do |spec|
+      if spec.starts_with('/')
+        ('file', spec)
+      else
+
+      end
   end
 
   # Verify that the admin has entered a set of
