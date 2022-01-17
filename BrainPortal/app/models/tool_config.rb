@@ -338,7 +338,7 @@ class ToolConfig < ApplicationRecord
     return [] if specs.blank?
 
     # break onto commands based on comas, whitespace or comments
-    specs = specs.split(/([\s,]|#.*$)+/).map(&:presence).compact
+    specs = parsed_overlay_specs
     specs.map do |spec|
       # Full path or pattern (legacy)
       next spec if spec =~ /^\// # just use that - FIXME remove after successful migration
@@ -375,7 +375,7 @@ class ToolConfig < ApplicationRecord
     return @_data_providers_with_overlays_ if @_data_providers_with_overlays_
     specs = self.singularity_overlays_specs.presence
     return [] if specs.blank?
-    specs = specs.split(/([\s,]|#.*$)+/).map(&:presence).compact
+    specs = parsed_overlay_specs
     @_data_providers_with_overlays_ = specs.map do |spec|
       next nil unless spec =~ /^dp:/i
       id_or_name = spec.sub(/^dp:/i,"")
@@ -420,11 +420,44 @@ class ToolConfig < ApplicationRecord
     return errors.empty?
   end
 
-  # Verify that the admin has entered a set of
+  # synchronize userfiles in tool config overlay specification
+  def sync_overlay_userfiles(spec)
+
+    specs = self.singularity_overlays_specs.presence
+    return if specs.blank?
+
+    specs = parsed_overlay_specs(specs)
+
+    # Iterate over each spec and validate them
+    specs.each do |kind, id_or_name|
+      if  kind == "userfile"  # db-registered file specification: "userfile:ID" e.g. "userfile:42"
+        Userfile.where(:id => id_or_name).sync_to_cache() rescue nil
+      end
+    end
+  end
+
+  # breaks overlay spec on statements
+  def parsed_overlay_specs(specs)
+    # split on statement (non-comment lines)
+    lines = specs.split(/(?:^s+)|(?:^#.+)|(?:\s+#.+)|(?:\s+\n)/)
+      lines.map(&:presence).compact.map do |spec|
+        spec = spec.strip # the regex should take care of stripping whitespace, still just in the case
+        if spec.start_with?('/')
+          ['file', spec]  # legacy format
+        elsif spec.include?(':')
+          spec.split(':', 2)
+        else
+          [spec, nil] # signals error to be handled or ignored by caller method
+        end
+      end
+  end
+
+  # Verifies that the admin has entered a set of
   # overlay specifications properly. One or several of:
   #
   #    file:/full/path/to/something.squashfs
   #    file:/full/path/to/pattern*/data?.squashfs
+  #    userfile:333
   #    dp:123
   #    dp:dp_name
   #
@@ -432,62 +465,49 @@ class ToolConfig < ApplicationRecord
     specs = self.singularity_overlays_specs.presence
     return if specs.blank?
 
-    specs = specs.split(/([\s,]|#.*$)+/).map(&:presence).compact
+    specs = parsed_overlay_specs(specs)
 
     # Iterate over each spec and validate them
-    specs.each do |spec|
+    specs.each do |kind, id_or_name|
 
-      # Legacy full paths
-      # not sure is it really needed, as user can add file: prefix while editing, but as requested
-      # may be check based on date and time of creation?
-      if spec =~ /^\//
-        next if spec =~ /^\/\S+\.(sqs|squashfs)$/i # full paths ok
-        self.errors.add(:singularity_overlays_specs, "contains invalid specification '#{spec}'. It should be a full path that ends in .squashfs or .sqs")
-        next
-      end
+      self.errors.add(:singularity_overlays_specs, " contains invalid specification '#{[kind, id_or_name]}'. Empty id or name, perhaps a missing colon") if id_or_name.nil?
 
-      self.errors.add(:singularity_overlays_specs, " contains invalid specification '#{spec}'. Semicolon in the start of line") if spec.start_with?(':')
-      knd, id_or_name = spec.split(':', 2)
-
-      self.errors.add(:singularity_overlays_specs, " contains invalid specification '#{spec}'. No colon is found. Specification without colon no longer supported") if ! id_or_name
-
-      case knd
+      case kind
       when 'file' # full path specification: "file:FULLPATH" e.g. "file:/a/b/c"
         if id_or_name !~ /^\/\S+\.(sqs|squashfs)$/i # full paths ok
           self.errors.add(:singularity_overlays_specs,
-            " contains invalid specification '#{spec}'. It should be a full path that ends in .squashfs or .sqs")
-        elsif (Pathname.new id_or_name).relative?
+            " contains invalid specification '#{[kind, id_or_name]}'. It should be a full path that ends in .squashfs or .sqs")
+        end
+        if (Pathname.new id_or_name).relative?
           self.errors.add(:singularity_overlays_specs,
-                          " contains invalid specification '#{spec}'. It should be an absolute path ")
+                          " contains invalid specification '#{[kind, id_or_name]}'. It should be an absolute path ")
         end
 
       when 'userfile' # db-registered file specification: "userfile:ID" e.g. "userfile:42"
-        userfile = Userfile.find(id_or_name) rescue nil
+        userfile = Userfile.where(:id => id_or_name).first
         if  !userfile
           self.errors.add(:singularity_overlays_specs,
-            %{" contains invalid specification '#{spec}'. The file with id #{id_or_name} is not found.
+            %{" contains invalid specification '#{[kind, id_or_name]}'. The file with id #{id_or_name} is not found.
             Note that file names are not supported for userfiles."}
           )
         elsif  !(userfile.sync_to_cache() rescue nil)
             self.errors.add(:singularity_overlays_specs,
-                   " contains invalid specification '#{spec}'. The fetching data from data provider to cache failed.")
-        elsif  ! userfile.name.ends_with?('.sqs') && ! userfile.name.ends_with?('.squashfs')
+                   " contains invalid specification '#{[kind, id_or_name]}'. The fetching data from data provider to cache failed.")
+        elsif  ! userfile.name.end_with?('.sqs') && ! userfile.name.end_with?('.squashfs')
               self.errors.add(:singularity_overlays_specs,
-              " contains invalid specification '#{spec}'. It should end in .squashfs or .sqs")            
+              " contains invalid specification '#{[kind, id_or_name]}'. File name should end in .squashfs or .sqs")
         end
-
       when 'dp' # DataProvider specs: "dp:name" or "dp:ID"
         dp = DataProvider.where_id_or_name(id_or_name).first
         if !dp
-          self.errors.add(:singularity_overlays_specs, "contains invalid DP specification '#{spec}' '#{spec}' (no such DP)")
+          self.errors.add(:singularity_overlays_specs, "contains invalid DP specification '#{kind}':'#{id_or_name}' (no such DP)")
         elsif ! dp.is_a?(SingSquashfsDataProvider)
-          self.errors.add(:singularity_overlays_specs, "DataProvider '#{spec}' is not a SingSquashfsDataProvider '#{spec}'")
+          self.errors.add(:singularity_overlays_specs, "DataProvider '#{[id_or_name]}' is not a SingSquashfsDataProvider '#{id_or_name}'")
         end
 
       else
-
         # Other errors
-        self.errors.add(:singularity_overlays_specs, "contains invalid specification '#{spec}'")
+        self.errors.add(:singularity_overlays_specs, "contains invalid specification, possibly unsupported kind '#{kind}'")
       end
     end
   end
