@@ -340,8 +340,8 @@ class ToolConfig < ApplicationRecord
     specs = parsed_overlay_specs(specs)
     specs.map do |knd, id_or_name|
 
-      # Full path or pattern (legacy)
-      next knd if knd =~ /^\// and id_or_name.nil? # FIXME delete it after successful migration
+      # Old style file spec (legacy, to be removed)
+      next knd if knd =~ /^\//  # FIXME delete it after successful migration
 
       case knd
       when 'dp'
@@ -352,15 +352,15 @@ class ToolConfig < ApplicationRecord
         dp_ovs
       when 'file'
         cb_error "Provide absolute filepath in spec #{spec}." if (Pathname.new id_or_name).relative?
-        id_or_name  # for local file, it could be (full) file name, other ids/inode is not supported, only (full) name supported
+        id_or_name  # for local file, it could be full file name (no ids)
       when 'userfile'
-        # admin can access all files
+        # db registered file, note admin can access all files
         userfile = Userfile.where(:id => id_or_name).last
         cb_error "Userfile #{id_or_name} not found." if ! userfile
-        userfile.sync_to_cache() rescue nil
+        userfile.sync_to_cache() rescue cb_error "Userfile #{id_or_name} failed to synchronize. "
         userfile.cache_full_path()
       else
-        cb_error "Invalid '#{knd}' overlay."
+        cb_error "Invalid '#{knd}:#{id_or_name}' overlay."
       end
     end.flatten.uniq
   end
@@ -440,22 +440,21 @@ class ToolConfig < ApplicationRecord
 
     # Iterate over each spec and validate them
     specs.each do |kind, id_or_name|
-      if id_or_name.nil?         # compatibility with old format
+
+      # compatibility layer for old file spec format, to be eventually deleted after migration
+      if id_or_name.nil?
           id_or_name = kind
           kind = 'old style file'
       end
+
       case kind # different validations rules for file, userfile and dp specs
-      when 'file', 'old style file' # full path specification: "file:FULLPATH" e.g. "file:/a/b/c"
-        if id_or_name !~ /^\/\S+\.(sqs|squashfs)$/i # full paths ok
+      when 'file', 'old style file' # full path specification for a local file, e.g. "file:/myfiles/c.sqs"
+        if id_or_name !~ /^\/\S+\.(sqs|squashfs)$/i
           self.errors.add(:singularity_overlays_specs,
-            " contains invalid #{kind}  '#{id_or_name}'. It should be a full path that ends in .squashfs or .sqs")
-        end
-        if (Pathname.new id_or_name).relative?
-          self.errors.add(:singularity_overlays_specs,
-                          " contains invalid #{kind} '#{id_or_name}'. It should be an absolute path ")
+            " contains invalid '#{kind}' name '#{id_or_name}'. It should be a full path that ends in .squashfs or .sqs")
         end
 
-      when 'userfile' # db-registered file specification: "userfile:ID" e.g. "userfile:42"
+      when 'userfile' # db-registered file spec, e.g. "userfile:42"
         if id_or_name !~ /\A\d+\z/
           self.errors.add(:singularity_overlays_specs,
             %{" contains invalid userfile id '#{id_or_name}'. The userfile id should be an integer number."}
@@ -466,13 +465,10 @@ class ToolConfig < ApplicationRecord
           self.errors.add(:singularity_overlays_specs,
             %{" contains invalid userfile id '#{id_or_name}'. The file with id '#{id_or_name}' is not found."}
           )
-        elsif  !(userfile.sync_to_cache() rescue nil)
-            self.errors.add(:singularity_overlays_specs,
-                   " contains invalid userfile with id '#{id_or_name}'. The fetching data from data provider to cache failed.")
         elsif  ! userfile.name.end_with?('.sqs') && ! userfile.name.end_with?('.squashfs')
               self.errors.add(:singularity_overlays_specs,
-              " contains invalid userfile with id '#{id_or_name}'. File name should end in .squashfs or .sqs")
-              # todo maybe rather or also check file type?
+              " contains invalid userfile with id '#{id_or_name}' and name '#{userfile.name}'. File name should end in .squashfs or .sqs")
+              # todo maybe or/and check file type?
         end
 
       when 'dp' # DataProvider specs: "dp:name" or "dp:ID"
