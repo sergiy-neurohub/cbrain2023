@@ -34,7 +34,6 @@
 #   a tool_id and a bourreau_id; they represent all
 #   available versions of a tool on a particular bourreau.
 class ToolConfig < ApplicationRecord
-  require 'pry'
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
   serialize       :env_array
