@@ -736,7 +736,6 @@ class ClusterTask < CbrainTask
     begin
       self.addlog("Setting Up.")
       self.record_cbraintask_revs
-      self.tool_config.sync_overlay_userfiles if self.tool_config  # synchronize overlay sqs userfile if any
       self.apply_tool_config_environment do
         Dir.chdir(self.full_cluster_workdir) do
           setup_success = self.meta[:submit_without_setup] || self.setup
