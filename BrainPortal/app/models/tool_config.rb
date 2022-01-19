@@ -357,7 +357,7 @@ class ToolConfig < ApplicationRecord
         # admin can access all files
         userfile = Userfile.where(:id => id_or_name).last
         cb_error "Userfile #{id_or_name} not found." if ! userfile
-        userfile.sync_to_cache() rescue nill
+        userfile.sync_to_cache() rescue nil
         userfile.cache_full_path()
       else
         cb_error "Invalid '#{knd}' overlay."
@@ -440,13 +440,11 @@ class ToolConfig < ApplicationRecord
 
     # Iterate over each spec and validate them
     specs.each do |kind, id_or_name|
-      if id_or_name.nil?
-        # compatibility with old format
+      if id_or_name.nil?         # compatibility with old format
           id_or_name = kind
           kind = 'old style file'
       end
-
-      case kind # different validations for different kinds of specs
+      case kind # different validations rules for file, userfile and dp specs
       when 'file', 'old style file' # full path specification: "file:FULLPATH" e.g. "file:/a/b/c"
         if id_or_name !~ /^\/\S+\.(sqs|squashfs)$/i # full paths ok
           self.errors.add(:singularity_overlays_specs,
@@ -458,10 +456,15 @@ class ToolConfig < ApplicationRecord
         end
 
       when 'userfile' # db-registered file specification: "userfile:ID" e.g. "userfile:42"
+        if id_or_name !~ /\A\d+\z/
+          self.errors.add(:singularity_overlays_specs,
+            %{" contains invalid userfile id '#{id_or_name}'. The userfile id should be an integer number."}
+          )
+        end
         userfile = Userfile.where(:id => id_or_name).first
         if  !userfile
           self.errors.add(:singularity_overlays_specs,
-            %{" contains invalid userfile '#{id_or_name}'. The file with id #{id_or_name} is not found."}
+            %{" contains invalid userfile id '#{id_or_name}'. The file with id '#{id_or_name}' is not found."}
           )
         elsif  !(userfile.sync_to_cache() rescue nil)
             self.errors.add(:singularity_overlays_specs,
@@ -469,7 +472,7 @@ class ToolConfig < ApplicationRecord
         elsif  ! userfile.name.end_with?('.sqs') && ! userfile.name.end_with?('.squashfs')
               self.errors.add(:singularity_overlays_specs,
               " contains invalid userfile with id '#{id_or_name}'. File name should end in .squashfs or .sqs")
-              # todo maybe rather check file type?
+              # todo maybe rather or also check file type?
         end
 
       when 'dp' # DataProvider specs: "dp:name" or "dp:ID"

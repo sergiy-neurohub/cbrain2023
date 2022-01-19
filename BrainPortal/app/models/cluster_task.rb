@@ -732,10 +732,10 @@ class ClusterTask < CbrainTask
       self.status == 'Setting Up'
     return false if self.workdir_archived?
 
-
     begin
       self.addlog("Setting Up.")
       self.record_cbraintask_revs
+      self.make_cluster_workdir
       self.apply_tool_config_environment do
         Dir.chdir(self.full_cluster_workdir) do
           setup_success = self.meta[:submit_without_setup] || self.setup
