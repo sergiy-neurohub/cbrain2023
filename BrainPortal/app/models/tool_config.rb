@@ -34,6 +34,7 @@
 #   a tool_id and a bourreau_id; they represent all
 #   available versions of a tool on a particular bourreau.
 class ToolConfig < ApplicationRecord
+
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
   serialize       :env_array
@@ -330,7 +331,7 @@ class ToolConfig < ApplicationRecord
   #        file:/path/to/file.squashfs
   #      # All overlays configured for DP 1234
   #         dp:1234
-  #      # My special overlay in CBRAIN
+  #      # CBRAIN db registered file
   #         userfile:1234
   def singularity_overlays_full_paths
     specs = self.singularity_overlays_specs.presence
@@ -357,7 +358,7 @@ class ToolConfig < ApplicationRecord
         # db registered file, note admin can access all files
         userfile = Userfile.where(:id => id_or_name).last
         cb_error "Userfile #{id_or_name} not found." if ! userfile
-        userfile.sync_to_cache() rescue cb_error "Userfile #{id_or_name} failed to synchronize. "
+        userfile.sync_to_cache() rescue cb_error "Userfile #{id_or_name} failed to synchronize."
         userfile.cache_full_path()
       else
         cb_error "Invalid '#{knd}:#{id_or_name}' overlay."
@@ -443,8 +444,8 @@ class ToolConfig < ApplicationRecord
 
       # compatibility layer for old file spec format, to be eventually deleted after migration
       if id_or_name.nil?
-          id_or_name = kind
-          kind = 'old style file'
+        id_or_name = kind
+        kind = 'old style file'
       end
 
       case kind # different validations rules for file, userfile and dp specs
@@ -459,16 +460,17 @@ class ToolConfig < ApplicationRecord
           self.errors.add(:singularity_overlays_specs,
             %{" contains invalid userfile id '#{id_or_name}'. The userfile id should be an integer number."}
           )
+        else
+          userfile = Userfile.where(:id => id_or_name).first
         end
-        userfile = Userfile.where(:id => id_or_name).first
         if  !userfile
           self.errors.add(:singularity_overlays_specs,
             %{" contains invalid userfile id '#{id_or_name}'. The file with id '#{id_or_name}' is not found."}
           )
-        elsif  ! userfile.name.end_with?('.sqs') && ! userfile.name.end_with?('.squashfs')
-              self.errors.add(:singularity_overlays_specs,
-              " contains invalid userfile with id '#{id_or_name}' and name '#{userfile.name}'. File name should end in .squashfs or .sqs")
-              # todo maybe or/and check file type?
+        elsif ! userfile.name.end_with?('.sqs') && ! userfile.name.end_with?('.squashfs')
+          self.errors.add(:singularity_overlays_specs,
+          " contains invalid userfile with id '#{id_or_name}' and name '#{userfile.name}'. File name should end in .squashfs or .sqs")
+          # todo maybe or/and check file type?
         end
 
       when 'dp' # DataProvider specs: "dp:name" or "dp:ID"
@@ -476,7 +478,7 @@ class ToolConfig < ApplicationRecord
         if !dp
           self.errors.add(:singularity_overlays_specs, "contains invalid DP '#{id_or_name}' (no such DP)")
         elsif ! dp.is_a?(SingSquashfsDataProvider)
-          self.errors.add(:singularity_overlays_specs, "DataProvider '#{[id_or_name]}' is not a SingSquashfsDataProvider '#{id_or_name}'")
+          self.errors.add(:singularity_overlays_specs, "DataProvider '#{id_or_name}' is not a SingSquashfsDataProvider")
         end
 
       else
