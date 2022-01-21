@@ -349,12 +349,12 @@ class ToolConfig < ApplicationRecord
         dp_ovs
       when 'file'
         cb_error "Provide absolute filepath for overlay  #{id_or_name}." if (Pathname.new id_or_name).relative?
-        id_or_name  # for local file, it could be full file name (no ids)
+        id_or_name  # for local file, it is full file name (no ids)
       when 'userfile'
         # db registered file, note admin can access all files
         userfile = SingleFile.where(:id => id_or_name).last
         cb_error "Userfile #{id_or_name} not found." if ! userfile
-        userfile.sync_to_cache() rescue cb_error "Userfile #{id_or_name} for fetching overlay failed to synchronize."
+        userfile.sync_to_cache() rescue cb_error "Userfile with id '#{id_or_name}' for fetching overlay failed to synchronize."
         userfile.cache_full_path()
       else
         cb_error "Invalid '#{knd}:#{id_or_name}' overlay."
