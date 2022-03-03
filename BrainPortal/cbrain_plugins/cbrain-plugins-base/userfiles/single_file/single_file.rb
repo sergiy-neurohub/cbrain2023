@@ -91,7 +91,6 @@ class SingleFile < Userfile
         else
           "md5sum"
         end
-    self.sync_to_cache
 
     content_path = self&.cache_full_path
     cb_error("Can't find cache path for file #{self.name}") if content_path.blank?
