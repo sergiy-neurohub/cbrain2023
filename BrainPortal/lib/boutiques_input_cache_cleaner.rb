@@ -37,9 +37,10 @@
 #   }
 #
 # In the example above, any userfile cache selected for the file input
-# named 'my_input1' or 'my_input2' will be deleted after task execution unless there .
+# named 'my_input1' or 'my_input2' will be deleted after task execution unless CBRAIN
+# notices that another task uses same cache.
 # CBRAIN tries to handle conflict between tasks that share same file based on timestamps.
-# Yet this is a dangerous feature as it might not handle races in cache clearing and updating
+# Yet this is a dangerous feature as it might not handle some of races 
 module BoutiquesInputCacheCleaner
 
   def save_results #:nodoc:
