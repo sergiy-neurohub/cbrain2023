@@ -747,6 +747,7 @@ class ClusterTask < CbrainTask
             self.status_transition(self.status, "Failed To Setup")
           else
             self.addlog("Setup and submit process successful.")
+            self.meta[:setup_time] = Time.now
             # the status is moving forward at its own pace now
           end
           self.meta[:submit_without_setup] = nil # reset special skip
