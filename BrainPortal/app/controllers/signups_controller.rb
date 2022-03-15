@@ -130,6 +130,9 @@ class SignupsController < ApplicationController
       @signup.confirmed = true
       @signup.save
       @propose_view = can_edit?(@signup)
+
+
+
       return # renders confirm.html.erb
     end
 
@@ -305,7 +308,8 @@ class SignupsController < ApplicationController
       :title, :first, :middle, :last,
       :institution, :department, :position, :affiliation, :email,
       :street1, :street2, :city, :province, :country, :postal_code,
-      :login, :time_zone, :comment, :admin_comment, :hidden, :user_id
+      :login, :time_zone, :comment, :admin_comment, :hidden, :user_id,
+      :maillist_conset
     )
   end
 

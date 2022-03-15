@@ -42,7 +42,7 @@ class Signup < ApplicationRecord
       :title, :first, :middle, :last,
       :institution, :department, :position, :affiliation, :email,
       :street1, :street2, :city, :province, :country, :postal_code,
-      :login, :comment, :admin_comment
+      :login, :comment, :admin_comment, :maillist_consent
     ].each do |att|
       val = read_attribute(att) || ""
       write_attribute(att, val.strip)
@@ -108,7 +108,7 @@ class Signup < ApplicationRecord
   # This method is mostly used by the users controller, after a user is created
   # based on the information from the signup record.
   def add_extra_info_for_user(user) #:nodoc:
-    [ :institution, :department, :position, :affiliation, :street1, :street2, :province, :postal_code ].each do |att|
+    [ :institution, :department, :position, :affiliation, :street1, :street2, :province, :postal_code, :maillist_consent  ].each do |att|
       val = self[att]
       next if val.blank?
       user.addlog("#{att.to_s.capitalize}: #{val.strip}")

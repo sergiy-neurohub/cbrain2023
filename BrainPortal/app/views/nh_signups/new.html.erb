@@ -137,6 +137,13 @@
         <%= f.label(:comment, "Comments or special requests") %>
         <%= f.text_area :comment, :cols => 80, :rows => 5 %>
       </fieldset>
+      <%= f.label(:maillist_consent, "Please subscribe me to NeuroHub/CBRAIN maillist:", "data-required"=>"true") %>
+      <%= f.select :maillist_consent, options_for_select(
+          [["(select one)", ""], "Yes",
+                                 "No"
+          ],
+          @signup.maillist_consent)
+      %>
       <div class="btn-section">
         <%= f.submit(@signup.new_record? ? "Request Account" : "Update Request", { :class => "btn-solid primary" })  %>
         <%= link_to 'Already Have An Account',

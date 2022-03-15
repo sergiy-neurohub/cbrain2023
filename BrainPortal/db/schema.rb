@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20220302191553) do
+ActiveRecord::Schema.define(version: 20220314170620) do
 
   create_table "access_profiles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string   "name",        null: false
@@ -361,6 +361,7 @@ ActiveRecord::Schema.define(version: 20220302191553) do
     t.boolean  "hidden",                           default: false
     t.integer  "remote_resource_id"
     t.string   "form_page"
+    t.string   "maillist_consent"
   end
 
   create_table "sites", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
@@ -516,6 +517,8 @@ ActiveRecord::Schema.define(version: 20220302191553) do
     t.boolean  "account_locked",       default: false, null: false
     t.string   "zenodo_main_token"
     t.string   "zenodo_sandbox_token"
+    t.string   "maillist_consent"
+    t.string   "envoke_id"
     t.index ["login"], name: "index_users_on_login", using: :btree
     t.index ["type"], name: "index_users_on_type", using: :btree
   end

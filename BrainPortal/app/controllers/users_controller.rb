@@ -21,6 +21,7 @@
 #
 
 require 'ipaddr'
+require 'envoke_helpers'
 
 #RESTful controller for the User resource.
 class UsersController < ApplicationController
@@ -158,6 +159,10 @@ class UsersController < ApplicationController
         signup.approved_by = current_user.login
         signup.approved_at = Time.now
         signup.user_id     = @user.id
+
+        @user.maillist_concent = signup.maillist_concent
+        envoke_id = 1
+
         signup.save
       else # account was not created from a signup request? Still log some info.
         current_user.addlog_context(self,"Created account for user '#{@user.login}'")

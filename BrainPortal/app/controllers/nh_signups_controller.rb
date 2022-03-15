@@ -93,7 +93,8 @@ class NhSignupsController < NeurohubApplicationController
       :title, :first, :middle, :last,
       :institution, :department, :position, :affiliation, :email,
       :street1, :street2, :city, :province, :country, :postal_code,
-      :login, :time_zone, :comment, :admin_comment, :hidden, :user_id
+      :login, :time_zone, :comment, :admin_comment, :hidden, :user_id,
+      :maillist_consent
     )
   end
 
