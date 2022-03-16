@@ -21,7 +21,7 @@
 #
 
 # Helper for logging in using Envoke
-module GlobusHelpers
+module EnvokeHelpers
 
   Revision_info = CbrainFileRevision[__FILE__] #:nodoc:
 
@@ -29,7 +29,7 @@ module GlobusHelpers
   require 'uri'
   require 'net/http'
   require 'json'
-  require 'cgi'
+  # require 'cgi'
 
 
   @envoke_id      = ENV['envoke_id']
@@ -87,7 +87,7 @@ module GlobusHelpers
     req.basic_auth @envoke_id, @envoke_auth
 
     req2      = Net::HTTP::Get.new(
-        URI.parse("#{ENVOKE_API_BASE}/contacts/filter[email]=#{user.email}"))
+        URI.parse("#{ENVOKE_API_BASE}/contacts?filter[email]=#{user.email}").path)
       # cbrain validates email, otherwise filter with CGI::escape or URI::encode.
       #  note URI::encode might have unicode issues eg. see
       #  https://stackoverflow.com/questions/6714196/how-to-url-encode-a-string-in-ruby
@@ -97,7 +97,6 @@ module GlobusHelpers
 
 
     res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-
       http.request(req)
     end
     if res.code == "400"

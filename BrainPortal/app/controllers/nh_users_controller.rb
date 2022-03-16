@@ -23,6 +23,8 @@
 #Controller for the User resource.
 class NhUsersController < NeurohubApplicationController
 
+  include EnvokeHelpers
+
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
   include OrcidHelpers
@@ -70,12 +72,18 @@ class NhUsersController < NeurohubApplicationController
 
     attr_to_update = params.require_as_params(:user).permit( [
       :full_name, :email, :time_zone, :password, :password_confirmation,
-      :city, :country, :affiliation, :position, :zenodo_sandbox_token, :zenodo_main_token
+      :city, :country, :affiliation, :position, :zenodo_sandbox_token, :zenodo_main_token,
+      :maillist_consent
     ])
 
     # Do not zap tokens if the user left them blank
     attr_to_update.delete(:zenodo_sandbox_token) if attr_to_update[:zenodo_sandbox_token].blank?
     attr_to_update.delete(:zenodo_main_token)    if attr_to_update[:zenodo_main_token].blank?
+
+    if @signup.maillist_consent != params[:user][:maillist_consent]
+      envoke_add_user(@user, "Consent via user page in NeuroHub") if params[:user][:maillist_consent] == 'Yes'
+      envoke_delete_user(@user) if params[:user][:maillist_consent] == 'No'
+    end
 
     last_update = @user.updated_at
     if @user.update_attributes_with_logging(attr_to_update, current_user)

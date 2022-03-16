@@ -21,10 +21,12 @@
 #
 
 require 'ipaddr'
-require 'envoke_helpers'
+require 'pry'
 
 #RESTful controller for the User resource.
 class UsersController < ApplicationController
+
+  include EnvokeHelpers
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
@@ -150,7 +152,7 @@ class UsersController < ApplicationController
       add_meta_data_from_form(@user, [:pref_data_provider_id])
 
       flash[:notice] = "User successfully created.\n"
-
+      # binding.pry
       # Find signup record matching login name, and log creation and transfer some info.
       if signup = Signup.where(:id => params[:signup_id]).first
         current_user.addlog("Approved [[signup request][#{signup_path(signup)}]] for user '#{@user.login}'")
@@ -160,8 +162,8 @@ class UsersController < ApplicationController
         signup.approved_at = Time.now
         signup.user_id     = @user.id
 
-        @user.maillist_concent = signup.maillist_concent
-        @user.envoke_id = envoke_add_user(@user)
+        @user.maillist_consent = signup.maillist_consent
+        @user.envoke_id = envoke_add_user(@user) if signup.maillist_consent == 'Yes'
         signup.save
       else # account was not created from a signup request? Still log some info.
         current_user.addlog_context(self,"Created account for user '#{@user.login}'")
