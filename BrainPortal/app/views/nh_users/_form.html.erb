@@ -157,9 +157,10 @@
     <%= f.password_field :zenodo_sandbox_token, :size => 30 %>
   </fieldset>
 
-
+  <% if @user.id == current_user.id  # show button only on user own page %>
   <fieldset>
-    <%= f.label(:maillist_consent, "Please subscribe me to NeuroHub mail list", "data-required"=>"true") %>
+
+    <%= f.label(:maillist_consent, "I wish to receive NeuroHub mail list") %>
     <%= f.select :maillist_consent, options_for_select(
         [["(select one)", ""], "Yes",
          "No"
@@ -168,11 +169,8 @@
 
     %>
 
-    <%= if @user.maillist_consent == 'Yes' && ! @user.envoke_id%>
-      your subscription is not yet finalized, please contact your admin for details
-    <%=  end %>
   </fieldset >
-  </fieldset>
+  <% end %>
 
 
   <div class="btn-section">

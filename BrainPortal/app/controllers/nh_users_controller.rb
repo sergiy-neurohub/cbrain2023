@@ -80,9 +80,12 @@ class NhUsersController < NeurohubApplicationController
     attr_to_update.delete(:zenodo_sandbox_token) if attr_to_update[:zenodo_sandbox_token].blank?
     attr_to_update.delete(:zenodo_main_token)    if attr_to_update[:zenodo_main_token].blank?
 
-    if @signup.maillist_consent != params[:user][:maillist_consent]
-      envoke_add_user(@user, "Consent via user page in NeuroHub") if params[:user][:maillist_consent] == 'Yes'
-      envoke_delete_user(@user) if params[:user][:maillist_consent] == 'No'
+    if @user.maillist_consent != params[:user][:maillist_consent] and envoke_auth_configured?
+      begin
+        envoke_add_user(@user, "Consent via user page in NeuroHub") if params[:user][:maillist_consent] == 'Yes'
+        envoke_delete_user(@user) if params[:user][:maillist_consent] == 'No'
+      rescue
+        flash[:warning] = "Your change to maillist subscription did not take effect, please contact your admin."
     end
 
     last_update = @user.updated_at
