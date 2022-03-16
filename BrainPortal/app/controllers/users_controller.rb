@@ -161,8 +161,7 @@ class UsersController < ApplicationController
         signup.user_id     = @user.id
 
         @user.maillist_concent = signup.maillist_concent
-        envoke_id = 1
-
+        @user.envoke_id = envoke_add_user(@user)
         signup.save
       else # account was not created from a signup request? Still log some info.
         current_user.addlog_context(self,"Created account for user '#{@user.login}'")
