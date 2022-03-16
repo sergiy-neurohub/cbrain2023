@@ -86,7 +86,11 @@ module GlobusHelpers
     #uri.port = 433
     req.basic_auth @envoke_id, @envoke_auth
 
-    req2      = Net::HTTP::Get.new(URI.parse("#{ENVOKE_API_BASE}/contacts/filter[email]={}"))
+    req2      = Net::HTTP::Get.new(
+        URI.parse("#{ENVOKE_API_BASE}/contacts/filter[email]=#{user.email}"))
+      # cbrain validates email, otherwise filter with CGI::escape or URI::encode.
+      #  note URI::encode might have unicode issues eg. see
+      #  https://stackoverflow.com/questions/6714196/how-to-url-encode-a-string-in-ruby
     req2.body = data.to_json
     #uri.port = 433
     req2.basic_auth @envoke_id, @envoke_auth
