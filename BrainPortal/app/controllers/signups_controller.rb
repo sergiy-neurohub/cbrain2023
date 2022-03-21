@@ -23,6 +23,8 @@ class SignupsController < ApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
+  include EnvokeHelpers
+
   before_action :login_required,      :except => [:show, :new, :create, :edit, :destroy, :update, :confirm, :resend_confirm]
   before_action :admin_role_required, :except => [:show, :new, :create, :edit, :destroy, :update, :confirm, :resend_confirm]
 
@@ -31,6 +33,7 @@ class SignupsController < ApplicationController
   ################################################################
 
   def show #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     @signup = Signup.find(params[:id]) rescue nil
 
     unless can_edit?(@signup)
@@ -40,6 +43,7 @@ class SignupsController < ApplicationController
   end
 
   def new #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     @signup = Signup.new
   end
 
@@ -71,6 +75,7 @@ class SignupsController < ApplicationController
   end
 
   def edit #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     @signup = Signup.find(params[:id]) rescue nil
 
     unless can_edit?(@signup)
@@ -82,6 +87,7 @@ class SignupsController < ApplicationController
   end
 
   def update #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     @signup = Signup.find(params[:id]) rescue nil
 
     unless can_edit?(@signup)

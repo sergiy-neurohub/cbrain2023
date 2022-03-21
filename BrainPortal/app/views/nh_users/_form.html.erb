@@ -157,7 +157,7 @@
     <%= f.password_field :zenodo_sandbox_token, :size => 30 %>
   </fieldset>
 
-  <% if @user.id == current_user.id  # show button only on user own page %>
+  <% if @user.id == current_user.id  && @envoke_auth_configured  # show button only on user own page %>
   <fieldset>
 
     <%= f.label(:maillist_consent, "I wish to receive NeuroHub mail list") %>
@@ -166,7 +166,6 @@
          "No"
         ],
         @user.maillist_consent)
-
     %>
 
   </fieldset >

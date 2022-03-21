@@ -24,18 +24,23 @@ require 'ipaddr'
 
 class NhSignupsController < NeurohubApplicationController
 
+  include EnvokeHelpers
+
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
   before_action :login_required, :except => [:new, :create, :show, :confirm]
 
   def new #:nodoc:
     @signup = Signup.new
+    @envoke_auth_configured = envoke_auth_configured?
   end
 
   def show #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
   end
 
   def create #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     @signup                    = Signup.new(signup_params)
     @signup.session_id         = request.session_options[:id]
     @signup.remote_resource_id = RemoteResource.current_resource.id
@@ -66,6 +71,7 @@ class NhSignupsController < NeurohubApplicationController
 
   # Confirms that a signup person's email address actually belongs to them
   def confirm #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     @signup = Signup.find(params[:id]) rescue nil
     token   = params[:token] || ""
 

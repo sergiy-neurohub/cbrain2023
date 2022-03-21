@@ -80,12 +80,24 @@ class NhUsersController < NeurohubApplicationController
     attr_to_update.delete(:zenodo_sandbox_token) if attr_to_update[:zenodo_sandbox_token].blank?
     attr_to_update.delete(:zenodo_main_token)    if attr_to_update[:zenodo_main_token].blank?
 
-    if @user.maillist_consent != params[:user][:maillist_consent] and envoke_auth_configured?
-      begin
-        envoke_add_user(@user, "Consent via user page in NeuroHub") if params[:user][:maillist_consent] == 'Yes'
-        envoke_delete_user(@user) if params[:user][:maillist_consent] == 'No'
-      rescue
-        flash[:warning] = "Your change to maillist subscription did not take effect, please contact your admin."
+    if envoke_auth_configured?
+      # not sure should we board users from myaccount page, as my user possibly changed email
+      # to possibly uncofirmed email or even another user email
+      # if ! envoke_contact_with_email(@user.email) && ! $user.envoke_id
+      #  envoke_add_user(@user)      #
+      # end
+      if @user.maillist_consent != params[:user][:maillist_consent]
+      # begin
+        r = envoke_reopt_in(@user) if params[:user][:maillist_consent] == 'Yes'
+        r = envoke_reopt_out(@user) if params[:user][:maillist_consent] == 'No'
+        flash[:notice] = "Your change to Newsletter subscription failed." unless r
+      # rescue StandardError => e
+      #   flash[:warning] = "Your change to mail list subscription did not take effect, please contact your admin."
+      #   cb_error(e.message)
+      # end
+      elsif @user_id
+      end
+
     end
 
     last_update = @user.updated_at

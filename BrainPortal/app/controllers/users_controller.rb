@@ -78,6 +78,7 @@ class UsersController < ApplicationController
   # GET /user/1.json
   def show #:nodoc:
     @user = User.find(params[:id])
+    @envoke_auth_configured = envoke_auth_configured?
 
     cb_error "You don't have permission to view this user.", :redirect  => start_page_path unless edit_permission?(@user)
 
@@ -109,6 +110,7 @@ class UsersController < ApplicationController
   def new #:nodoc:
     @user        = User.new
     @random_pass = User.random_string
+    @envoke_auth_configured = envoke_auth_configured?
 
     # Pre-load attributes based on signup ID given in path.
     if params[:signup_id].present?
@@ -124,6 +126,7 @@ class UsersController < ApplicationController
   end
 
   def create #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     new_user_attr = user_params
 
     no_password_reset_needed = params[:no_password_reset_needed] == "1"
@@ -146,6 +149,12 @@ class UsersController < ApplicationController
 
     @user.password_reset = no_password_reset_needed ? false : true
 
+    signup = Signup.where(:id => params[:signup_id]).first
+
+    @envoke_auth_configured = envoke_auth_configured?
+    @user.maillist_consent = signup.maillist_consent if signup
+    @user.envoke_id = envoke_add_user(@user) if signup&.maillist_consent == 'Yes'
+
     if @user.save
 
       # This is not a real attribute of the model, and must be added after user is created
@@ -154,16 +163,13 @@ class UsersController < ApplicationController
       flash[:notice] = "User successfully created.\n"
       # binding.pry
       # Find signup record matching login name, and log creation and transfer some info.
-      if signup = Signup.where(:id => params[:signup_id]).first
+      if signup
         current_user.addlog("Approved [[signup request][#{signup_path(signup)}]] for user '#{@user.login}'")
         @user.addlog("Account created after signup request approved by '#{current_user.login}'")
         signup.add_extra_info_for_user(@user)
         signup.approved_by = current_user.login
         signup.approved_at = Time.now
         signup.user_id     = @user.id
-
-        @user.maillist_consent = signup.maillist_consent
-        @user.envoke_id = envoke_add_user(@user) if signup.maillist_consent == 'Yes'
         signup.save
       else # account was not created from a signup request? Still log some info.
         current_user.addlog_context(self,"Created account for user '#{@user.login}'")

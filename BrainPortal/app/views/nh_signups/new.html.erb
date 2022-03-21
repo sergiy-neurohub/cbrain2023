@@ -133,14 +133,17 @@
                                { :default => ActiveSupport::TimeZone['Eastern Time (US & Canada)'], :include_blank => true }
         %>
       </fieldset>
+      envok <%= @envoke_auth_configured %>
+      <% if @envoke_auth_configured %>
       <fieldset >
-      <%= f.label(:maillist_consent, "Please subscribe me to NeuroHub mail list", "data-required"=>"true") %>
+      <%= f.label(:maillist_consent, "Please subscribe me to NeuroHub Monthly newsletter", "data-required"=>"true") %>
       <%= f.select :maillist_consent, options_for_select(
           [["(select one)", ""], "Yes",
            "No"
           ],
           @signup.maillist_consent)
       %>
+      <% end %>
       </fieldset >
 
 
