@@ -168,8 +168,16 @@
         @user.maillist_consent)
     %>
 
+    <% if @user.maillist_consent == 'Yes' && @user.envoke_id.blank? %>
+      <span class="field_note">
+      Due to a technical error your Newsletter optin failed. Please contact tech support
+      </span>
+    <% end %>
+
   </fieldset >
   <% end %>
+
+
 
 
   <div class="btn-section">

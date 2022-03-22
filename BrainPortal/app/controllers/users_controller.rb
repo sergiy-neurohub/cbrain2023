@@ -150,10 +150,14 @@ class UsersController < ApplicationController
     @user.password_reset = no_password_reset_needed ? false : true
 
     signup = Signup.where(:id => params[:signup_id]).first
-
-    @envoke_auth_configured = envoke_auth_configured?
+    #binding.pry
     @user.maillist_consent = signup.maillist_consent if signup
-    @user.envoke_id = envoke_add_user(@user) if signup&.maillist_consent == 'Yes'
+    begin
+      @user.envoke_id = envoke_add_user(@user) if signup&.maillist_consent == 'Yes'
+    rescue CbrainError => e
+      flash[:notice] = "Envoke opt in failed, #{e.message} \n"
+    end
+
 
     if @user.save
 

@@ -47,6 +47,7 @@ class NhUsersController < NeurohubApplicationController
   end
 
   def edit #:nodoc:
+    @envoke_auth_configured = envoke_auth_configured?
     @user = User.find(params[:id])
     unless @user.id == current_user.id
       cb_error "You don't have permission to view this user.", :redirect => :neurohub

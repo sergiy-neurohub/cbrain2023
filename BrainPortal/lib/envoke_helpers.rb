@@ -57,8 +57,11 @@ module EnvokeHelpers
 
   def guess_first_name(user) # figure from sign up or guess first name
     signup = user.signup
+    # drop the title though no sure 100% may be should be appended into first name
+    # fixme a nice name parsing gem like https://github.com/berkmancenter/namae can do better
+    full_name = user.full_name.sub(/\A(Dr|Doctor|PhD|PHD|Master|Prof|Herr|Lord|Lady|Mr|Mrs|Ms|Sr|Sir|Madame)\.?\s/, "")
     return signup.first if user.signup && user.signup.first && user.full_name.start_with?(user.signup.first)
-    return user.full_name&.split(' ', 2)[0].presence # user might changed name
+    return full_name&.split(' ', 2)[0][0, 20].presence # user might changed name
   end
 
   def guess_second_name(user) # figure from sign up or guess last name from the full name
@@ -67,7 +70,7 @@ module EnvokeHelpers
     first = guess_first_name(user)
     return "" if first == signup&.full_name
     return user.full_name&.split(first + ' ', 2)[1].presence if user.full_name.start_with?(first + ' ')
-    return user.full_name.split[1].presence
+    return user.full_name.split[1][0, 20].presence
   end
 
   # def names  # todo merge two methods?
@@ -92,38 +95,32 @@ module EnvokeHelpers
         "first_name"          => guess_first_name(user),
         "last_name"           => guess_second_name(user),
         "consent_description" => consent_description,
-        # "interests" => {
-        #    "Monthly newsletter": "Set"        #
-        # }
+        "interests" => {
+           "Monthly newsletter": "Set"
+        },
         "consent_status"      => "Express"
     }
-
+    # binding.pry
     req      = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
     req.body = data.to_json
     #uri.port = 433
     req.basic_auth envoke_id, envoke_key
     begin
-      req2 = Net::HTTP::Get.new(
-          URI.parse("#{envoke_api_base}/contacts?filter[email]=#{user.email}").path)
-      # cbrain validates email, otherwise filter with CGI::escape or URI::encode.
-      #  note URI::encode might have unicode issues eg. see
-      #  https://stackoverflow.com/questions/6714196/how-to-url-encode-a-string-in-ruby
-      #uri.port = 433
-      req2.basic_auth envoke_id, envoke_key
 
       res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
         http.request(req)
       end
-      if res.code == "400"
-
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-          res = http.request(req2)
+      if res.code == "400" && envoke_contact_with_email(user.email)
           cb_error "user with #{user.email} email is already in the maillist"
+          # todo check is user active? if not add with new status?
+      elsif ! res.code.start_with?('2')
+        cb_error "Envoke opt in failed"
+        user.add_log("Envoke opt in failed code #{res.code}  #{res.body}")
+        # todo check is user active? if not add with new status?
 
-          # todo check is he active? if not add with new status?
-        end
       end
-    rescue StandardError => e
+    rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError,
+        Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => e
       cb_error(e.message)
     end
 
@@ -132,11 +129,11 @@ module EnvokeHelpers
 
   # updates envoke contact
   def envoke_update(user, new_params, validate=true)
-    contact_params = !envoke_contact_with_email(user.email)
+    contact_params =  envoke_contact_with_email(user.email)
     #validation
     if validate
-      return cb_error('email is not found in Envoke contact list, contact admin')  if !contact_params
-      return cb_error('is not boarded to Enovoke via NeuroHub signup, contact admin')  if user.id.blank?
+      return cb_error('Your email is not found in Envoke contact list, contact admin')  if ! contact_params
+      return cb_error('is not boarded to Enovoke via NeuroHub signup, contact admin')  if user.envoke_id.blank?
     end
 
     # user.id = envoke_get_contact
@@ -152,7 +149,8 @@ module EnvokeHelpers
       res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
         http.request(req)
       end
-    rescue StandardError => e
+    rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError,
+        Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => e
       cb_error(e.message)
     end
     if res&.code&.start_with?("2")
@@ -206,7 +204,7 @@ module EnvokeHelpers
 
     rescue Timeout::Error, Errno::EINVAL, Errno::ECONNRESET, EOFError,
       Net::HTTPBadResponse, Net::HTTPHeaderSyntaxError, Net::ProtocolError => e
-      cb_error("Unable to retrieve a contact with email #{e.message}")
+      flash['notice'] = ("Unable to retrieve a contact Envoke newsletter service #{e.message}")
     end
   end
 
