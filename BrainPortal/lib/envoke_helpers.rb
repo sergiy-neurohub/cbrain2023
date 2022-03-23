@@ -60,7 +60,7 @@ module EnvokeHelpers
     # drop the title though no sure 100% may be should be appended into first name
     # fixme a nice name parsing gem like https://github.com/berkmancenter/namae can do better
     full_name = user.full_name.sub(/\A(Dr|Doctor|PhD|PHD|Master|Prof|Herr|Lord|Lady|Mr|Mrs|Ms|Sr|Sir|Madame)\.?\s/, "")
-    return signup.first if user.signup && user.signup.first && user.full_name.start_with?(user.signup.first)
+    return signup.first if user.signup && user.signup.first && full_name.include?(user.signup.first)
     return full_name&.split(' ', 2)[0][0, 20].presence # user might changed name
   end
 
@@ -131,13 +131,15 @@ module EnvokeHelpers
   def envoke_update(user, new_params, validate=true)
     contact_params =  envoke_contact_with_email(user.email)
     #validation
+    binding.pry
     if validate
       return cb_error('Your email is not found in Envoke contact list, contact admin')  if ! contact_params
       return cb_error('is not boarded to Enovoke via NeuroHub signup, contact admin')  if user.envoke_id.blank?
     end
 
-    # user.id = envoke_get_contact
-    uri          = URI.parse("#{envoke_api_base}/contacts/#{user.id}")
+    # user.envoke_id = envoke_contact_with_email.dig('id') unless user.envoke_id # should we set user if alreday there?
+    # user.envoke_id = envoke_add_user(user)
+    uri          = URI.parse("#{envoke_api_base}/contacts/#{user.envoke_id}")
     http         = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
 
@@ -156,18 +158,22 @@ module EnvokeHelpers
     if res&.code&.start_with?("2")
       JSON.parse(res.body)['result_data']['id']
     else
-      cb_error('Mail list update failed')
+      cb_error('Newsletter contact list update failed')
     end
   end
 
   def envoke_opt_out(user) # opt out existing contact
-    envoke_update(user, {"consent_status" => "Revoked",
-      "consent_description" => "Revoked from NeuroHub account management page"})
+    envoke_update(user,
+      {"consent_status" => "Revoked",
+       "consent_description" => "Revoked from NeuroHub account management page",
+      "interests" => {"Monthly newsletter": "Unset"}
+      })
   end
 
   #included again
   def envoke_reopt_in(user)
       envoke_update(user, {"consent_status" => "Express",
+                           "interests" => { "Monthly newsletter": "Unset"   },
                            "consent_description" => "Reenabled from NeuroHub account management page"})
   end
 
@@ -194,6 +200,7 @@ module EnvokeHelpers
         http.request(req)
         # todo check is he active? if not add with new status?
       end
+      binding.pry
       if res&.code&.start_with?("2")
         r = JSON.parse(res.body)
         cb_error('malformed Json from Envoke') && nil unless r.instance_of? Array
@@ -212,7 +219,7 @@ module EnvokeHelpers
   def envoke_delete_user(user)
 
     # return unless user.maillist_consent == "Yes"
-    uri          = URI.parse("#{envoke_api_base}/contacts/#{user.id}")
+    uri          = URI.parse("#{envoke_api_base}/contacts/#{user.envoke_id}")
     http         = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     req          = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
