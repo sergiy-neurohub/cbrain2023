@@ -90,7 +90,7 @@ class NhUsersController < NeurohubApplicationController
       if @user.maillist_consent != params[:user][:maillist_consent]
       # begin
         r = envoke_reopt_in(@user) if params[:user][:maillist_consent] == 'Yes'
-        r = envoke_reopt_out(@user) if params[:user][:maillist_consent] == 'No'
+        r = envoke_opt_out(@user) if params[:user][:maillist_consent] == 'No'
         flash[:notice] = "Your change to Newsletter subscription failed." unless r
       # rescue StandardError => e
       #   flash[:warning] = "Your change to mail list subscription did not take effect, please contact your admin."

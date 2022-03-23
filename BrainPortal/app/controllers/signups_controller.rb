@@ -89,7 +89,7 @@ class SignupsController < ApplicationController
   def update #:nodoc:
     @envoke_auth_configured = envoke_auth_configured?
     @signup = Signup.find(params[:id]) rescue nil
-
+    binding.pry
     unless can_edit?(@signup)
       redirect_to login_path
       return
@@ -315,7 +315,7 @@ class SignupsController < ApplicationController
       :institution, :department, :position, :affiliation, :email,
       :street1, :street2, :city, :province, :country, :postal_code,
       :login, :time_zone, :comment, :admin_comment, :hidden, :user_id,
-      :maillist_conset
+      :maillist_consent
     )
   end
 
