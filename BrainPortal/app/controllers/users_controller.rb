@@ -21,7 +21,6 @@
 #
 
 require 'ipaddr'
-require 'pry'
 
 #RESTful controller for the User resource.
 class UsersController < ApplicationController
@@ -150,7 +149,6 @@ class UsersController < ApplicationController
     @user.password_reset = no_password_reset_needed ? false : true
 
     signup = Signup.where(:id => params[:signup_id]).first
-    #binding.pry
     @user.maillist_consent = signup.maillist_consent if signup
     begin
       @user.envoke_id = envoke_add_user(@user) if signup&.maillist_consent == 'Yes'
@@ -165,7 +163,6 @@ class UsersController < ApplicationController
       add_meta_data_from_form(@user, [:pref_data_provider_id])
 
       flash[:notice] = "User successfully created.\n"
-      # binding.pry
       # Find signup record matching login name, and log creation and transfer some info.
       if signup
         current_user.addlog("Approved [[signup request][#{signup_path(signup)}]] for user '#{@user.login}'")

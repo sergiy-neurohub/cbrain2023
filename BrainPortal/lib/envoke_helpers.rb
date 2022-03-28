@@ -20,7 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-# Helper for logging in using Envoke
+# Helper for subscribing user to newsletter and maillists using Envoke
 module EnvokeHelpers
 
   Revision_info = CbrainFileRevision[__FILE__] #:nodoc:
@@ -29,8 +29,6 @@ module EnvokeHelpers
   require 'net/http'
   require 'json'
 
-  require 'pry'
-  # require 'cgi'
 
   ENVOKE_API_BASE = 'https://e1.envoke.com/v1'
 
@@ -100,7 +98,6 @@ module EnvokeHelpers
         },
         "consent_status"      => "Express"
     }
-    # binding.pry
     req      = Net::HTTP::Post.new(uri.path, 'Content-Type' => 'application/json')
     req.body = data.to_json
     #uri.port = 433
@@ -131,7 +128,6 @@ module EnvokeHelpers
   def envoke_update(user, new_params, validate=true)
     contact_params =  envoke_contact_with_email(user.email)
     #validation
-    binding.pry
     if validate
       return cb_error('Your email is not found in Envoke contact list, contact admin')  if ! contact_params
       return cb_error('is not boarded to Enovoke via NeuroHub signup, contact admin')  if user.envoke_id.blank?
@@ -195,12 +191,10 @@ module EnvokeHelpers
     req.basic_auth envoke_id, envoke_key
 
     begin
-      #binding.pry
       res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
         http.request(req)
         # todo check is he active? if not add with new status?
       end
-      binding.pry
       if res&.code&.start_with?("2")
         r = JSON.parse(res.body)
         cb_error('malformed Json from Envoke') && nil unless r.instance_of? Array
