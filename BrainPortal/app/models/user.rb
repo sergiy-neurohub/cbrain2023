@@ -155,7 +155,7 @@ class User < ApplicationRecord
     license_agreement_set - self.signed_license_agreements(license_agreement_set)
   end
 
-  def license_agreement_set #:nodoc:
+  def license_agreement_set # both nh and old agreements
     all_object_with_license = RemoteResource.find_all_accessible_by_user(self) +
                               Tool.find_all_accessible_by_user(self) +
                               DataProvider.find_all_accessible_by_user(self)
@@ -164,6 +164,8 @@ class User < ApplicationRecord
     # List all license_agreements
     all_object_with_license.each do |o|
       o_license_agreements = o.meta[:license_agreements]
+      license_agreements.concat(o_license_agreements) if o_license_agreements
+      o_license_agreements = o.meta[:nh_license_agreements]
       license_agreements.concat(o_license_agreements) if o_license_agreements
     end
 

@@ -195,7 +195,7 @@ class PortalController < ApplicationController
 
   def sign_license #:nodoc:
     @license = params[:license]
-    if @license.end_with? "_info" # no validation for info pages
+    if @license.include? "_info" # no validation for info pages
       sign_license!
       redirect_to start_page_path
       return

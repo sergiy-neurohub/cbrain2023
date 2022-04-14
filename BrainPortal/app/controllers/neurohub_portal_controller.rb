@@ -55,5 +55,42 @@ class NeurohubPortalController < NeurohubApplicationController
     @projects = report[:projects]
   end
 
+  def nh_show_license #:nodoc:
+
+    @license = params[:license].gsub(/[^\w\/-]+/, "")
+
+     binding.pry
+    render :show_infolicense if @license&.end_with? "_info" # info license does not require to accept it
+  end
+
+
+  require 'pry'
+  def nh_sign_license #:nodoc:
+    @license = params[:license]
+
+    if @license.include? "_info" # no validation for info pages
+      sign_license!
+      redirect_to start_page_path
+      return
+    end
+    unless params.has_key?(:agree)
+      flash[:error] = "NeuroHub cannot be used without signing the End User Licence Agreement."
+      redirect_to "/logout"
+      return
+    end
+    num_checkboxes = params[:num_checkboxes].to_i
+    if num_checkboxes > 0
+      num_checks = params.keys.grep(/\Alicense_check/).size
+      if num_checks < num_checkboxes
+        flash[:error] = "There was a problem with your submission. Please read the agreement and check all checkboxes."
+        redirect_to :action => :show_license, :license => @license
+        return
+      end
+    end
+    sign_license!
+    redirect_to start_page_path
+  end
+
+
 end
 

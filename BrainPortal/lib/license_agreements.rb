@@ -26,6 +26,14 @@ module LicenseAgreements
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
+
+  # Portal license from neurohub subfolder are checked only on neurohub portal
+  # however licenses which only differen in subfolder are considered equivalent
+  # that is if user already signed cbrain_1 he does not have to sing neurohub/cbrain_1
+  #
+  # suffix _info indicates informational page which should be shown just once
+
+
   # Check that the the class this module is being included into is a valid one.
   def self.included(includer) #:nodoc:
     unless includer <= ApplicationRecord
@@ -82,9 +90,11 @@ module LicenseAgreements
     return true
   end
 
+  require 'pry'
   # 'after_save' callback to write back the license agreements array
   # to the meta data store whenever the object is being saved.
   def register_license_agreements
+    #binding.pry
     return true if @license_agreements.nil? # nothing to do if they were never loaded or updated
     # To keep pre_register licenses agreement, useful when the console is used to save the object
     new_agreements  = (license_agreements || []).sort
