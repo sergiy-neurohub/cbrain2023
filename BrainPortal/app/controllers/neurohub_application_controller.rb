@@ -82,11 +82,30 @@ class NeurohubApplicationController < ApplicationController
 
   end
 
+  require 'pry'
   # For the moment on the NeuroHub side, we bypass checking the site-wide
   # licenses. They'll still be required if the user switch to CBRAIN.
-  # def check_license_agreements
-  #   true
-  # end
+  def check_license_agreements(licenses_path='licenses') #:nodoc:
+    current_user.meta.reload
+    return true if current_user.neurohub_licenses_signed.present?
+    return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
+    return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
+
+    unsigned_agreements = current_user.neurohub_unsigned_license_agreements
+    unless unsigned_agreements.empty?
+      if File.exists?(Rails.root + "public/#{licenses_path}/#{unsigned_agreements.first}.html")
+        respond_to do |format|
+          format.html { redirect_to :controller => :neurohub_portal, :action => :show_license, :license => unsigned_agreements.first }
+          format.json { render :status => 403, :json => { "error" => "Some license agreements are not signed." } }
+          format.xml  { render :status => 403, :xml  => { "error" => "Some license agreements are not signed." } }
+        end
+        return false
+      end
+    end
+
+    current_user.neurohub_licenses_signed = "yes"
+    return true
+  end
 
   ########################################################################
   # Messaging System Filters (presently only invite acceptance)

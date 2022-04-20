@@ -22,6 +22,7 @@
 
 require 'digest/sha1'
 require 'pbkdf2'
+require 'pry'
 
 # Model representing CBrain users.
 # All authentication of user access to the system is handle by the User model.
@@ -148,11 +149,21 @@ class User < ApplicationRecord
     self.meta[:signed_license_agreements] || []
   end
 
-  def unsigned_license_agreements #:nodoc:
-    license_agreement_set = self.license_agreement_set
+  # def cbrain_unsigned_license_agreements #:nodoc:
+  #   license_agreement_set = self.license_agreement_set
+  #
+  #   # Difference between all license agreements and whom signed by the user
+  #   license_agreement_set - self.signed_license_agreements(license_agreement_set)
+  # end
 
+  def cbrain_unsigned_license_agreements #:nodoc:
     # Difference between all license agreements and whom signed by the user
-    license_agreement_set - self.signed_license_agreements(license_agreement_set)
+    cbrain_license_agreement_set - (strip_prefix self.signed_license_agreements)
+  end
+
+
+  def neurohub_unsigned_license_agreements #:nodoc:
+    neurohub_license_agreement_set - (add_prefix self.signed_license_agreements)
   end
 
   def license_agreement_set # both nh and old agreements
@@ -165,11 +176,17 @@ class User < ApplicationRecord
     all_object_with_license.each do |o|
       o_license_agreements = o.meta[:license_agreements]
       license_agreements.concat(o_license_agreements) if o_license_agreements
-      o_license_agreements = o.meta[:nh_license_agreements]
-      license_agreements.concat(o_license_agreements) if o_license_agreements
     end
 
     RemoteResource.current_resource.license_agreements  + license_agreements
+  end
+
+  def cbrain_license_agreement_set # cbrain required licenses
+    license_agreement_set.reject {|l| l.include?('/')}
+  end
+
+  def neurohub_license_agreement_set #neurohub license agreement set
+    RemoteResource.current_resource.license_agreements.select {|l| l.start_with?('neurohub/')}
   end
 
   def all_licenses_signed #:nodoc:
@@ -181,6 +198,21 @@ class User < ApplicationRecord
     self.meta.reload
     self.meta[:all_licenses_signed] = x
   end
+
+  # neurohub specific licenses are signed flag
+  def neurohub_licenses_signed
+    self.meta.reload
+    self.meta['neurohub_licenses_signed']
+  end
+
+  def neurohub_licenses_signed
+    self.meta.reload
+    self.meta['neurohub_licenses_signed'] = x
+  end
+
+
+
+
 
   #############################################################
   #
@@ -613,6 +645,22 @@ class User < ApplicationRecord
     end
     self.group_ids = group_ids
     true
+  end
+
+  # stips prefix for string array
+  def strip_prefix(a, prefix='neurohub/')
+    a.each {|l| l.sub(/\A#{prefix}/, "")}
+  end
+
+  # add prefix to string array if missing
+  def add_prefix(a, prefix='neurohub/')
+    a.each do |l|
+      if l.start_with? prefix
+        prefix + l
+      else
+        l
+      end
+    end
   end
 
 end

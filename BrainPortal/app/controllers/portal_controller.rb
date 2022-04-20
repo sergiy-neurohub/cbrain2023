@@ -189,7 +189,7 @@ class PortalController < ApplicationController
   end
 
   def show_license #:nodoc:
-    @license = params[:license].gsub(/[^\w-]+/, "")
+    @license = params[:license].gsub(/[^\w\/-]+/, "")
     render :show_infolicense if @license&.end_with? "_info" # info license does not require to accept it
   end
 

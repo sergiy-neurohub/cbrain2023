@@ -62,7 +62,7 @@ module LicenseAgreements
     unless agrs.is_a? Array
       agrs = agrs.to_s.split(/[,\s]+/)
     end
-    agrs = agrs.map { |a| a.sub(/\.html\z/, "").gsub(/[^\w-]+/, "") }.uniq.sort
+    agrs = agrs.map { |a| a.sub(/\.html\z/, "").gsub(/[^\/\w-]+/, "") }.uniq.sort
     @license_agreements = agrs
   end
 
@@ -105,6 +105,7 @@ module LicenseAgreements
     # Unset all licenses signed when a new license is added
     User.all.each do |u|
       u.all_licenses_signed = nil
+      u.neurohub_licenses_signed = nil
     end
     true
   end
