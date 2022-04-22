@@ -32,32 +32,31 @@
       <div class="card-heading">
         License <%= @license_id %>
       </div>
-      <% if is_signed %>
-        <%= render :partial => 'show_license_text' %>
-      <% else %>
+
+      <% if ! is_signed %>
         <div class="nh_form">
           <%= form_tag :action => :nh_sign_license, :license => @license %>
             <%= hidden_field_tag :license, @license %>
-            <%= render 'show_license_text', is_signed: is_signed%>
-            <div class="btn-section">
-              <%= submit_tag "Continue to neurohub", :name => :agree,     :class => "btn-solid primary m-1" %>
-                %>
-            </div>
+      <% end %>
+
+        <div class="card-item">
+          <p class="card-label">Carefully read this license agreement.</p>
+          <pre class="card-text license-text">
+          <% content = File.read(Rails.root +
+             "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
+          <% content.gsub!(/<input\s/i,"<INPUT DISABLED CHECKED ") if is_signed %>
+          <%= content.html_safe %>
+
+          </pre>
 
         </div>
-      <% end %>
+
+       <div class="btn-section">
+              <%= submit_tag "Continue to neurohub", :name => :agree,     :class => "btn-solid primary m-1" %>
+       </div>
+
+      </div>
     </div>
-    <%# if @current_licenses.size > 1 %>
-<!--      <div class="card-section license-list">-->
-<!--        <div class="card-heading">-->
-<!--          Other licenses for NeuroHub portal-->
-<!--        </div>-->
-<!--        <div class="card-item">-->
-          <%# @current_licenses.each do |id| %>
-            <%#= link_to "License ##{id} #{id == @license_id? "- currently selected": ""}", show_license_neurohub_project(:license_id => id), :class => "btn-text primary", 'data-active' => (id == @license_id), 'disabled' => (id == @license_id) %>
-          <%# end %>
-<!--        </div>-->
-<!--      </div>-->
-    <%# end %>
+
   </div>
 </div>

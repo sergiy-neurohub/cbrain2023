@@ -25,7 +25,7 @@
   <div class="card-item">
     <p class="card-label">Carefully read this license agreement.</p>
     <pre class="card-text license-text">
-            <% content = File.read(Rails.root + "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
+      <% content = File.read(Rails.root + "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
       <% content.gsub!(/<input\s/i,"<INPUT DISABLED CHECKED ") if is_signed %>
       <%= content.html_safe %>
 

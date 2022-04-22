@@ -88,7 +88,7 @@ class NeurohubPortalController < NeurohubApplicationController
       end
     end
     sign_license!
-    redirect_to start_page_path
+    redirect_to welcome
   end
 
   private
