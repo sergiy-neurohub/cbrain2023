@@ -1,0 +1,63 @@
+
+<%-
+  #
+  # NeuroHub Project
+  #
+  # Copyright (C) 2020
+  # The Royal Institution for the Advancement of Learning
+  # McGill University
+  #
+  # This program is free software: you can redistribute it and/or modify
+  # it under the terms of the GNU General Public License as published by
+  # the Free Software Foundation, either version 3 of the License, or
+  # (at your option) any later version.
+  #
+  # This program is distributed in the hope that it will be useful,
+  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  # GNU General Public License for more details.
+  #
+  # You should have received a copy of the GNU General Public License
+  # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  #
+-%>
+
+<% title("License #{@license_id}", '') %>
+
+<div id="nh_show_license" class="nh_content">
+  <% is_signed = current_user.signed_license_agreements.include?(@license) %>
+  <%- # license - %>
+  <div class="card">
+    <div class="card-section">
+      <div class="card-heading">
+        License <%= @license_id %>
+      </div>
+      <% if is_signed %>
+        <%= render :partial => 'show_license_text' %>
+      <% else %>
+        <div class="nh_form">
+          <%= form_tag :action => :nh_sign_license, :license => @license %>
+            <%= hidden_field_tag :license, @license %>
+            <%= render 'show_license_text', is_signed: is_signed%>
+            <div class="btn-section">
+              <%= submit_tag "Continue to neurohub", :name => :agree,     :class => "btn-solid primary m-1" %>
+                %>
+            </div>
+
+        </div>
+      <% end %>
+    </div>
+    <%# if @current_licenses.size > 1 %>
+<!--      <div class="card-section license-list">-->
+<!--        <div class="card-heading">-->
+<!--          Other licenses for NeuroHub portal-->
+<!--        </div>-->
+<!--        <div class="card-item">-->
+          <%# @current_licenses.each do |id| %>
+            <%#= link_to "License ##{id} #{id == @license_id? "- currently selected": ""}", show_license_neurohub_project(:license_id => id), :class => "btn-text primary", 'data-active' => (id == @license_id), 'disabled' => (id == @license_id) %>
+          <%# end %>
+<!--        </div>-->
+<!--      </div>-->
+    <%# end %>
+  </div>
+</div>

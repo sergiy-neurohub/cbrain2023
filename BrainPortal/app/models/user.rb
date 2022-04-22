@@ -205,7 +205,8 @@ class User < ApplicationRecord
     self.meta['neurohub_licenses_signed']
   end
 
-  def neurohub_licenses_signed
+  # neurohub specific licenses are signed flag
+  def neurohub_licenses_signed=(x)
     self.meta.reload
     self.meta['neurohub_licenses_signed'] = x
   end

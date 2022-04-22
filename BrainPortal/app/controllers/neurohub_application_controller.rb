@@ -95,7 +95,7 @@ class NeurohubApplicationController < ApplicationController
     unless unsigned_agreements.empty?
       if File.exists?(Rails.root + "public/#{licenses_path}/#{unsigned_agreements.first}.html")
         respond_to do |format|
-          format.html { redirect_to :controller => :neurohub_portal, :action => :show_license, :license => unsigned_agreements.first }
+          format.html { redirect_to :controller => :neurohub_portal, :action => :nh_show_license, :license => unsigned_agreements.first }
           format.json { render :status => 403, :json => { "error" => "Some license agreements are not signed." } }
           format.xml  { render :status => 403, :xml  => { "error" => "Some license agreements are not signed." } }
         end

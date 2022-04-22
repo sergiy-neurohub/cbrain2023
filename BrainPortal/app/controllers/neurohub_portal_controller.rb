@@ -91,6 +91,14 @@ class NeurohubPortalController < NeurohubApplicationController
     redirect_to start_page_path
   end
 
+  private
+
+  def sign_license!
+    signed_agreements = current_user.meta[:signed_license_agreements] || []
+    signed_agreements << @license
+    current_user.meta[:signed_license_agreements] = signed_agreements
+    current_user.addlog("Signed license agreement '#{@license}'.")
+  end
 
 end
 
