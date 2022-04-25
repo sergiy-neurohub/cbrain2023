@@ -148,18 +148,10 @@ class User < ApplicationRecord
     self.meta[:signed_license_agreements] || []
   end
 
-  # def cbrain_unsigned_license_agreements #:nodoc:
-  #   license_agreement_set = self.license_agreement_set
-  #
-  #   # Difference between all license agreements and whom signed by the user
-  #   license_agreement_set - self.signed_license_agreements(license_agreement_set)
-  # end
-
   def cbrain_unsigned_license_agreements #:nodoc:
     # Difference between all license agreements and whom signed by the user
     cbrain_license_agreement_set - (strip_prefix self.signed_license_agreements)
   end
-
 
   def neurohub_unsigned_license_agreements #:nodoc:
     neurohub_license_agreement_set - (add_prefix self.signed_license_agreements)
@@ -209,9 +201,6 @@ class User < ApplicationRecord
     self.meta.reload
     self.meta['neurohub_licenses_signed'] = x
   end
-
-
-
 
 
   #############################################################

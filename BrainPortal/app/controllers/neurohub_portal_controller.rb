@@ -67,7 +67,7 @@ class NeurohubPortalController < NeurohubApplicationController
 
     if @license.include? "_info" # no validation for info pages
       sign_license!
-      redirect_to :welcome
+      redirect_to action => :welcome
       return
     end
     unless params.has_key?(:agree)
@@ -85,7 +85,7 @@ class NeurohubPortalController < NeurohubApplicationController
       end
     end
     sign_license!
-    redirect_to welcome
+    redirect_to :action => welcome
   end
 
   private
