@@ -90,11 +90,9 @@ module LicenseAgreements
     return true
   end
 
-  require 'pry'
   # 'after_save' callback to write back the license agreements array
   # to the meta data store whenever the object is being saved.
   def register_license_agreements
-    #binding.pry
     return true if @license_agreements.nil? # nothing to do if they were never loaded or updated
     # To keep pre_register licenses agreement, useful when the console is used to save the object
     new_agreements  = (license_agreements || []).sort

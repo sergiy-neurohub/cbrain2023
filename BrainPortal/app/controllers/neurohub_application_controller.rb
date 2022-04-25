@@ -82,7 +82,6 @@ class NeurohubApplicationController < ApplicationController
 
   end
 
-  require 'pry'
   # For the moment on the NeuroHub side, we bypass checking the site-wide
   # licenses. They'll still be required if the user switch to CBRAIN.
   def check_license_agreements(licenses_path='licenses') #:nodoc:

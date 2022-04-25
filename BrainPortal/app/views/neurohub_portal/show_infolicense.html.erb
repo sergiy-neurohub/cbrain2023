@@ -22,16 +22,11 @@
   #
 -%>
 
-<% title("License #{@license_id}", '') %>
-
 <div id="nh_show_license" class="nh_content">
   <% is_signed = current_user.signed_license_agreements.include?(@license) %>
   <%- # license - %>
   <div class="card">
     <div class="card-section">
-      <div class="card-heading">
-        License <%= @license_id %>
-      </div>
 
       <% if ! is_signed %>
         <div class="nh_form">
@@ -39,22 +34,22 @@
             <%= hidden_field_tag :license, @license %>
       <% end %>
 
-        <div class="card-item">
-          <p class="card-label">Carefully read this license agreement.</p>
-          <pre class="card-text license-text">
+<!--        <div class="card-item">-->
+          <p class="card-label">Carefully read the following important information:</p>
+          <div class="card-text ">
           <% content = File.read(Rails.root +
              "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
           <% content.gsub!(/<input\s/i,"<INPUT DISABLED CHECKED ") if is_signed %>
           <%= content.html_safe %>
 
-          </pre>
+          </div>
 
-        </div>
+<!--        </div>-->
 
-       <div class="btn-section">
-              <%= submit_tag "Continue to neurohub", :name => :agree,     :class => "btn-solid primary m-1" %>
-       </div>
 
+      </div>
+      <div class="btn-section">
+        <%= submit_tag "I have read this, Continue to NeuroHub", :name => :agree,     :class => "btn-solid primary m-1" %>
       </div>
     </div>
 

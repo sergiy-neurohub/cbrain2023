@@ -59,18 +59,15 @@ class NeurohubPortalController < NeurohubApplicationController
 
     @license = params[:license].gsub(/[^\w\/-]+/, "")
 
-     binding.pry
     render :show_infolicense if @license&.end_with? "_info" # info license does not require to accept it
   end
 
-
-  require 'pry'
   def nh_sign_license #:nodoc:
     @license = params[:license]
 
     if @license.include? "_info" # no validation for info pages
       sign_license!
-      redirect_to start_page_path
+      redirect_to :welcome
       return
     end
     unless params.has_key?(:agree)

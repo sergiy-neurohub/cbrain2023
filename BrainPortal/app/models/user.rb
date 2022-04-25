@@ -22,7 +22,6 @@
 
 require 'digest/sha1'
 require 'pbkdf2'
-require 'pry'
 
 # Model representing CBrain users.
 # All authentication of user access to the system is handle by the User model.
