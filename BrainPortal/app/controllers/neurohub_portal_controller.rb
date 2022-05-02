@@ -67,7 +67,7 @@ class NeurohubPortalController < NeurohubApplicationController
 
     if @license.include? "_info" # no validation for info pages
       sign_license!
-      redirect_to action => :welcome
+      redirect_to :action => :welcome
       return
     end
     unless params.has_key?(:agree)
@@ -80,12 +80,12 @@ class NeurohubPortalController < NeurohubApplicationController
       num_checks = params.keys.grep(/\Alicense_check/).size
       if num_checks < num_checkboxes
         flash[:error] = "There was a problem with your submission. Please read the agreement and check all checkboxes."
-        redirect_to :action => :show_license, :license => @license
+        redirect_to :action => :nh_show_license, :license => @license
         return
       end
     end
     sign_license!
-    redirect_to :action => welcome
+    redirect_to :action => :welcome
   end
 
   private
