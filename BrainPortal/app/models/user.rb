@@ -150,11 +150,11 @@ class User < ApplicationRecord
 
   def cbrain_unsigned_license_agreements #:nodoc:
     # Difference between all license agreements and whom signed by the user
-    cbrain_license_agreement_set - (strip_prefix self.signed_license_agreements)
+    cbrain_license_agreement_set - (strip_prefix signed_license_agreements)
   end
 
   def neurohub_unsigned_license_agreements #:nodoc:
-    neurohub_license_agreement_set - (add_prefix self.signed_license_agreements)
+    neurohub_license_agreement_set - (add_prefix signed_license_agreements)
   end
 
   def license_agreement_set # both nh and old agreements
@@ -638,17 +638,14 @@ class User < ApplicationRecord
 
   # stips prefix for string array
   def strip_prefix(a, prefix='neurohub/')
-    a.each {|l| l.sub(/\A#{prefix}/, "")}
+    a.map {|l| l.sub(/\A#{prefix}/, "")}
   end
 
   # add prefix to string array if missing
   def add_prefix(a, prefix='neurohub/')
-    a.each do |l|
-      if l.start_with? prefix
-        prefix + l
-      else
-        l
-      end
+    a.map do |l|
+      prefix = '' if l.start_with? prefix
+      prefix + l
     end
   end
 

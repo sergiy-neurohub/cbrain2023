@@ -99,10 +99,10 @@ module LicenseAgreements
     orig_agreements = (@_license_agreements_original || []).sort
     return true if new_agreements == orig_agreements
     self.meta[:license_agreements] = license_agreements
-    @_license_agreements_original = license_agreements
+    @_license_agreements_original  = license_agreements
     # Unset all licenses signed when a new license is added
     User.all.each do |u|
-      u.all_licenses_signed = nil
+      u.all_licenses_signed      = nil
       u.neurohub_licenses_signed = nil
     end
     true
