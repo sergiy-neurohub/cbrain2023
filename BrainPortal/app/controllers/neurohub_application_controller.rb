@@ -84,14 +84,15 @@ class NeurohubApplicationController < ApplicationController
 
   # For the moment on the NeuroHub side, we bypass checking the site-wide
   # licenses. They'll still be required if the user switch to CBRAIN.
-  def check_license_agreements(licenses_path='licenses') #:nodoc:
+  def check_license_agreements #:nodoc:
     current_user.meta.reload
+    # todo not sure why reload if next neurohub_license_signed method reloads meta
     return true if current_user.neurohub_licenses_signed.present?
     return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
     return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
     unsigned_agreements = current_user.neurohub_unsigned_license_agreements
     unless unsigned_agreements.empty?
-      if File.exists?(Rails.root + "public/#{licenses_path}/#{unsigned_agreements.first}.html")
+      if File.exists?(Rails.root + "public/licenses/#{unsigned_agreements.first}.html")
         respond_to do |format|
           format.html { redirect_to :controller => :neurohub_portal, :action => :nh_show_license, :license => unsigned_agreements.first }
           format.json { render :status => 403, :json => { "error" => "Some license agreements are not signed." } }

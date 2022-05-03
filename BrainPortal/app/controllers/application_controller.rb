@@ -125,16 +125,15 @@ class ApplicationController < ActionController::Base
     return true
   end
 
-
-  def check_license_agreements(licenses_path='licenses') #:nodoc:
+  def check_license_agreements #:nodoc:
     current_user.meta.reload
+    # todo not sure why reload if next all_license_signed method reloads meta
     return true if current_user.all_licenses_signed.present?
     return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
     return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
-
     unsigned_agreements = current_user.cbrain_unsigned_license_agreements
     unless unsigned_agreements.empty?
-      if File.exists?(Rails.root + "public/#{licenses_path}/#{unsigned_agreements.first}.html")
+      if File.exists?(Rails.root + "public/licenses/#{unsigned_agreements.first}.html")
         respond_to do |format|
           format.html { redirect_to :controller => :portal, :action => :show_license, :license => unsigned_agreements.first }
           format.json { render :status => 403, :json => { "error" => "Some license agreements are not signed." } }
