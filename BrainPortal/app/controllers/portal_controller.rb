@@ -189,11 +189,17 @@ class PortalController < ApplicationController
   end
 
   def show_license #:nodoc:
-    @license = params[:license].gsub(/[^\w-]+/, "")
+    @license = params[:license].gsub(/[^\w\/-]+/, "")
+    render :show_infolicense if @license&.end_with? "_info" # info license does not require to accept it
   end
 
   def sign_license #:nodoc:
     @license = params[:license]
+    if @license.include? "_info" # no validation for info pages
+      sign_license!
+      redirect_to start_page_path
+      return
+    end
     unless params.has_key?(:agree)
       flash[:error] = "CBRAIN cannot be used without signing the End User Licence Agreement."
       redirect_to "/logout"
@@ -208,10 +214,7 @@ class PortalController < ApplicationController
         return
       end
     end
-    signed_agreements = current_user.meta[:signed_license_agreements] || []
-    signed_agreements << @license
-    current_user.meta[:signed_license_agreements] = signed_agreements
-    current_user.addlog("Signed license agreement '#{@license}'.")
+    sign_license!
     redirect_to start_page_path
   end
 
@@ -439,6 +442,14 @@ class PortalController < ApplicationController
   end
 
   private
+
+  # adds @license to signed_license_agreements without any validation
+  def sign_license!
+    signed_agreements = current_user.meta[:signed_license_agreements] || []
+    signed_agreements << @license
+    current_user.meta[:signed_license_agreements] = signed_agreements
+    current_user.addlog("Signed license agreement '#{@license}'.")
+  end
 
   def merge_vals_as_array(*sub_reports) #:nodoc:
     merged_report = {}

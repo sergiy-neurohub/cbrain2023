@@ -26,6 +26,14 @@ module LicenseAgreements
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
+
+  # Portal license from neurohub subfolder are checked only on neurohub portal
+  # however licenses which only differen in subfolder are considered equivalent
+  # that is if user already signed cbrain_1 he does not have to sing neurohub/cbrain_1
+  #
+  # suffix _info indicates informational page which should be shown just once
+
+
   # Check that the the class this module is being included into is a valid one.
   def self.included(includer) #:nodoc:
     unless includer <= ApplicationRecord
@@ -54,7 +62,7 @@ module LicenseAgreements
     unless agrs.is_a? Array
       agrs = agrs.to_s.split(/[,\s]+/)
     end
-    agrs = agrs.map { |a| a.sub(/\.html\z/, "").gsub(/[^\w-]+/, "") }.uniq.sort
+    agrs = agrs.map { |a| a.sub(/\.html\z/, "").gsub(/[^\/\w-]+/, "") }.uniq.sort
     @license_agreements = agrs
   end
 
@@ -91,10 +99,11 @@ module LicenseAgreements
     orig_agreements = (@_license_agreements_original || []).sort
     return true if new_agreements == orig_agreements
     self.meta[:license_agreements] = license_agreements
-    @_license_agreements_original = license_agreements
+    @_license_agreements_original  = license_agreements
     # Unset all licenses signed when a new license is added
     User.all.each do |u|
-      u.all_licenses_signed = nil
+      u.all_licenses_signed      = nil
+      u.neurohub_licenses_signed = nil
     end
     true
   end

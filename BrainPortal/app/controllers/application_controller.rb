@@ -126,13 +126,12 @@ class ApplicationController < ActionController::Base
   end
 
   def check_license_agreements #:nodoc:
-
     current_user.meta.reload
+    # todo not sure why reload if next all_license_signed method reloads meta
     return true if current_user.all_licenses_signed.present?
-    return true if params[:controller] == "portal" && params[:action] =~ /license$/
+    return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
     return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
-
-    unsigned_agreements = current_user.unsigned_license_agreements
+    unsigned_agreements = current_user.cbrain_unsigned_license_agreements
     unless unsigned_agreements.empty?
       if File.exists?(Rails.root + "public/licenses/#{unsigned_agreements.first}.html")
         respond_to do |format|
