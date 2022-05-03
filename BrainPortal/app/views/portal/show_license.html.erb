@@ -32,7 +32,7 @@
   <% content.gsub!(/<input\s/i,"<INPUT DISABLED CHECKED ") if is_signed %>
   <%= content.html_safe %>
   <p>
-  <hr> <%=  @license%>
+  <hr>
   <% if ! is_signed %>
       <%= submit_tag "I Agree", :name => :agree %>
       <%= submit_tag "I Do Not Agree", :name => :not_agree %>
