@@ -26,12 +26,13 @@ module LicenseAgreements
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
-
-  # Portal license from neurohub subfolder are checked only on neurohub portal
-  # however licenses which only differen in subfolder are considered equivalent
-  # that is if user already signed cbrain_1 he does not have to sing neurohub/cbrain_1
+  # Cbrain License texts are stored in public/licenses folder.
+  # Portal license from neurohub subfolder are relevant only to neurohub portal.
+  # Note that licenses which same file name are considered equivalent
+  # that is user who already signed cbrain_1 does not have to sign neurohub/cbrain_1
   #
   # suffix _info indicates informational page which should be shown just once
+  # those pages have 'Continue' button instead of Agree/Disagree
 
 
   # Check that the the class this module is being included into is a valid one.

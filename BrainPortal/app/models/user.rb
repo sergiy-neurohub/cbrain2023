@@ -176,7 +176,7 @@ class User < ApplicationRecord
     license_agreement_set.reject {|l| l.include?('/')}
   end
 
-  def neurohub_license_agreement_set #neurohub license agreement set
+  def neurohub_license_agreement_set # neurohub license agreement set
     RemoteResource.current_resource.license_agreements.select {|l| l.start_with?('neurohub/')}
   end
 
@@ -636,7 +636,7 @@ class User < ApplicationRecord
     true
   end
 
-  # stips prefix for string array
+  # strips prefix in a string array
   def strip_prefix(a, prefix='neurohub/')
     a.map {|l| l.sub(/\A#{prefix}/, "")}
   end

@@ -90,6 +90,7 @@ class NeurohubApplicationController < ApplicationController
     return true if current_user.neurohub_licenses_signed.present?
     return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
     return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
+    return true if params[:controller] =~ /sessions$/ && params[:action] =~ /destroy$/
     unsigned_agreements = current_user.neurohub_unsigned_license_agreements
     unless unsigned_agreements.empty?
       if File.exists?(Rails.root + "public/licenses/#{unsigned_agreements.first}.html")

@@ -65,14 +65,14 @@ class NeurohubPortalController < NeurohubApplicationController
   def nh_sign_license #:nodoc:
     @license = params[:license]
 
-    if @license.include? "_info" # no validation for info pages
+    if @license.end_with? "_info" # no validation for info pages
       sign_license!
       redirect_to :action => :welcome
       return
     end
     unless params.has_key?(:agree)
       flash[:error] = "NeuroHub cannot be used without signing the End User Licence Agreement."
-      redirect_to "/logout"
+      redirect_to "/signout"
       return
     end
     num_checkboxes = params[:num_checkboxes].to_i
