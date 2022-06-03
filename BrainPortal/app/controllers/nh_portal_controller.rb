@@ -21,9 +21,11 @@
 #
 
 # Controller for the entry point into the system.
-class NeurohubPortalController < NeurohubApplicationController
+class NhPortalController < NhApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
+
+  include LicenseConcerns
 
   before_action :login_required
 
@@ -60,46 +62,9 @@ class NeurohubPortalController < NeurohubApplicationController
     @projects = report[:projects]
   end
 
-  def nh_show_license #:nodoc:
-
-    @license = params[:license].gsub(/[^\w\/-]+/, "")
-
-    render :show_infolicense if @license&.end_with? "_info" # info license does not require to accept it
-  end
 
   def nh_sign_license #:nodoc:
-    @license = params[:license]
-
-    if @license.end_with? "_info" # no validation for info pages
-      sign_license!
-      redirect_to :action => :welcome
-      return
-    end
-    unless params.has_key?(:agree)
-      flash[:error] = "NeuroHub cannot be used without signing the End User Licence Agreement."
-      redirect_to "/signout"
-      return
-    end
-    num_checkboxes = params[:num_checkboxes].to_i
-    if num_checkboxes > 0
-      num_checks = params.keys.grep(/\Alicense_check/).size
-      if num_checks < num_checkboxes
-        flash[:error] = "There was a problem with your submission. Please read the agreement and check all checkboxes."
-        redirect_to :action => :nh_show_license, :license => @license
-        return
-      end
-    end
-    sign_license!
-    redirect_to :action => :welcome
-  end
-
-  private
-
-  def sign_license!
-    signed_agreements = current_user.meta[:signed_license_agreements] || []
-    signed_agreements << @license
-    current_user.meta[:signed_license_agreements] = signed_agreements
-    current_user.addlog("Signed license agreement '#{@license}'.")
+    sign_license(on_agree=:neurohub_path, on_disagree='/signout', portal='NeuroHub')
   end
 
 end

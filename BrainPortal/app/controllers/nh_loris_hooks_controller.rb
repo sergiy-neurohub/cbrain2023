@@ -23,7 +23,7 @@
 # Controller for special LORIS hooks for NeuroHub.
 # All the actions implemented in this controller
 # are API actions using JSON.
-class NhLorisHooksController < NeurohubApplicationController
+class NhLorisHooksController < NhApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
