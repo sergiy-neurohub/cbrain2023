@@ -22,7 +22,7 @@
 
 require 'ipaddr'
 
-class NhSignupsController < NeurohubApplicationController
+class NhSignupsController < NhApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 

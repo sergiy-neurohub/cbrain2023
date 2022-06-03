@@ -23,7 +23,7 @@
 # Storage management for NeuroHub.
 #
 # The main data model is in fact CBRAIN's UserkeyFlatDirSshDataProvider
-class NhStoragesController < NeurohubApplicationController
+class NhStoragesController < NhApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 

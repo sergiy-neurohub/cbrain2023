@@ -23,7 +23,7 @@
 # Superclass to all *NeuroHub* controllers.
 # Already inherits all the methods and modules of
 # CBRAIN's ApplicationController.
-class NeurohubApplicationController < ApplicationController
+class NhApplicationController < ApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
@@ -82,29 +82,11 @@ class NeurohubApplicationController < ApplicationController
 
   end
 
-  # For the moment on the NeuroHub side, we bypass checking the site-wide
-  # licenses. They'll still be required if the user switch to CBRAIN.
-  def check_license_agreements #:nodoc:
-    current_user.meta.reload
-    # todo not sure why reload if next neurohub_license_signed method reloads meta
-    return true if current_user.neurohub_licenses_signed.present?
-    return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
-    return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
-    return true if params[:controller] =~ /sessions$/ && params[:action] =~ /destroy$/
-    unsigned_agreements = current_user.neurohub_unsigned_license_agreements
-    unless unsigned_agreements.empty?
-      if File.exists?(Rails.root + "public/licenses/#{unsigned_agreements.first}.html")
-        respond_to do |format|
-          format.html { redirect_to :controller => :neurohub_portal, :action => :nh_show_license, :license => unsigned_agreements.first }
-          format.json { render :status => 403, :json => { "error" => "Some license agreements are not signed." } }
-          format.xml  { render :status => 403, :xml  => { "error" => "Some license agreements are not signed." } }
-        end
-        return false
-      end
-    end
-
-    current_user.neurohub_licenses_signed = "yes"
-    return true
+  def need_sign_license #: overrides a methods used in check_license_agreements, as list of neurohub licenses differ from cbrains
+    return if current_user.neurohub_licenses_signed.present?
+    license = current_user.neurohub_unsigned_license_agreements.first
+    current_user.all_licenses_signed = "yes" if license.blank?
+    [license, :nh_portal]
   end
 
   ########################################################################
@@ -122,11 +104,14 @@ class NeurohubApplicationController < ApplicationController
     @nh_new_message_count = find_nh_messages.where(:read => false).count  # differs from cbrain, as invites are shown separately
     @nh_new_invites_ack   = current_user.messages.where( :read => false, :header => 'Invitation Accepted' ).order( "last_sent DESC" ).all()
   end
-  
+
   # Check if password need to be reset.
   # This method is identical to (and overrides) the one in
   # ApplicationController excepts it uses the NeuroHub password reset form.
   def check_password_reset #:nodoc:
+    # todo SB - not sure why this needed. to use nh_change_password, user has to type url manually,
+    # remembering 5 word nh_users/ nh_change_password require beyond average memory
+    # , and the url on neurohub login page is cbrains /change_password.
     if current_user.password_reset
       unless params[:controller] == "nh_users" && (params[:action] == "change_password" || params[:action] == "update")
         flash[:error] = "Please reset your password."

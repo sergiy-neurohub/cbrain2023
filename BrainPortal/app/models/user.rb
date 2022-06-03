@@ -644,8 +644,11 @@ class User < ApplicationRecord
   # add prefix to string array if missing
   def add_prefix(a, prefix='neurohub/')
     a.map do |l|
-      prefix = '' if l.start_with? prefix
-      prefix + l
+      if l.start_with? prefix
+        l
+      else
+        prefix + l
+      end
     end
   end
 

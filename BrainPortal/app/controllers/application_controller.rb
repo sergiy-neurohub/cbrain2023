@@ -119,23 +119,28 @@ class ApplicationController < ActionController::Base
   # or sign license agreements.
   def check_account_validity #:nodoc:
     return false unless current_user
-    return true  if     params[:controller] == "sessions"
+    return true  if     params[:controller] =~ /sessions$/
     return false unless check_password_reset()
     return false unless check_license_agreements()
     return true
   end
 
-  def check_license_agreements #:nodoc:
-    current_user.meta.reload
+  def need_sign_license #:  next in order licenses to sign (if needed)
+    return if current_user.all_licenses_signed.present?
+    license = current_user.cbrain_unsigned_license_agreements&.first
+    current_user.all_licenses_signed = "yes" if license.blank?
+    [license, :portal]
+  end
+
+  def check_license_agreements #check portal
     # todo not sure why reload if next all_license_signed method reloads meta
-    return true if current_user.all_licenses_signed.present?
+    license_agreement, portal = need_sign_license
     return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
-    return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
-    unsigned_agreements = current_user.cbrain_unsigned_license_agreements
-    unless unsigned_agreements.empty?
-      if File.exists?(Rails.root + "public/licenses/#{unsigned_agreements.first}.html")
+    return true if params[:controller] =~ /users/  && (params[:action] == "change_password" || params[:action] == "update")
+    unless license_agreement.blank?
+      if File.exists?(Rails.root + "public/licenses/#{license_agreement}.html")
         respond_to do |format|
-          format.html { redirect_to :controller => :portal, :action => :show_license, :license => unsigned_agreements.first }
+          format.html { redirect_to :controller => portal, :action => :show_license, :license => license_agreement }
           format.json { render :status => 403, :json => { "error" => "Some license agreements are not signed." } }
           format.xml  { render :status => 403, :xml  => { "error" => "Some license agreements are not signed." } }
         end
@@ -143,7 +148,6 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    current_user.all_licenses_signed = "yes"
     return true
   end
 

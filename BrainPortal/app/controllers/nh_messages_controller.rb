@@ -20,7 +20,7 @@
 #
 
 # NeuroHub controller for Messages.
-class NhMessagesController < NeurohubApplicationController
+class NhMessagesController < NhApplicationController
   Revision_info = CbrainFileRevision[__FILE__] #:nodoc:
 
   include Pagy::Backend
