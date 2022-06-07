@@ -137,7 +137,7 @@ class ApplicationController < ActionController::Base
     license_agreement, portal = need_sign_license
     return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
     return true if params[:controller] =~ /users/  && (params[:action] == "change_password" || params[:action] == "update")
-    unless license_agreement.blank?
+    if license_agreement.present?
       if File.exists?(Rails.root + "public/licenses/#{license_agreement}.html")
         respond_to do |format|
           format.html { redirect_to :controller => portal, :action => :show_license, :license => license_agreement }
