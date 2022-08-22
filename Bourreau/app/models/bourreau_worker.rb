@@ -57,9 +57,8 @@ class BourreauWorker < Worker
     @process_task_list_pid = nil
     ToolConfig
         .where(:bourreau_id => @rr_id)
-        .map(&:tool)
+        .map(&:cbrain_task_class)  # todo add rescue block for deleted boutiques
         .uniq
-        .map(&:cbrain_task_class)
         .each { |klass| klass.revision_info.self_update }
   end
 
