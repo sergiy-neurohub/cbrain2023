@@ -55,10 +55,10 @@ class BourreauWorker < Worker
     @rr_id = @rr.id
     @last_ruby_stuck_check = 20.minutes.ago
     @process_task_list_pid = nil
-    ToolConfig
-        .where(:bourreau_id => @rr_id)
-        .map(&:cbrain_task_class)  # todo add rescue block for deleted boutiques
+    ToolConfig.where(:bourreau_id => @rr_id)
+        .map {|tc| tc.cbrain_task_class rescue nil}
         .uniq
+        .compact   # to remove nil
         .each { |klass| klass.revision_info.self_update }
   end
 
