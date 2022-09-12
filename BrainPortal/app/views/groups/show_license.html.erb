@@ -24,7 +24,7 @@
 
 <% title("License #{@license_id}", '') %>
 
-<div id="show_license" class="content">
+<div id="show_license">
 
   <%- # actions -%>
   <% if @can_add_license %>
@@ -32,20 +32,25 @@
   <% end %>
 
   <div class="license_agreement">
-    <i> </i>License <%= @license_id %> </div>
+    <i> License <%= @license_id %> </i> </div>
 
-     <%= render :partial => 'show_license_text' %>
-     <% if @is_signed %>
+     <%#= render :partial => 'show_license_text' %>
+
         <div>
           <%= form_tag sign_license_group_path(@group) do %>
             <%= hidden_field_tag :license_id, @license_id %>
+
+            <pre><%= @license_text %></pre>
+
+            <% unless @is_signed %>
             <div>
               <%= submit_tag "I agree with the above statement", :name => :agree,     :class => "button" %>
               <%= submit_tag "I do not agree",                   :name => :not_agree, :class => "button" %>
             </div>
+            <% end %>
           <% end %>
         </div>
-      <% end %>
+
     </div>
 
     <% if @current_licenses.size > 1 %>
