@@ -24,18 +24,23 @@
 
 <% title "Add License", "" %>
 
-<div id="new_license" >
-  <div class="form">
-    <%= form_tag add_license_group_path(@group) do %>
-      <div>
-        Add License
-        <p class="field_note"><b>Important:</b> All members of the project will be required to sign the agreement in order to access the project. You, as the author, will be be considered as having signed it implicitly.</p>
-      </div>
-      <fieldset>
-        <label>Enter license text: <%= @group.name %></label>
-        <%= text_area_tag "license_text", "", :required => true, :rows => 20, :cols => 60 %>
+<h2>Add New Licence to Project <%= @group.name %> </h2>
 
-      </fieldset>
+<div id="new_license" >
+  <%= form_tag add_license_group_path(@group) do %>
+    <div class="generalbox">
+       <div class="field_note"><b>Important:</b>
+          All members of the project will be required to sign the agreement in order to access the project.
+          You, as the author, will be be considered as having signed it implicitly.
+       </div>
+
+      <p>
+        <label>Enter license text: </label>
+      </p>
+      <p>
+        <%= text_area_tag "license_text", "", :required => true, :rows => 20, :class => "whole_width" %>
+
+      </p>
       <div>
         <%= submit_tag "Add License", :name => :add_license, :class => "button" %>
         <span class="field_note">
