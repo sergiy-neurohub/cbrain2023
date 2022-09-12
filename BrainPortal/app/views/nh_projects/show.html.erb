@@ -29,28 +29,28 @@
   <%- # actions -%>
     <div class="nh_actions">
 
-      <% if @nh_project.can_be_edited_by?(current_user) %>
-        <%= link_to nh_icon_invite + "Invite Other Users", new_nh_invitation_path(nh_project_id: @nh_project.id), :class => "btn-solid primary nh_action"  %>
+      <% if @group.can_be_edited_by?(current_user) %>
+        <%= link_to nh_icon_invite + "Invite Other Users", new_nh_invitation_path(nh_project_id: @group.id), :class => "btn-solid primary nh_action"  %>
       <% end %>
 
       <% if @can_upload %>
-        <%= link_to nh_icon_upload + "Upload File", new_file_nh_project_path(@nh_project), :class => "btn-solid primary nh_action", :method => :get %>
+        <%= link_to nh_icon_upload + "Upload File", new_file_nh_project_path(@group), :class => "btn-solid primary nh_action", :method => :get %>
       <% end %>
 
-      <% if @nh_project.can_be_edited_by?(current_user) %>
-        <%= link_to nh_icon_edit + "Edit", {:action => :edit, :id => @nh_project.id}, :method  => :get, :class => "btn-solid primary nh_action"  %>
+      <% if @group.can_be_edited_by?(current_user) %>
+        <%= link_to nh_icon_edit + "Edit", {:action => :edit, :id => @group.id}, :method  => :get, :class => "btn-solid primary nh_action"  %>
       <% end %>
 
       <% if @can_add_license %>
-        <%= link_to nh_icon_add + "Add License", new_license_nh_project_path(nh_project_id: @nh_project.id), :class => "btn-solid primary nh_action" %>
+        <%= link_to nh_icon_add + "Add License", new_license_nh_project_path(nh_project_id: @group.id), :class => "btn-solid primary nh_action" %>
       <% end %>
 
-      <% if @nh_project.can_be_edited_by?(current_user) %>
-        <%= link_to nh_icon_add + "Add Storage", new_nh_storage_path(:group_id => @nh_project.id), :class => "btn-solid primary nh_action" %>
+      <% if @group.can_be_edited_by?(current_user) %>
+        <%= link_to nh_icon_add + "Add Storage", new_nh_storage_path(:group_id => @group.id), :class => "btn-solid primary nh_action" %>
       <% end %>
 
-      <% if current_user.id == @nh_project.creator_id || current_user.has_role?(:admin_user) %>
-        <%= link_to nh_icon_dash + "Delete", nh_project_path(@nh_project), :method => :delete, :class => "btn-solid primary nh_action" , data: {:confirm => "Are you sure you want to delete '#{@nh_project.name}'?" }
+      <% if current_user.id == @group.creator_id || current_user.has_role?(:admin_user) %>
+        <%= link_to nh_icon_dash + "Delete", nh_project_path(@group), :method => :delete, :class => "btn-solid primary nh_action" , data: {:confirm => "Are you sure you want to delete '#{@group.name}'?" }
         %>
 
       <% end %>
@@ -60,29 +60,29 @@
   <%- # project details -%>
   <div class="card">
     <%
-      group_members  = @nh_project.users   || []
-      group_editors  = @nh_project.editors || []
-      open_invites   = Invitation.where(sender_id: current_user.id, group_id: @nh_project.id, active: true)
+      group_members  = @group.users   || []
+      group_editors  = @group.editors || []
+      open_invites   = Invitation.where(sender_id: current_user.id, group_id: @group.id, active: true)
     %>
 
       <div class="card-row header">
         <div class="card-item">
-          <%= link_to(files_nh_project_path(@nh_project.id), :class=>"btn-text primary") do %>
+          <%= link_to(files_nh_project_path(@group.id), :class=>"btn-text primary") do %>
             <div class="card-stat">
               <div class="card-icon"><%= nh_stats_files %></div>
               <div class="card-details">
-                <p><%= @nh_project.userfiles.count %></p>
-                <p class="label"><%= "File#{@nh_project.userfiles.count != 1 ? "s": ""}" %></p>
+                <p><%= @group.userfiles.count %></p>
+                <p class="label"><%= "File#{@group.userfiles.count != 1 ? "s": ""}" %></p>
               </div>
             </div>
           <% end %>
         </div>
 
         <div class="card-item">
-          <% task_stat = ("<div class='card-stat external middle'><div class='card-icon'>#{nh_stats_tasks}</div><div class='card-details'><p>#{@nh_project.cbrain_tasks.count}</p><p class='label'>Task#{@nh_project.cbrain_tasks.count != 1 ? 's': ''}</p></div></div>").html_safe %>
+          <% task_stat = ("<div class='card-stat external middle'><div class='card-icon'>#{nh_stats_tasks}</div><div class='card-details'><p>#{@group.cbrain_tasks.count}</p><p class='label'>Task#{@group.cbrain_tasks.count != 1 ? 's': ''}</p></div></div>").html_safe %>
           <%=
             scope_link(task_stat,
-              'tasks#index', { :filters => [{ :a => 'group_id', :v => @nh_project.id }], },
+              'tasks#index', { :filters => [{ :a => 'group_id', :v => @group.id }], },
               url: { :controller => :tasks, :action => :index },
               link: { class:"btn-text cbrain", target: "_blank" }
             )
@@ -114,7 +114,7 @@
       <div class="card-item">
         <div>
           <p class="card-label">Name</p>
-          <p class="card-text"><%= @nh_project.name %></p>
+          <p class="card-text"><%= @group.name %></p>
         </div>
       </div>
     </div>
@@ -122,7 +122,7 @@
       <div class="card-item">
         <div>
           <p class="card-label">Maintainer</p>
-          <p class="card-text"><%= @nh_project.creator.name %></p>
+          <p class="card-text"><%= @group.creator.name %></p>
         </div>
       </div>
     </div>
@@ -131,10 +131,10 @@
         <div>
           <p class="card-label">Type</p>
           <p class="card-text"><%=
-            if @nh_project.is_a?(UserGroup)
+            if @group.is_a?(UserGroup)
               "Your Own Private Project"
             else
-              @nh_project.pretty_category_name(current_user).gsub(/group/i,"Project")
+              @group.pretty_category_name(current_user).gsub(/group/i, "Project")
             end
           %></p>
         </div>
@@ -144,7 +144,7 @@
       <div class="card-item">
         <div>
           <p class="card-label">Description</p>
-          <p class="card-text"><%= @nh_project.description.presence || "-" %></p>
+          <p class="card-text"><%= @group.description.presence || "-" %></p>
         </div>
       </div>
     </div>
@@ -159,13 +159,13 @@
                 <div class="list-item list-header" type="checkbox"><p>Access</p></div>
               </div>
               <% group_members.each do |member| %>
-                <% if ((group_editors.include? member) || (@nh_project.creator.id == member.id) ) %>
+                <% if ((group_editors.include? member) || (@group.creator.id == member.id) ) %>
                   <div class="list-row">
                     <div class="list-item">
                       <p><%= member.name %></p>
                     </div>
                     <div class="list-item" type="checkbox">
-                      <p class="secondary text-uppercase"><%= @nh_project.creator.id == member.id ? "Maintainer" : "Editor" %></p>
+                      <p class="secondary text-uppercase"><%= @group.creator.id == member.id ? "Maintainer" : "Editor" %></p>
                     </div>
                   </div>
                 <% else %>
@@ -202,7 +202,7 @@
             <p class="card-label">Licenses | <%= @current_licenses.count %></p>
             <div class="card-text pt-2">
               <% @current_licenses.each do |id| %>
-                <%= link_to "License ##{id}", show_license_nh_project_path(@nh_project, :license_id => id), :class=>"btn-text primary bg-primary-wash mt-1" %>
+                <%= link_to "License ##{id}", show_license_nh_project_path(@group, :license_id => id), :class=>"btn-text primary bg-primary-wash mt-1" %>
               <% end %>
             </div>
           </div>

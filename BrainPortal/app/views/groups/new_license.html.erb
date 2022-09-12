@@ -24,7 +24,7 @@
 
 <% title "Add License", "" %>
 
-<div id="new_license" class="nh_content">
+<div id="new_license" >
   <div class="form">
     <%= form_tag add_license_group_path(@group) do %>
       <div>
@@ -32,11 +32,11 @@
         <p class="field_note"><b>Important:</b> All members of the project will be required to sign the agreement in order to access the project. You, as the author, will be be considered as having signed it implicitly.</p>
       </div>
       <fieldset>
-        <label>the text of the license  : <%= @group.name %></label>
+        <label>Enter license text: <%= @group.name %></label>
         <%= text_area_tag "license_text", "", :required => true, :rows => 20, :cols => 60 %>
 
       </fieldset>
-      <div class>
+      <div>
         <%= submit_tag "Add License", :name => :add_license, :class => "button" %>
         <span class="field_note">
           You can assign additional license agreements at any time.

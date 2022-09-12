@@ -32,11 +32,11 @@ class NhInvitationsController < NeurohubApplicationController
   end
 
   def new #:nodoc:
-    @nh_project = find_nh_project(current_user, params[:nh_project_id], allow_own_group: false)
+    @group = find_nh_project(current_user, params[:nh_project_id], allow_own_group: false)
   end
 
   def create #:nodoc:
-    @nh_project     = find_nh_project(current_user, params[:nh_project_id], allow_own_group: false)
+    @group     = find_nh_project(current_user, params[:nh_project_id], allow_own_group: false)
 
     # The form allows users to invite by emails or usernames, even though
     # the parameter is only called :emails
@@ -44,7 +44,7 @@ class NhInvitationsController < NeurohubApplicationController
     user_specs      = user_specs.map(&:presence).compact
 
     if user_specs.empty?
-      cb_error "Please specify at least one email address or username", :redirect => nh_project_path(@nh_project)
+      cb_error "Please specify at least one email address or username", :redirect => nh_project_path(@group)
     end
 
     # Fetch the users
@@ -70,7 +70,7 @@ class NhInvitationsController < NeurohubApplicationController
     end
 
     # Which invitations are pending?
-    already_sent_to = Invitation.where(active: true, user_id: user_ids, group_id: @nh_project.id).pluck(:user_id)
+    already_sent_to = Invitation.where(active: true, user_id: user_ids, group_id: @group.id).pluck(:user_id)
     rejected_ids    = user_ids & already_sent_to
     if rejected_ids.present?
       already_logins = User.where(:id => rejected_ids).pluck(:login).join(", ")
@@ -78,9 +78,9 @@ class NhInvitationsController < NeurohubApplicationController
     end
 
     # List of newly invited users
-    invited_users = User.find(user_ids - already_sent_to - @nh_project.user_ids)
+    invited_users = User.find(user_ids - already_sent_to - @group.user_ids)
     if invited_users.present?
-      Invitation.send_out(current_user, @nh_project, invited_users)
+      Invitation.send_out(current_user, @group, invited_users)
       flash[:notice] = "Your invitation was successfully sent to #{view_pluralize(invited_users.size,"user")}"
     else
       flash_errors << "No new users were found to invite."
@@ -89,7 +89,7 @@ class NhInvitationsController < NeurohubApplicationController
     flash[:warning] = flash_warnings.join "\n"      if flash_warnings.present?
     flash[:error]   = flash_errors.join   "\n"      if flash_errors.present?
 
-    redirect_to nh_project_path(@nh_project)
+    redirect_to nh_project_path(@group)
   end
 
 
@@ -114,9 +114,9 @@ class NhInvitationsController < NeurohubApplicationController
       return
     end
 
-    @nh_project = @nh_invitation.group
+    @group = @nh_invitation.group
 
-    unless @nh_project
+    unless @group
       @nh_invitation.destroy
 
       flash[:notice] = "This project does not exist anymore."
@@ -124,20 +124,20 @@ class NhInvitationsController < NeurohubApplicationController
       return
     end
 
-    unless @nh_project.users.include?(current_user)
-      @nh_project.users << current_user
+    unless @group.users.include?(current_user)
+      @group.users << current_user
     end
 
     @nh_invitation.active = false
     @nh_invitation.save
 
-    flash[:notice] = "You have been added to project #{@nh_project.name}."
+    flash[:notice] = "You have been added to project #{@group.name}."
 
     Message.send_message(@nh_invitation.sender,
                          :message_type   => 'notice',
                          :header         => "Invitation Accepted",
-                         :description    => "A user joined project #{@nh_project.name}",
-                         :variable_text  => "#{current_user.login} accepted your invitation to join project #{@nh_project.name} via NeuroHub"
+                         :description    => "A user joined project #{@group.name}",
+                         :variable_text  => "#{current_user.login} accepted your invitation to join project #{@group.name} via NeuroHub"
     )
     redirect_to nh_projects_path
   end
@@ -145,11 +145,11 @@ class NhInvitationsController < NeurohubApplicationController
   # Delete an invitation
   def destroy #:nodoc:
     @nh_invitation = Invitation.where(user_id: current_user.id).find(params[:id])
-    @nh_project = @nh_invitation.group
+    @group = @nh_invitation.group
 
     @nh_invitation.destroy
 
-    flash[:notice] = "You have declined an invitation to #{@nh_project.name}."
+    flash[:notice] = "You have declined an invitation to #{@group.name}."
     redirect_to nh_invitations_path
   end
 

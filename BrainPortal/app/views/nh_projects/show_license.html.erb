@@ -29,7 +29,7 @@
   <%- # actions -%>
   <% if @can_add_license %>
     <div class="nh_actions">
-      <%= link_to nh_icon_add + "Add License", new_license_nh_project_path(nh_project_id: @nh_project.id), :class => "btn-solid primary nh_action" %>
+      <%= link_to nh_icon_add + "Add License", new_license_nh_project_path(nh_project_id: @group.id), :class => "btn-solid primary nh_action" %>
     </div>
   <% end %>
 
@@ -43,7 +43,7 @@
         <%= render :partial => 'show_license_text' %>
       <% else %>
         <div class="nh_form">
-          <%= form_tag sign_license_nh_project_path(@nh_project) do %>
+          <%= form_tag sign_license_nh_project_path(@group) do %>
             <%= hidden_field_tag :license_id, @license_id %>
             <%= render :partial => 'show_license_text' %>
             <div class="btn-section">
@@ -57,11 +57,11 @@
     <% if @current_licenses.size > 1 %>
       <div class="card-section license-list">
         <div class="card-heading">
-          Other licenses for <%= @nh_project.name %>
+          Other licenses for <%= @group.name %>
         </div>
         <div class="card-item">
           <% @current_licenses.each do |id| %>
-            <%= link_to "License ##{id} #{id == @license_id? "- currently selected": ""}", show_license_nh_project_path(@nh_project, :license_id => id), :class => "btn-text primary", 'data-active' => (id == @license_id), 'disabled' => (id == @license_id) %>
+            <%= link_to "License ##{id} #{id == @license_id? "- currently selected": ""}", show_license_nh_project_path(@group, :license_id => id), :class => "btn-text primary", 'data-active' => (id == @license_id), 'disabled' => (id == @license_id) %>
           <% end %>
         </div>
       </div>

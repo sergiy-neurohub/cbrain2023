@@ -32,36 +32,36 @@ class NhProjectsController < NeurohubApplicationController
   rescue_from CbrainLicenseException, with: :redirect_show_license
 
   def new #:nodoc:
-    @nh_project = WorkGroup.new
+    @group = WorkGroup.new
   end
 
   def create #:nodoc:
-    attributes             = params.require_as_params(:nh_project).permit(:name, :description, :public, :not_assignable, :editor_ids => [])
+    attributes             = params.require_as_params(:group).permit(:name, :description, :public, :not_assignable, :editor_ids => [])
 
-    @nh_project            = WorkGroup.new(attributes)
-    @nh_project.creator_id = current_user.id
+    @group            = WorkGroup.new(attributes)
+    @group.creator_id = current_user.id
 
-    if @nh_project.save
-      @nh_project.user_ids = [ current_user.id ]
-      @nh_project.addlog_context(self,"Created by #{current_user.login}")
-      flash[:notice] = "Project #{@nh_project.name} was successfully created"
-      redirect_to :action => :show, :id => @nh_project.id
+    if @group.save
+      @group.user_ids = [current_user.id ]
+      @group.addlog_context(self, "Created by #{current_user.login}")
+      flash[:notice] = "Project #{@group.name} was successfully created"
+      redirect_to :action => :show, :id => @group.id
     else
-      flash[:error] = "Cannot create project #{@nh_project.name}"
+      flash[:error] = "Cannot create project #{@group.name}"
       render :action => :new
     end
   end
 
   def destroy #:nodoc:
-    @nh_project = current_user.modifiable_groups.find(params[:id])
+    @group = current_user.modifiable_groups.find(params[:id])
 
     if ! current_user.has_role?(:admin_user)
-      if current_user.id != @nh_project.creator_id
-        cb_error "Cannot destroy this project: you are not its maintainer.", :redirect => nh_project_path(@nh_project)
+      if current_user.id != @group.creator_id
+        cb_error "Cannot destroy this project: you are not its maintainer.", :redirect => nh_project_path(@group)
       end
     end
     
-    @nh_project.destroy
+    @group.destroy
 
     flash[:notice] = "Project successfully deleted."
 
@@ -95,43 +95,43 @@ class NhProjectsController < NeurohubApplicationController
   end
 
   def edit #:nodoc:
-    @nh_project      = find_nh_project(current_user, params[:id], allow_own_group: false)
-    @can_add_license = @nh_project.creator_id == current_user.id
+    @group      = find_nh_project(current_user, params[:id], allow_own_group: false)
+    @can_add_license = @group.creator_id == current_user.id
   end
 
   def update #:nodoc:
-    @nh_project = find_nh_project(current_user, params[:id])
+    @group = find_nh_project(current_user, params[:id])
 
-    unless @nh_project.can_be_edited_by?(current_user)
+    unless @group.can_be_edited_by?(current_user)
       flash[:error] = "You don't have permission to edit this project."
       redirect_to :action => :show
       return
     end
 
-    attr_to_update = params.require_as_params(:nh_project).permit(:name, :description, :public, :not_assignable, :editor_ids => [])
+    attr_to_update = params.require_as_params(:group).permit(:name, :description, :public, :not_assignable, :editor_ids => [])
     attr_to_update["editor_ids"] = [] if !attr_to_update["editor_ids"]
-    success        = @nh_project.update_attributes_with_logging(attr_to_update,current_user)
+    success        = @group.update_attributes_with_logging(attr_to_update, current_user)
 
     if success
-      flash[:notice] = "Project #{@nh_project.name} is successfully updated."
+      flash[:notice] = "Project #{@group.name} is successfully updated."
       redirect_to :action => :show
     else
-      flash.now[:error] = "Project #{@nh_project.name} is not successfully updated."
+      flash.now[:error] = "Project #{@group.name} is not successfully updated."
       render :action => :edit
     end
   end
 
   def show #:nodoc:
-    @nh_project       = find_nh_project(current_user, params[:id])
-    @current_licenses = @nh_project.custom_license_agreements # can be empty array
-    @can_add_license  = @nh_project.creator_id == current_user.id
-    @proj_dps         = @nh_project.data_providers.where(:user_id => current_user.id)
-    @can_upload       = ensure_assignable_nh_projects(current_user, @nh_project).present? rescue nil
+    @group       = find_nh_project(current_user, params[:id])
+    @current_licenses = @group.custom_license_agreements # can be empty array
+    @can_add_license  = @group.creator_id == current_user.id
+    @proj_dps         = @group.data_providers.where(:user_id => current_user.id)
+    @can_upload       = ensure_assignable_nh_projects(current_user, @group).present? rescue nil
   end
 
   def files #:nodoc:
-    @nh_project      = find_nh_project(current_user, params[:id])
-    @files           = @nh_project.userfiles
+    @group      = find_nh_project(current_user, params[:id])
+    @files           = @group.userfiles
     @files_count     = @files.count
 
     @page, @per_page = pagination_check(@files, :nh_project_files)
@@ -140,19 +140,19 @@ class NhProjectsController < NeurohubApplicationController
       @pagy, @files    = pagy(@files, :items => @per_page)
     end
 
-    @can_upload = ensure_assignable_nh_projects(current_user, @nh_project).present? rescue nil
+    @can_upload = ensure_assignable_nh_projects(current_user, @group).present? rescue nil
   end
 
   def new_license #:nodoc:
-    @nh_project = find_nh_project(current_user, params[:id], allow_own_group: false)
-    if @nh_project.creator_id != current_user.id
+    @group = find_nh_project(current_user, params[:id], allow_own_group: false)
+    if @group.creator_id != current_user.id
       cb_error "Only owner can set licensing", :redirect => { :action => :show }
     end
   end
 
   def add_license #:nodoc:
-    @nh_project = find_nh_project(current_user, params[:id], check_licenses: false)
-    if @nh_project.creator_id != current_user.id
+    @group = find_nh_project(current_user, params[:id], check_licenses: false)
+    if @group.creator_id != current_user.id
       cb_error "Only owner can set licensing", :redirect  => { :action => :show }
     end
 
@@ -160,20 +160,20 @@ class NhProjectsController < NeurohubApplicationController
     cb_error 'Empty licenses are presently not allowed' if license_text.blank?
 
     timestamp  = Time.zone.now.strftime("%Y-%m-%dT%H:%M:%S")
-    group_name = @nh_project.name.gsub(/[^\w]+/,"")
+    group_name = @group.name.gsub(/[^\w]+/, "")
     file_name  = "license_#{group_name}_#{timestamp}.txt"
-    license    = @nh_project.register_custom_license(license_text, current_user, file_name)
-    user_signs_license_for_project(current_user, license, @nh_project)
+    license    = @group.register_custom_license(license_text, current_user, file_name)
+    current_user.signs_license_for_group( license, @group)
 
     flash[:notice] = 'A license is added. You can force users to sign multiple license agreements if needed.'
     redirect_to :action => :show
   end
 
   def show_license #:nodoc:
-    @nh_project       = find_nh_project(current_user, params[:id], check_licenses: false, allow_own_group: false)
-    @current_licenses = @nh_project.custom_license_agreements
-    @can_add_license  = @nh_project.creator_id == current_user.id
-    unsigned_licenses = current_user.unsigned_custom_licenses(@nh_project)
+    @group       = find_nh_project(current_user, params[:id], check_licenses: false, allow_own_group: false)
+    @current_licenses = @group.custom_license_agreements
+    @can_add_license  = @group.creator_id == current_user.id
+    unsigned_licenses = current_user.unsigned_custom_licenses(@group)
 
     if unsigned_licenses.empty?
       if @current_licenses.present?
@@ -208,10 +208,10 @@ class NhProjectsController < NeurohubApplicationController
   end
 
   def sign_license #:nodoc:
-    @nh_project = find_nh_project(current_user, params[:id], check_licenses: false, allow_own_group: false)
+    @group = find_nh_project(current_user, params[:id], check_licenses: false, allow_own_group: false)
     @license_id = params[:license_id].to_i
 
-    unless @nh_project.custom_license_agreements.include?(@license_id)
+    unless @group.custom_license_agreements.include?(@license_id)
       flash[:error] = 'You are trying to access unrelated license. Try again or report the issue to the support.'
       redirect_to :action => :show
       return
@@ -231,19 +231,19 @@ class NhProjectsController < NeurohubApplicationController
 
     if params[:license_check].blank? || params[:license_check].to_i == 0
       flash[:error] = "There was a problem with your submission. Please read the agreement and check the checkbox."
-      redirect_to show_license_nh_project_path(@nh_project)
+      redirect_to show_license_nh_project_path(@group)
       return
     end
 
     license = Userfile.find(@license_id)
-    user_signs_license_for_project(current_user, license, @nh_project)
+    current_user.signs_license_for_group( license, @group)
 
-    if current_user.unsigned_custom_licenses(@nh_project).empty?
+    if current_user.unsigned_custom_licenses(@group).empty?
       flash[:notice] = 'You signed all the project licenses'
-      redirect_to :action => :show, :id => @nh_project.id
+      redirect_to :action => :show, :id => @group.id
     else
       flash[:notice] = 'This project has at least one other license agreement'
-      redirect_to :action => :show, :id => @nh_project.id
+      redirect_to :action => :show, :id => @group.id
       #redirect_to :action => show_license_nh_project_path(@nh_project)
     end
   end
@@ -251,13 +251,13 @@ class NhProjectsController < NeurohubApplicationController
   # GET /nh_projects/:id/new_file
   def new_file
 
-    @nh_project  = find_nh_project(current_user, params[:id])
-    @nh_project  = ensure_assignable_nh_projects(current_user, @nh_project)
+    @group  = find_nh_project(current_user, params[:id])
+    @group  = ensure_assignable_nh_projects(current_user, @group)
 
     @nh_projects = find_nh_projects(current_user)
     @nh_projects = ensure_assignable_nh_projects(current_user, @nh_projects)
 
-    nh_dps       = find_all_nh_storages(current_user).where(:group_id => @nh_project.id).to_a
+    nh_dps       = find_all_nh_storages(current_user).where(:group_id => @group.id).to_a
     service_dps  = nh_service_storages(current_user).to_a
     @nh_dps      = nh_dps | service_dps
 
@@ -330,15 +330,6 @@ class NhProjectsController < NeurohubApplicationController
     else
       redirect_to nh_projects_path
     end
-  end
-
-  # Records that +user+ signed the +license+ file for +project+
-  # with nice log messages to that effect.
-  def user_signs_license_for_project(user, license, project)
-    user.add_signed_custom_license(license)
-
-    user.addlog("Signed custom license agreement '#{license.name}' (ID #{license.id}) for project '#{project.name}' (ID #{project.id}).")
-    project.addlog("User #{user.login} signed license agreement '#{license.name}' (ID #{license.id}).")
   end
 
 end

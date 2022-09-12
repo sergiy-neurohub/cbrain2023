@@ -26,13 +26,13 @@
 
 <div id="nh_new_license" class="nh_content">
   <div class="nh_form">
-    <%= form_tag add_license_nh_project_path(@nh_project) do %>
+    <%= form_tag add_license_nh_project_path(@group) do %>
       <div class="nh_form_title">
         Add License
         <p class="field_note"><b>Important:</b> All members of the project will be required to sign the agreement in order to access the project. You, as the author, will be be considered as having signed it implicitly.</p>
       </div>
       <fieldset>
-        <label>Enter the text of the license agreement for : <%= @nh_project.name %></label>
+        <label>Enter the text of the license agreement for : <%= @group.name %></label>
         <%= text_area_tag "license_text", "", :required => true, :rows => 20, :cols => 60 %>
 
       </fieldset>

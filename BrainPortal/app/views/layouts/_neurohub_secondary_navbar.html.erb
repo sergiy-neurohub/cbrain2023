@@ -69,9 +69,9 @@
       <% if(params[:controller].include?('nh_projects')||(params[:controller].include?('nh_invitations') && params[:action].include?('new'))) %>
         <%= link_to "Projects", nh_projects_path, { :class => "nh_breadcrumbs_item", "data-active"=> controller_name === 'nh_projects' && action_name==="index"  }%>
 
-        <% if(@nh_project && @nh_project.id)%>
+        <% if(@group && @group.id)%>
             <div class="nh_breadcrumbs_icon"><%= nh_icon_caret_right %></div>
-            <%= link_to @nh_project.name, {:controller=> "nh_projects",:action => :show, :id => @nh_project.id }, :method  => :get, :class => "nh_breadcrumbs_item", "data-active"=> controller_name === 'nh_projects' && action_name === "show"  %>
+            <%= link_to @group.name, {:controller=> "nh_projects", :action => :show, :id => @group.id }, :method  => :get, :class => "nh_breadcrumbs_item", "data-active"=> controller_name === 'nh_projects' && action_name === "show"  %>
         <% end %>
 
         <% if action_name!="index" && action_name!="show" %>

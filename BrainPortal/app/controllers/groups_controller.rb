@@ -284,7 +284,7 @@ class GroupsController < ApplicationController
     group_name = @group.name.gsub(/[^\w]+/, "")
     file_name  = "license_#{group_name}_#{timestamp}.txt"
     license    = @group.register_custom_license(license_text, current_user, file_name)
-    current_user.signs_license_for_group( license, @group)
+    current_user.signs_license_for_project(license, @group, model='group')
 
     flash[:notice] = 'A license is added. You can force users to sign multiple license agreements if needed.'
     redirect_to :action => :show
