@@ -24,44 +24,49 @@
 
 <% title("License #{@license_id}", '') %>
 
+<h2> <i> License <%= @license_id %> </i> </h2>
+
 <div id="show_license">
+
+  The owner of the project <%= @group.name %> forbade access to the project info, until you sign the license
 
   <%- # actions -%>
   <% if @can_add_license %>
       <%= link_to "Add License", new_license_group_path(@group.id) %>
   <% end %>
 
-  <div class="license_agreement">
-    <i> License <%= @license_id %> </i> </div>
+  <p class="license_agreement">
 
      <%#= render :partial => 'show_license_text' %>
 
-        <div>
+        <div class="generalbox">
           <%= form_tag sign_license_group_path(@group) do %>
             <%= hidden_field_tag :license_id, @license_id %>
 
             <pre><%= @license_text %></pre>
-
-            <% unless @is_signed %>
-            <div>
+        </div>
+        <% unless @is_signed %>
+            <p>
               <%= submit_tag "I agree with the above statement", :name => :agree,     :class => "button" %>
               <%= submit_tag "I do not agree",                   :name => :not_agree, :class => "button" %>
-            </div>
+            </p>
             <% end %>
           <% end %>
-        </div>
+
 
     </div>
 
     <% if @current_licenses.size > 1 %>
-        <div>
-          All licenses for <%= @group.name %>
-        </div>
-        <div class="card-item">
+        <p>
+          Licenses for the project <%= @group.name %>
+        </p>
+        <ul>
           <% @current_licenses.each do |id| %>
-            <%= link_to "License ##{id} #{id == @license_id? "- currently selected": ""}", show_license_group_path(:group_id => @group.id, :license_id => id), :class => "btn-text primary", 'data-active' => (id == @license_id), 'disabled' => (id == @license_id) %>
+            <li>
+            <%= link_to "License ##{id} #{id == @license_id? "- currently selected": ""}", show_license_group_path(:group_id => @group.id, :license_id => id), 'data-active' => (id == @license_id), 'disabled' => (id == @license_id) %>
+            </li>
           <% end %>
-        </div>
+        </ul>
       </div>
     <% end %>
   </div>

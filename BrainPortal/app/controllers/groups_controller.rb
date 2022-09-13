@@ -33,7 +33,7 @@ class GroupsController < ApplicationController
 
   before_action :license_check, :only => [:show, :create, :switch, :edit, :update, :unregister, :destroy]
 
-  before_action :can_add_license, :only => [:show, :new_license, :add_license, :show_license, :sign_license] # todo remove only block for greater safety
+  before_action :can_add_license, :only => [:show, :new_license, :add_license, :show_license, :sign_license]
 
   # GET /groups
   # GET /groups.xml
@@ -307,11 +307,7 @@ class GroupsController < ApplicationController
 
     # What to show. If a license is given in params,
     # we make sure it's a registered one and we pick that.
-    param_lic_id = params[:license_id].presence.try(:to_i) # can be nil
-    if param_lic_id
-      @license_id = @current_licenses.detect { |id| id == param_lic_id }
-    end
-    # If no valid license was given and there are unsigned licenses, pick the first
+    @license_id = false unless @current_licenses.include? @license_id
     @license_id ||= unsigned_licenses.first.try(:to_i)
     # Otherwise, show the first license.
     @license_id ||= @current_licenses.first
@@ -326,9 +322,6 @@ class GroupsController < ApplicationController
   end
 
   def sign_license #:nodoc:
-    # @group      =  @current_user.visible_groups.find(id: params[id]).first
-    @is_signed = current_user.custom_licenses_signed.include?(@license_id)
-    @is_author = Userfile.where(:id => @license_id, :user_id => current_user.id).exists?
 
     unless @group.custom_license_agreements.include?(@license_id)
       flash[:error] = 'You are trying to access unrelated license. Try again or report the issue to the support.'
@@ -370,11 +363,12 @@ class GroupsController < ApplicationController
   # check license for project with id pid,
   def license_check(pid=false)
     pid = pid || params[:id]
-    return true if pid
+
+
     return true if pid == 'all' ## to do && current_user.has_role(:admin)
     # if unexpected id - let the action method handle the error message
     begin
-      @group = current_user.viewable_groups.find(params[:id])
+      @group = current_user.viewable_groups.find(pid)
     rescue ActiveRecord::RecordNotFound
       return true
     end
@@ -402,13 +396,16 @@ class GroupsController < ApplicationController
     end
   end
 
-  def can_add_license # updates custom license attribute
-
+  def can_add_license # helper updates custom license attribute
     @group            = @current_user.viewable_groups.find(params[:id])
-    @can_add_license  = current_user.id == @group&.creator_id
-    @current_licenses = @group.custom_license_agreements
-    @license_id = params[:license_id].to_i
 
+    @can_add_license  = current_user.id == @group&.creator_id
+
+    @current_licenses = @group.custom_license_agreements
+    param_lic_id = params['license_id']
+    @license_id = param_ic_id.to_i if param_ic_id
+
+    # If no valid license was given and there are unsigned licenses, pick the first
   end
 
 end
