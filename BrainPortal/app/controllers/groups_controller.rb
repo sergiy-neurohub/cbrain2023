@@ -308,6 +308,7 @@ class GroupsController < ApplicationController
     # What to show. If a license is given in params,
     # we make sure it's a registered one and we pick that.
     @license_id = false unless @current_licenses.include? @license_id
+    # If no valid license was given and there are unsigned licenses, pick the first
     @license_id ||= unsigned_licenses.first.try(:to_i)
     # Otherwise, show the first license.
     @license_id ||= @current_licenses.first
@@ -402,10 +403,10 @@ class GroupsController < ApplicationController
     @can_add_license  = current_user.id == @group&.creator_id
 
     @current_licenses = @group.custom_license_agreements
-    param_lic_id = params['license_id']
+    param_lic_id = params['license_id'].presence
     @license_id = param_ic_id.to_i if param_ic_id
 
-    # If no valid license was given and there are unsigned licenses, pick the first
+
   end
 
 end
