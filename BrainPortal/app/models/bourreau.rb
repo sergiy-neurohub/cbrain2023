@@ -406,6 +406,13 @@ class Bourreau < RemoteResource
     # Returns a logger object or the symbol :auto
     logger = self.initialize_worker_logger(log_to,verbose)
 
+    # prefetch git commits before workers are started (reduces git invocation #)
+    ToolConfig.where(:bourreau_id => myself.id)
+        .map {|tc| tc.cbrain_task_class rescue nil}
+        .uniq
+        .compact   # to remove nil
+        .each { |klass| klass.revision_info.self_update }
+
     # Workers are started when created
     worker_pool = WorkerPool.create_or_find_pool(BourreauWorker,
        num_instances,
