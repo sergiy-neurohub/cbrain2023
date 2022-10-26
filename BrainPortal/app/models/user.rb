@@ -149,7 +149,7 @@ class User < ApplicationRecord
   end
 
   def cbrain_unsigned_license_agreements #:nodoc:
-    # Difference between all license agreements and whom signed by the user
+    # Difference between all cbrain license agreements and signed by the user
     cbrain_license_agreement_set - (strip_prefix signed_license_agreements)
   end
 
@@ -157,7 +157,8 @@ class User < ApplicationRecord
     neurohub_license_agreement_set - (add_prefix signed_license_agreements)
   end
 
-  def license_agreement_set # both nh and old agreements
+  # all h and cbrain agreements (on accessible objects)
+  def license_agreement_set
     all_object_with_license = RemoteResource.find_all_accessible_by_user(self) +
                               Tool.find_all_accessible_by_user(self) +
                               DataProvider.find_all_accessible_by_user(self)
@@ -172,14 +173,17 @@ class User < ApplicationRecord
     RemoteResource.current_resource.license_agreements  + license_agreements
   end
 
-  def cbrain_license_agreement_set # cbrain required licenses
+  # cbrain required licenses
+  def cbrain_license_agreement_set
     license_agreement_set.reject {|l| l.include?('/')}
   end
 
-  def neurohub_license_agreement_set # neurohub license agreement set
+  # neurohub license agreement set
+  def neurohub_license_agreement_set
     RemoteResource.current_resource.license_agreements.select {|l| l.start_with?('neurohub/')}
   end
 
+  # a flag that all required cbrain licenses are signed
   def all_licenses_signed #:nodoc:
     self.meta.reload
     self.meta[:all_licenses_signed]
@@ -191,13 +195,13 @@ class User < ApplicationRecord
   end
 
   # neurohub specific licenses are signed flag
-  def neurohub_licenses_signed
+  def neurohub_licenses_signed #:nodoc:
     self.meta.reload
     self.meta['neurohub_licenses_signed']
   end
 
-  # neurohub specific licenses are signed flag
-  def neurohub_licenses_signed=(x)
+  # neurohub specific licenses are signed flag setter
+  def neurohub_licenses_signed=(x) #:nodoc:
     self.meta.reload
     self.meta['neurohub_licenses_signed'] = x
   end

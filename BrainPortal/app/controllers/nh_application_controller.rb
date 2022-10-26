@@ -82,10 +82,11 @@ class NhApplicationController < ApplicationController
 
   end
 
-  def need_sign_license #: overrides a methods used in check_license_agreements, as list of neurohub licenses differ from cbrains
+  # overrides a methods used in check_license_agreements, as list of NeuroHub licenses may differ from cbrains
+  def need_sign_license
     return if current_user.neurohub_licenses_signed.present?
     license = current_user.neurohub_unsigned_license_agreements.first
-    current_user.all_licenses_signed = "yes" if license.blank?
+    current_user.neurohub_licenses_signed = "yes" if license.blank?
     [license, :nh_portal]
   end
 

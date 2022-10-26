@@ -142,7 +142,7 @@ class ApplicationController < ActionController::Base
     return false
   end
 
-  def need_sign_license #:  next in order licenses to sign (if needed)
+  def need_sign_license #:nodoc:
     return if current_user.all_licenses_signed.present?
     license = current_user.cbrain_unsigned_license_agreements&.first
     current_user.all_licenses_signed = "yes" if license.blank?
