@@ -184,7 +184,7 @@ ActiveRecord::Schema.define(version: 20220418144014) do
     t.index ["type"], name: "index_groups_on_type", using: :btree
   end
 
-  create_table "groups_editors", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "groups_editors", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.integer "group_id"
     t.integer "user_id"
     t.index ["group_id", "user_id"], name: "index_groups_editors_on_group_id_and_user_id", unique: true, using: :btree
@@ -205,7 +205,7 @@ ActiveRecord::Schema.define(version: 20220418144014) do
     t.index ["key"], name: "index_help_documents_on_key", unique: true, using: :btree
   end
 
-  create_table "large_session_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "large_session_infos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string   "session_id",                               null: false
     t.text     "data",       limit: 65535
     t.datetime "created_at"
@@ -299,7 +299,7 @@ ActiveRecord::Schema.define(version: 20220418144014) do
     t.index ["type"], name: "index_remote_resources_on_type", using: :btree
   end
 
-  create_table "resource_usage", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "resource_usage", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
     t.string   "type"
     t.decimal  "value",                    precision: 24
     t.integer  "user_id"
@@ -387,7 +387,6 @@ ActiveRecord::Schema.define(version: 20220418144014) do
     t.boolean  "hidden",                           default: false
     t.integer  "remote_resource_id"
     t.string   "form_page"
-    t.string   "maillist_consent"
   end
 
   create_table "sites", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci" do |t|
@@ -543,8 +542,6 @@ ActiveRecord::Schema.define(version: 20220418144014) do
     t.boolean  "account_locked",       default: false, null: false
     t.string   "zenodo_main_token"
     t.string   "zenodo_sandbox_token"
-    t.string   "maillist_consent"
-    t.string   "envoke_id"
     t.index ["login"], name: "index_users_on_login", using: :btree
     t.index ["type"], name: "index_users_on_type", using: :btree
   end
