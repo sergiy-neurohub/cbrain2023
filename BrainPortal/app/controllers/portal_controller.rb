@@ -26,7 +26,7 @@ class PortalController < ApplicationController
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
   include DateRangeRestriction
-  include LicenseConcerns
+  include LicenseActions
 
   api_available :only => [ :swagger ] # GET /swagger returns the .json specification
 

@@ -25,7 +25,7 @@ class NhPortalController < NhApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
-  include LicenseConcerns
+  include LicenseActions
 
   before_action :login_required
 
