@@ -62,10 +62,8 @@ class NhPortalController < NhApplicationController
     @projects = report[:projects]
   end
 
-
   def nh_sign_license #:nodoc:
-    sign_license(on_agree=:neurohub_path, on_disagree='/signout', portal='NeuroHub')
+    sign_license(on_agree=:neurohub_path, on_disagree='/signout', portalname='NeuroHub')
   end
 
 end
-
