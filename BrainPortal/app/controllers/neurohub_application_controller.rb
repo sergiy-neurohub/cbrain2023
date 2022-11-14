@@ -110,9 +110,6 @@ class NeurohubApplicationController < ApplicationController
   # This method is identical to (and overrides) the one in
   # ApplicationController excepts it uses the NeuroHub password reset form.
   def check_password_reset #:nodoc:
-    # todo SB - not sure why this needed. to use nh_change_password, user has to type url manually,
-    # remembering 5 word nh_users/ nh_change_password require beyond average memory
-    # , and the url on neurohub login page is cbrains /change_password.
     if current_user.password_reset
       unless params[:controller] == "nh_users" && (params[:action] == "change_password" || params[:action] == "update")
         flash[:error] = "Please reset your password."
