@@ -38,7 +38,7 @@ module SwitcherHelper
   def login_dashboard_path
     if current_user
       if cbrain_session[:login_page] == 'NeuroHub'
-        neurohub_path  # /neurohub -> nh_portal#welcome
+        neurohub_path  # /neurohub -> neurohub_portal#welcome
       else
         home_path      # /home     -> portal#welcome
       end
@@ -53,7 +53,7 @@ module SwitcherHelper
     if controller.to_s =~ /^(neurohub_|nh_)/
       home_path
     else
-      neurohub_path  # /neurohub -> nh_portal#welcome
+      neurohub_path  # /neurohub -> neurohub_portal#welcome
     end
   end
 

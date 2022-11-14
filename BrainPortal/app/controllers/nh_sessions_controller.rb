@@ -21,7 +21,7 @@
 #
 
 # Session management for NeuroHub
-class NhSessionsController < NhApplicationController
+class NhSessionsController < NeurohubApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 

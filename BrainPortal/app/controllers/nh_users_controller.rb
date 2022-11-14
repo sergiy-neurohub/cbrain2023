@@ -21,7 +21,7 @@
 #
 
 #Controller for the User resource.
-class NhUsersController < NhApplicationController
+class NhUsersController < NeurohubApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 

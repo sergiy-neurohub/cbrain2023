@@ -21,7 +21,7 @@
 #
 
 # Invitation management for NeuroHub
-class NhInvitationsController < NhApplicationController
+class NhInvitationsController < NeurohubApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 

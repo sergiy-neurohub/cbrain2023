@@ -32,12 +32,12 @@
 -%>
 
 <% if current_user %>
-  <div class="nh_secondary_navbar" data-controller data-welcome="<%= params[:controller].include?("nh_portal")&&params[:action].include?("welcome") %>">
+  <div class="nh_secondary_navbar" data-controller data-welcome="<%= params[:controller].include?("neurohub_portal")&&params[:action].include?("welcome") %>">
 
     <div class="nh_breadcrumbs">
 
       <%- # welcome -%>
-      <% if(params[:controller].include?("nh_portal")) %>
+      <% if(params[:controller].include?("neurohub_portal")) %>
         <% if action_name=="welcome" %>
           <p class="nh_welcome">Welcome <%= @username %></p>
         <% end %>
@@ -94,9 +94,9 @@
       <% end %>
 
       <%- # styleguide -%>
-      <% if(params[:controller].include?('nh_portal') && action_name === "styleguide") %>
-        <%= link_to 'Styleguide', styleguide_path, { :class => "nh_breadcrumbs_item", "data-active"=> controller_name === "nh_portal" && action_name === "styleguide"} %>
-      <% end %>
+      <% if(params[:controller].include?('neurohub_portal') && action_name === "styleguide") %>
+        <%= link_to 'Styleguide', styleguide_path, { :class => "nh_breadcrumbs_item", "data-active"=> controller_name === "neurohub_portal" && action_name === "styleguide"} %>
+    <% end %>
 
     </div>
 

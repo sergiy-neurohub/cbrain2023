@@ -23,7 +23,7 @@
 # Superclass to all *NeuroHub* controllers.
 # Already inherits all the methods and modules of
 # CBRAIN's ApplicationController.
-class NhApplicationController < ApplicationController
+class NeurohubApplicationController < ApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
@@ -87,7 +87,7 @@ class NhApplicationController < ApplicationController
     return if current_user.neurohub_licenses_signed.present?
     license = current_user.neurohub_unsigned_license_agreements.first
     current_user.neurohub_licenses_signed = "yes" if license.blank?
-    [license, :nh_portal]
+    [license, :neurohub_portal]
   end
 
   ########################################################################

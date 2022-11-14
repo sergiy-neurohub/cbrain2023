@@ -283,15 +283,15 @@ Rails.application.routes.draw do
   ####################################################################################
 
     # Special named routes
-    get   '/neurohub'               => 'nh_portal#welcome'
-    get   '/styleguide'             => 'nh_portal#styleguide'
-    get   '/nh_search'              => 'nh_portal#search'
+    get   '/neurohub'               => 'neurohub_portal#welcome'
+    get   '/styleguide'             => 'neurohub_portal#styleguide'
+    get   '/nh_search'              => 'neurohub_portal#search'
     get   '/signin'                 => 'nh_sessions#new'
     get   '/signout'                => 'nh_sessions#destroy'
     get   '/myaccount'              => 'nh_users#myaccount'
 
-    get '/nh_show_license/*license', :controller => :nh_portal, :action => :show_license
-    post '/nh_sign_license/*license', :controller => :nh_portal, :action => :nh_sign_license
+    get '/nh_show_license/*license', :controller => :neurohub_portal, :action => :show_license
+    post '/nh_sign_license/*license', :controller => :neurohub_portal, :action => :nh_sign_license
 
     # Globus authentication
     get   '/nh_globus'              => 'nh_sessions#nh_globus'

@@ -21,7 +21,7 @@
 #
 
 # Project management for NeuroHub
-class NhProjectsController < NhApplicationController
+class NhProjectsController < NeurohubApplicationController
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
