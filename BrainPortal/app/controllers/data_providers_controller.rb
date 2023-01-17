@@ -896,7 +896,7 @@ class DataProvidersController < ApplicationController
 
   end
 
-  # register all pd files
+  # register all files on the provider
   def autoregister
     id        = params[:id]
     @provider = DataProvider.find(id) 
