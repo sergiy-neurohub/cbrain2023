@@ -31,7 +31,7 @@ class DataProvidersController < ApplicationController
                            :browse, :register, :unregister, :delete ]
 
   before_action :login_required
-  before_action :manager_role_required, :only => [:new, :create]
+
   before_action :admin_role_required,   :only => [:report, :repair]
 
   def index #:nodoc:
@@ -84,13 +84,16 @@ class DataProvidersController < ApplicationController
                                 )
 
     @typelist = get_type_list
+    render template: 'data_providers/normal_new' unless current_user.has_role?(:admin) # normal user only allowed create UserkeyFlatDirSshDataProvider
   end
 
   def create #:nodoc:
-    @provider = DataProvider.sti_new(data_provider_params)
+    @provider = DataProvider.sti_new(data_provider_params) if current_user.has_role?(:admin_user)
+    # non-admins are limited to one dp type only
+    # todo allow any other types???
+    @provider = UserkeyFlatDirSshDataProvider.new(data_provider_params) unless current_user.has_role?(:admin_user)
     @provider.user_id  ||= current_user.id # disabled field in form DOES NOT send value!
     @provider.group_id ||= current_assignable_group.id
-
     if @provider.save
       add_meta_data_from_form(@provider, [:must_move, :no_uploads, :no_viewers, :browse_gid])
       @provider.addlog_context(self,"Created by #{current_user.login}")
@@ -309,7 +312,8 @@ class DataProvidersController < ApplicationController
     # a relative path "a/b/c"
     @browse_path = current_browse_path(@provider, params['browse_path'])
     @scope.custom['browse_path'] = @browse_path
-
+    # allow normal user browse his custom data provider for manual registration
+    @as_user ||= current_user if current_user.has_role?(:normal_user) && @provider.is_a?(UserkeyFlatDirSshDataProvider)
     begin
       # [ base, size, type, mtime ]
       @fileinfolist = BrowseProviderFileCaching.get_recent_provider_list_all(@provider, @as_user, @browse_path, params[:refresh])
@@ -819,6 +823,153 @@ class DataProvidersController < ApplicationController
     end
   end
 
+  # This action checks that the remote side of the DataProvider is
+  # accessible using SSH.
+  def check
+    id        = params[:id]
+    @provider = DataProvider.find(id)
+    unless @provider.has_owner_access?(current_user)
+      flash[:error] = "You cannot check a provider that you do not own."
+      respond_to do |format|
+        format.html { redirect_to :action => :show }
+        format.xml  { head :forbidden }
+        format.json { head :forbidden }
+      end
+      return
+    end
+
+    master  = @provider.master # This is a handler for the connection, not persistent.
+    tmpfile = "/tmp/dp_check.#{Process.pid}.#{rand(1000000)}"
+
+    # Check #1: the SSH connection can be established
+    if ! master.is_alive?
+      test_error "Cannot establish the SSH connection. Check the configuration: username, hostname, port are valid, and SSH key is installed."
+    end
+
+    # Check #2: we can run "true" on the remote site and get no output
+    status = master.remote_shell_command_reader("true",
+                                                :stdin  => "/dev/null",
+                                                :stdout => "#{tmpfile}.out",
+                                                :stderr => "#{tmpfile}.err",
+                                                )
+    stdout = File.read("#{tmpfile}.out") rescue "Error capturing stdout"
+    stderr = File.read("#{tmpfile}.err") rescue "Error capturing stderr"
+    if stdout.size != 0
+      stdout.strip! if stdout.present? # just to make it pretty while still reporting whitespace-only strings
+      test_error "Remote shell is not clean: got some bytes on stdout: '#{stdout}'"
+    end
+    if stderr.size != 0
+      stderr.strip! if stdout.present?
+      test_error "Remote shell is not clean: got some bytes on stderr: '#{stderr}'"
+    end
+    if ! status
+      test_error "Got non-zero return code when trying to run 'true' on remote side."
+    end
+
+    # Check #3: the remote directory exists
+    master.remote_shell_command_reader "test -d #{@provider.remote_dir.bash_escape} && echo DIR-OK", :stdout => tmpfile
+    out = File.read(tmpfile)
+    if out != "DIR-OK\n"
+      test_error "The remote directory doesn't seem to exist."
+    end
+
+    # Check #4: the remote directory is readable
+    master.remote_shell_command_reader "test -r #{@provider.remote_dir.bash_escape} && test -x #{@provider.remote_dir.bash_escape} && echo DIR-READ", :stdout => tmpfile
+    out = File.read(tmpfile)
+    if out != "DIR-READ\n"
+      test_error "The remote directory doesn't seem to be readable"
+    end
+
+    # Ok, all is well.
+    flash[:notice] = "The configuration was tested and seems to be operational."
+    redirect_to :action => :show
+
+  rescue UserKeyTestConnectionError => ex
+    flash[:error]  = ex.message
+    flash[:error] += "\nThis storage is marked as 'offline' until this test pass."
+    @provider.update_column(:online, false)
+    redirect_to :action => :show
+
+  ensure
+    File.unlink "#{tmpfile}.out" rescue true
+    File.unlink "#{tmpfile}.err" rescue true
+
+  end
+
+  # register all files on the provider
+  def autoregister
+    id        = params[:id]
+    @provider = DataProvider.find(id) 
+    unless @provider.has_owner_access?(current_user)
+       flash[:error] = "You cannot autoregister files of a provider that you do not own."
+       respond_to do |format|
+        format.html { redirect_to :action => :show }
+        format.xml  { head :forbidden }
+        format.json { head :forbidden }
+       end
+       return
+    end 
+
+    # Contact remote site and get list of files there
+    fileinfos = BrowseProviderFileCaching.get_recent_provider_list_all(@provider, current_user)
+
+    # Get currently registered files on DP
+    registered = Userfile.where( :data_provider_id => @provider.id )
+
+    # Match them together
+    FileInfo.array_match_all_userfiles(fileinfos, registered)
+
+    # Make validation checks
+    FileInfo.array_validate_for_registration(fileinfos)
+
+    # Register all new ones
+    added_ids = []
+    fileinfos.select do |fi|
+      fi.userfile.blank? &&
+          (fi.symbolic_type == :regular || fi.symbolic_type == :directory)
+    end.each do |fi|
+
+      basename = fi.name
+
+      # Guess best type
+      type     = Userfile.suggested_file_type(basename) || SingleFile
+      type     = FileCollection if fi.symbolic_type == :directory && ! (type < FileCollection)
+
+      # Make the object
+      userfile = type.new(
+          :name             => basename,
+          :user_id          => current_user.id,
+          :group_id         => @provider.group_id,
+          :data_provider_id => @provider.id,
+          :group_writable   => false,
+          :size             => (fi.symbolic_type == :regular ? fi.size : nil), # dir sizes set later
+          :num_files        => (fi.symbolic_type == :regular ? 1       : nil),
+          )
+      if userfile.save
+        added_ids << userfile.id
+        userfile.addlog("Registered on dataprovider '#{@provider.name}'.")
+      end
+
+    end
+
+    # Start size+num_files calculation in background
+    todo = Userfile.where(:id => added_ids, :size => nil)
+    CBRAIN.spawn_with_active_records_if(todo.count > 0, current_user, "Adjust file sizes") do
+      todo.each do |file|
+        file.set_size rescue nil
+      end
+    end
+
+    # TODO: auto-deregister missing files?
+
+    # Report
+    @file_counts = Userfile.where(:id => added_ids).group(:type).count
+    @file_sizes  = Userfile.where(:id => added_ids).group(:type).sum(:size)
+    flash.now[:notice] = "Registered #{view_pluralize(added_ids.size,"new file")}"
+    render show
+  end
+
+    
   private
 
   def data_provider_params #:nodoc:
@@ -842,7 +993,8 @@ class DataProvidersController < ApplicationController
       # they don't control.
       params.require_as_params(:data_provider).permit(
         :name, :description, :group_id, :time_zone,
-        :alternate_host,
+        :alternate_host, :remote_user, :remote_host, :alternate_host, :remote_dir,
+        :remote_port,
         :online, :read_only, :not_syncable,
         :datalad_repository_url, :datalad_relative_path,
         :license_agreements,
@@ -852,7 +1004,7 @@ class DataProvidersController < ApplicationController
   end
 
   def get_type_list #:nodoc:
-    data_provider_list = [ "FlatDirSshDataProvider" ]
+    data_provider_list = [ "UserkeyFlatDirSshDataProvider" ]
     if check_role(:site_manager) || check_role(:admin_user)
       data_provider_list = DataProvider.descendants.map(&:name)
     end
