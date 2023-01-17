@@ -272,6 +272,9 @@
 
 <P>
 
+<% if @provider.type == "UserkeyFlatDirSshDataProvider" %>
+    <%= render :partial => 'show_user_key' %>
+<% else %>
 <div>
   <table>
     <tr><th colspan="2" class="supertitle">Public SSH Key for this CBRAIN Portal</th></tr>
@@ -279,6 +282,8 @@
     <tr><td><PRE class="ssh_key"><%= pretty_ssh_key(RemoteResource.current_resource.get_ssh_public_key || 'Unknown! Talk to sysadmin!') %></PRE></td></tr>
   </table>
 </div>
+
+<% end %>
 
 <% end %>
 
