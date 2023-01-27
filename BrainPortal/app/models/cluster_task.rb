@@ -375,7 +375,10 @@ class ClusterTask < CbrainTask
 
   # Make a given +userfile+ available to the task
   # for processing at +file_path+, which is a relative
-  # path inside the work directory of the task.
+  # path inside the work directory of the task by creating
+  # a soft link to the userfile or its cache. ( Or, in presence
+  # of explicit config flag 'copy_input' - a copy of input data.)
+  #
   # For example, to access the userfile with ID 6 at
   # <workdir>/mincfiles/input.mnc, do:
   #
@@ -479,15 +482,28 @@ class ClusterTask < CbrainTask
       File.unlink(full_path) if File.symlink?(full_path.to_s) # potential race condition here
     end
 
-    # Create the symlink
+
+    # Create the symlink or copy input data
     Dir.chdir(self.full_cluster_workdir) do
       # Do nothing is symlink already exists with proper value.
       # If there is something not a symlink in the way, or a symlink with a different
       # value, the symlink() method will crash, which is what we want to
       # catch the error in the situation.
-      unless File.symlink?(file_path.to_s) && File.readlink(file_path.to_s) == target.to_s
+
+      copy_input = self&.tool_config.copy_input
+
+      unless copy_input || File.symlink?(file_path.to_s) && File.readlink(file_path.to_s) == target.to_s
         File.symlink(target.to_s, file_path.to_s)
       end
+
+      if copy_input
+        source = target.to_s
+        needslash=""
+        File.unlink(file_path.to_s) if File.exists?(file_path.to_s) && File.symlink?(file_path.to_s)
+        userfile.cache_copy_to_local_file(full_path)
+      end
+
+
     end
 
     true

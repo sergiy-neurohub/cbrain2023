@@ -75,6 +75,15 @@
         </div>
       <% end %>
 
+      <% t.edit_cell(:copy_input, :header => "Use a copy of the original input data", :show_width => 2) do |f| %>
+        <%= f.check_box :copy_input %>
+        <div class="wide_field_explanation">
+          Check this if the tool is known <strong>to modify its input files </strong> to avoid change.
+          This will force task to copy input data to the task folder rather than link. This reduces the chance of
+          collision between two parallel tasks running on the same input.
+        </div>
+      <% end %>
+
       <% desc_origin, desc_path = @tool_config.boutiques_descriptor_origin_keyword %>
       <% desc_content  = "<strong>(#{desc_origin.capitalize})</strong> ".html_safe %>
       <%

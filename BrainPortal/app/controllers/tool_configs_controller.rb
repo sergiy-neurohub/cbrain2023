@@ -314,7 +314,8 @@ class ToolConfigsController < ApplicationController
       # properties) and the type of instance (thus RAM and
       # CPU requirements) to use.
       :cloud_disk_image, :cloud_vm_user, :cloud_ssh_key_pair, :cloud_instance_type,
-      :cloud_job_slots, :cloud_vm_boot_timeout, :cloud_vm_ssh_tunnel_port
+      :cloud_job_slots, :cloud_vm_boot_timeout, :cloud_vm_ssh_tunnel_port,
+      :copy_input
     )
   end
 

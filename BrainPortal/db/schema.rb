@@ -465,6 +465,7 @@ ActiveRecord::Schema.define(version: 20230304184206) do
     t.string   "container_exec_args"
     t.boolean  "inputs_readonly",                             default: false
     t.string   "boutiques_descriptor_path"
+    t.boolean  "copy_input",                                default: false
     t.index ["bourreau_id"], name: "index_tool_configs_on_bourreau_id", using: :btree
     t.index ["tool_id"], name: "index_tool_configs_on_tool_id", using: :btree
   end
