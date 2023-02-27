@@ -23,7 +23,7 @@
 require 'rails_helper'
 
 describe VaultSmartDataProvider do
-  let(:vault_smart_data_provider) {create(:vault_smart_data_provider)}
+  let(:vault_smart_data_provider) {create(:vault_smart_data_provider, :user_id => 1)}
 
   describe "#after_initialize_select_provider" do
 

@@ -23,7 +23,7 @@
 require 'rails_helper'
 
 describe EnCbrainLocalDataProvider do
-  let(:en_cbrain_local_data_provider) {create(:en_cbrain_local_data_provider, :remote_dir => "remote")}
+  let(:en_cbrain_local_data_provider) {create(:en_cbrain_local_data_provider, :user_id => 1, :remote_dir => "remote")}
   let(:userfile) {create(:single_file, :data_provider => en_cbrain_local_data_provider)}
 
 

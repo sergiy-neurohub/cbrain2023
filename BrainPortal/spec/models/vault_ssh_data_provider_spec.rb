@@ -23,7 +23,7 @@
 require 'rails_helper'
 
 RSpec.describe VaultSshDataProvider, :type => :model do
-  let(:vault_ssh_data_provider) { create(:vault_ssh_data_provider) }
+  let(:vault_ssh_data_provider) { create(:vault_ssh_data_provider, :user_id => 1) }
   let(:userfile)                { create(:single_file, :data_provider => vault_ssh_data_provider) }
   let(:user)                    { mock_model(NormalUser) }
 

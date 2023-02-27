@@ -24,7 +24,7 @@ require 'rails_helper'
 
 describe DataProvider do
 
-  let(:provider)        { create(:data_provider, :online => true, :read_only => false) }
+  let(:provider)        { create(:user_id => 1, :data_provider, :online => true, :read_only => false) }
   let(:userfile)        { mock_model(Userfile,       :name => "userfile_mock",       :user_id => 1).as_null_object }
   let(:singlefile)      { mock_model(SingleFile,     :name => "singlefile_mock",     :user_id => 1).as_null_object }
   let(:filecollection)  { mock_model(FileCollection, :name => "filecollection_mock", :user_id => 1).as_null_object }

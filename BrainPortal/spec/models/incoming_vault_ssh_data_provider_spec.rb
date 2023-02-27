@@ -23,7 +23,7 @@
 require 'rails_helper'
 
 describe IncomingVaultSshDataProvider do
-  let(:incoming_vault_ssh_data_provider) {create(:incoming_vault_ssh_data_provider)}
+  let(:incoming_vault_ssh_data_provider) {create(:incoming_vault_ssh_data_provider, :user_id => 1)}
   let(:user) {create(:normal_user)}
 
   describe "#is_browsable?" do

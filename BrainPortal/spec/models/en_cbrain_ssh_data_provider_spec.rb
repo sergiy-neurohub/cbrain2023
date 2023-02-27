@@ -23,7 +23,7 @@
 require 'rails_helper'
 
 describe EnCbrainSshDataProvider do
-  let(:en_cbrain_ssh_data_provider) {create(:en_cbrain_ssh_data_provider)}
+  let(:en_cbrain_ssh_data_provider) {create(:en_cbrain_ssh_data_provider, :user_id => 1)}
   let(:userfile) {create(:single_file, :data_provider => en_cbrain_ssh_data_provider)}
 
   describe "#is_browsable?" do

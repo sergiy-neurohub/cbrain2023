@@ -24,7 +24,7 @@ require 'rails_helper'
 require 'pry-byebug'
 
 describe FlatDirLocalDataProvider do
-  let(:local_data_provider) {create(:flat_dir_local_data_provider)}
+  let(:local_data_provider) {create(:flat_dir_local_data_provider, :user_id => 1)}
   let(:userfile) {create(:single_file, :data_provider => local_data_provider)}
 
   describe "#is_fast_syncing?" do

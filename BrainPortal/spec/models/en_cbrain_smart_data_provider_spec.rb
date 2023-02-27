@@ -23,7 +23,7 @@
 require 'rails_helper'
 
 describe EnCbrainSmartDataProvider do
-  let(:en_cbrain_smart_data_provider) {create(:en_cbrain_smart_data_provider)}
+  let(:en_cbrain_smart_data_provider) {create(:en_cbrain_smart_data_provider, :user_id => 1)}
 
   describe "#after_initialize_select_provider" do
 
