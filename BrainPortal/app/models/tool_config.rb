@@ -647,7 +647,6 @@ class ToolConfig < ApplicationRecord
       :script_epilogue => nil,
       :ncpus           => 1,
       :inputs_readonly => descriptor.custom['cbrain:readonly-input-files'].present?,
-      :copy_input      => descriptor.custom['cbrain:copy-input-files'].present?,
       :boutiques_descriptor_path => (record_path.presence && descriptor.from_file),
       # The following three attributes are for containerization; not sure about values
       :container_engine          => container_engine,

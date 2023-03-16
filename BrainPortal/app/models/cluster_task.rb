@@ -377,7 +377,7 @@ class ClusterTask < CbrainTask
   # for processing at +file_path+, which is a relative
   # path inside the work directory of the task by creating
   # a soft link to the userfile or its cache. ( Or, in presence
-  # of explicit config flag 'copy_input' - a copy of input data.)
+  # of explicit flag 'copy_input' - a copy performed.)
   #
   # For example, to access the userfile with ID 6 at
   # <workdir>/mincfiles/input.mnc, do:
@@ -416,7 +416,7 @@ class ClusterTask < CbrainTask
   # from which the symlink's relative path to the dp_cache is
   # computed. This is useful for containerized tasks that have mounted
   # to a location different than the original task directory.
-  def make_available(userfile, file_path, userfile_sub_path = nil, start_dir = nil)
+  def make_available(userfile, file_path, userfile_sub_path = nil, start_dir = nil, copy_file = false)
     cb_error "File path argument must be relative" if
       file_path.to_s.blank? || file_path.to_s =~ /\A\//
 
@@ -485,25 +485,20 @@ class ClusterTask < CbrainTask
 
     # Create the symlink or copy input data
     Dir.chdir(self.full_cluster_workdir) do
-      # Do nothing is symlink already exists with proper value.
-      # If there is something not a symlink in the way, or a symlink with a different
-      # value, the symlink() method will crash, which is what we want to
-      # catch the error in the situation.
 
-      copy_input = self&.tool_config.copy_input
+      # copying code
+      return userfile.cache_copy_to_local_file(full_path) if copy_file
+      # presently we do not save what (user)file is copied so no exception is raised
+      # if file or link exists already
 
-      unless copy_input || File.symlink?(file_path.to_s) && File.readlink(file_path.to_s) == target.to_s
+      # symlinking code
+      unless File.symlink?(file_path.to_s) && File.readlink(file_path.to_s) == target.to_s
+        # Do nothing is symlink already exists with proper value.
+        # If there is something not a symlink in the way, or a symlink with a different
+        # value, the symlink() method will crash, which is what we want to
+        # catch the error in the situation.
         File.symlink(target.to_s, file_path.to_s)
       end
-
-      if copy_input
-        source = target.to_s
-        needslash=""
-        File.unlink(file_path.to_s) if File.exists?(file_path.to_s) && File.symlink?(file_path.to_s)
-        userfile.cache_copy_to_local_file(full_path)
-      end
-
-
     end
 
     true
