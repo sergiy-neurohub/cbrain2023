@@ -22,7 +22,12 @@
 
 # Module containing common methods for set and access the
 # license agreements
+#
+#
+#
 module LicenseAgreements
+
+  require 'pry'
 
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
@@ -98,6 +103,9 @@ module LicenseAgreements
     # To keep pre_register licenses agreement, useful when the console is used to save the object
     new_agreements  = (license_agreements || []).sort
     orig_agreements = (@_license_agreements_original || []).sort
+
+    # binding.pry
+
     return true if new_agreements == orig_agreements
     self.meta[:license_agreements] = license_agreements
     @_license_agreements_original  = license_agreements
