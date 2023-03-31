@@ -7,9 +7,10 @@ be found in the documentation.
 
 The information files which do not require signing should ends
 with _info.html, for example 'maillist_form_info.html'. Files relevant to
-NeuroHub should go to neurohub subfolder. If CBRAIN and NeuroHub files are
-named similiary (save for 'neurohub/'), they are considered equivalent and
-shown just once.
+NeuroHub should start with nh- prefix, e.g. nh-NeuroHub_Mailist_Subscription.html.
+If CBRAIN and NeuroHub files are
+named similiary (save for nh- prefix), they are considered equivalent and
+shown just once. The semantic of double nh- prefix is undefined, avoid it.
 
 
 
