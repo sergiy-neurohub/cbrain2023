@@ -31,7 +31,6 @@
     <div class="card-section">
       <% if is_signed %>
         <%= render :partial => 'show_license_text', :locals => {is_signed: is_signed} %>
-        you already signed this agreement
       <% else %>
         <div class="nh_form">
           <%= form_tag :action => :nh_sign_license, :license => @license %>

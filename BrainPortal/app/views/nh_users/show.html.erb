@@ -180,10 +180,12 @@
       <div class="card-row">
         <div class="card-item">
           <div>
-            <p class="card-label">Licenses | <%= @current_licenses.count %></p>
+            <p class="card-label">Licenses | <%= true_licenses.count %></p>
             <div class="card-text pt-2">
-              <% @current_licenses.each do |license| %>
-                <%= link_to "License #{license}", nh_show_license_path(license), :class=>"btn-text primary bg-primary-wash mt-1" %>
+              <% true_licenses.each do |license| %>
+                <%= link_to "#{license}", :controller => :neurohub_portal,
+                            :action => :nh_show_license, :license => license,
+                            :class=>"btn-text primary bg-primary-wash mt-1" %>
               <% end %>
             </div>
           </div>
@@ -195,10 +197,12 @@
       <div class="card-row">
         <div class="card-item">
           <div>
-            <p class="card-label">Important Messages Shown to You | <%= @current_licenses.count %></p>
+            <p class="card-label">Important Messages Shown to You | <%= info_pages.count %></p>
             <div class="card-text pt-2">
               <% info_pages.each do |license| %>
-                <%= link_to "License #{license}", nh_show_license_path(license), :class=>"btn-text primary bg-primary-wash mt-1" %>
+                <%= link_to "#{license}", :controller => :neurohub_portal,
+                            :action => :nh_show_license, :license => license,
+                            :class=>"btn-text primary bg-primary-wash mt-1" %>
               <% end %>
             </div>
           </div>

@@ -40,9 +40,6 @@
                      "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
         <% content.gsub!(/<input\s/i, "<INPUT DISABLED CHECKED ") if is_signed %>
         <%= content.html_safe %>
-        <% if is_signed %>
-          <p class="field_note"> You already signed this license.</p>
-        <% end %>
       </div>
 
       </div>

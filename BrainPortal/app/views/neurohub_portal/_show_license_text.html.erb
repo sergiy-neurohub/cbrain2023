@@ -23,11 +23,23 @@
 -%>
 
 <div class="card-item">
-  <p class="card-label">Carefully read this license agreement.</p>
-  <pre class="card-text license-text">
+
+  <% if ! is_signed %>
+    <p class="card-label">Carefully read this license agreement</p>
+  <% else %>
+    <p class="card-label">A license agreement (already signed by you)</p>
+  <% end %>
+</div>
+  <p class="card-text">
     <% content = File.read(Rails.root + "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
     <% content.gsub!(/<input\s/i, "<INPUT DISABLED CHECKED ") if is_signed %>
     <%= content.html_safe %>
-  </pre>
-
+  </p>
 </div>
+
+
+<% if is_signed %>
+  <div class="card-item">
+  <p class="field_note"> You already signed this license.</p>
+  </div>
+<% end %>
