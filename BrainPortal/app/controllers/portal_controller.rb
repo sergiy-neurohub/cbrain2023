@@ -26,7 +26,6 @@ class PortalController < ApplicationController
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
   include DateRangeRestriction
-  include LicenseActions
 
   api_available :only => [ :swagger ] # GET /swagger returns the .json specification
 
@@ -42,8 +41,8 @@ class PortalController < ApplicationController
 
     @num_files              = current_user.userfiles.count
     @groups                 = current_user.has_role?(:admin_user) ?
-                                current_user.groups.order(:name)  :  # admins see just his own groups
-                                current_user.viewable_groups.without_everyone.order(:name) # normal users
+                                  current_user.groups.order(:name)  :  # admins see just his own groups
+                                  current_user.viewable_groups.without_everyone.order(:name) # normal users
     @default_data_provider  = DataProvider.find_by_id(current_user.meta["pref_data_provider_id"])
     @default_bourreau       = Bourreau.find_by_id(current_user.meta["pref_bourreau_id"])
 
@@ -195,6 +194,40 @@ class PortalController < ApplicationController
     @portal_log = log.html_safe
   end
 
+  def show_license #:nodoc:
+    @license = params[:license].gsub(/[^\w-]+/, "")
+
+    # to reduce user confusion
+    # NeuroHub signed licenses are showed in NeuroHub, CBRAIN signed licenses are shown in CBRAIN
+    if @license.start_with? 'nh-'
+      flash[:error] = 'You are redirected to NeuroHub, this license is best viewed via NeuroHub'
+      redirect_to :controller => :neurohub_portal, :action => :nh_show_license, :license => @license
+      return
+    end
+
+    render :show_infolicense if @license&.end_with? "_info" # info license does not require to accept it
+  end
+
+  def sign_license #:nodoc:
+    @license = params[:license]
+    unless params.has_key?(:agree)
+      flash[:error] = "CBRAIN cannot be used without signing the End User Licence Agreement."
+      redirect_to "/logout"
+      return
+    end
+    num_checkboxes = params[:num_checkboxes].to_i
+    if num_checkboxes > 0
+      num_checks = params.keys.grep(/\Alicense_check/).size
+      if num_checks < num_checkboxes
+        flash[:error] = "There was a problem with your submission. Please read the agreement and check all checkboxes."
+        redirect_to :action => :show_license, :license => @license
+        return
+      end
+    end
+    current_user.accept_license_agreement @license
+    redirect_to start_page_path
+  end
+
   # Display general information about the CBRAIN project.
   def credits #:nodoc:
     # Nothing to do, just let the view show itself.
@@ -209,7 +242,7 @@ class PortalController < ApplicationController
                  'Last Changed Author' => info.lc_author,
                  'Last Changed Rev'    => info.lc_rev,
                  'Last Changed Date'   => info.lc_date
-               }
+    }
 
   end
 
@@ -220,22 +253,22 @@ class PortalController < ApplicationController
 
     # The tools we list. They must have at least one ToolConfig.
     @tools = Tool
-             .all
-             .order(:name)
-             .to_a
-             .reject { |t| t.category == 'background' }
-             .select { |t| t.tool_configs.to_a.any? { |tc|
-                tc.bourreau_id.present?  &&
-                tc.bourreau_id > 0       &&
-                tc.bourreau.try(:online) && # comment out to show them all
-                tc.version_name.present?
-                }
-             }
+                 .all
+                 .order(:name)
+                 .to_a
+                 .reject { |t| t.category == 'background' }
+                 .select { |t| t.tool_configs.to_a.any? { |tc|
+                   tc.bourreau_id.present?  &&
+                       tc.bourreau_id > 0       &&
+                       tc.bourreau.try(:online) && # comment out to show them all
+                       tc.version_name.present?
+                 }
+                 }
 
     # The groups we list.
     @groups = WorkGroup
-              .where(:public => true)
-              .to_a
+                  .where(:public => true)
+                  .to_a
 
     # The AccessProfile named 'Restricted Datasets' must be created be the admin;
     # generally it won't contain any users, just groups.
@@ -267,20 +300,20 @@ class PortalController < ApplicationController
     end
 
     allowed_breakdown = {
-       # Table content  => [ [ row or column attributes ],                                [ content_op ] ]
-       #--------------     -----------------------------------------------------------
-       Userfile         => [ [ :user_id, :group_id, :data_provider_id, :type           ], [ 'count', 'sum(size)', 'sum(num_files)', 'combined_file_rep' ] ],
-       CbrainTask       => [ [ :user_id, :group_id, :bourreau_id,      :type, :status  ], [ 'count', 'sum(cluster_workdir_size)',   'combined_task_rep' ] ],
+        # Table content  => [ [ row or column attributes ],                                [ content_op ] ]
+        #--------------     -----------------------------------------------------------
+        Userfile         => [ [ :user_id, :group_id, :data_provider_id, :type           ], [ 'count', 'sum(size)', 'sum(num_files)', 'combined_file_rep' ] ],
+        CbrainTask       => [ [ :user_id, :group_id, :bourreau_id,      :type, :status  ], [ 'count', 'sum(cluster_workdir_size)',   'combined_task_rep' ] ],
     }
     allowed_breakdown.merge!( {
-       RemoteResource   => [ [ :user_id, :group_id,                    :type           ], [ 'count' ] ],
-       DataProvider     => [ [ :user_id, :group_id,                    :type           ], [ 'count' ] ],
-       Group            => [ [                                         :type, :site_id ], [ 'count' ] ],
-       Tool             => [ [ :user_id, :group_id,                    :category       ], [ 'count' ] ],
-       ToolConfig       => [ [           :group_id, :bourreau_id,      :tool_id        ], [ 'count' ] ],
-       User             => [ [ :type, :site_id, :timezone, :city, :country             ], [ 'count' ] ],
-       DataUsage        => [ [ :user_id, :group_id, :yearmonth                         ], [ 'combined_views', 'combined_copies', 'combined_downloads', 'combined_task_setups' ] ],
-    }) if current_user.has_role?(:site_manager) || current_user.has_role?(:admin_user)
+                                  RemoteResource   => [ [ :user_id, :group_id,                    :type           ], [ 'count' ] ],
+                                  DataProvider     => [ [ :user_id, :group_id,                    :type           ], [ 'count' ] ],
+                                  Group            => [ [                                         :type, :site_id ], [ 'count' ] ],
+                                  Tool             => [ [ :user_id, :group_id,                    :category       ], [ 'count' ] ],
+                                  ToolConfig       => [ [           :group_id, :bourreau_id,      :tool_id        ], [ 'count' ] ],
+                                  User             => [ [ :type, :site_id, :timezone, :city, :country             ], [ 'count' ] ],
+                                  DataUsage        => [ [ :user_id, :group_id, :yearmonth                         ], [ 'combined_views', 'combined_copies', 'combined_downloads', 'combined_task_setups' ] ],
+                              }) if current_user.has_role?(:site_manager) || current_user.has_role?(:admin_user)
 
     @model      = allowed_breakdown.keys.detect { |m| m.table_name == table_name }
     model_brk   = allowed_breakdown[@model] || [[],[]]
@@ -305,13 +338,13 @@ class PortalController < ApplicationController
 
     # Compute access restriction to content
     if @model.respond_to?(:find_all_accessible_by_user)
-       table_content_scope = @model.find_all_accessible_by_user(current_user)  # no .all here yet! We need to compute more later on
+      table_content_scope = @model.find_all_accessible_by_user(current_user)  # no .all here yet! We need to compute more later on
     else
-       table_content_scope = @model.where({})
-       if ! current_user.has_role?(:admin_user)
-         table_content_scope = table_content_scope.where(:user_id  => current_user.available_users.pluck('users.id'))  if @model.columns_hash['user_id']
-         table_content_scope = table_content_scope.where(:group_id => current_user.viewable_group_ids)                 if @model.columns_hash['group_id']
-       end
+      table_content_scope = @model.where({})
+      if ! current_user.has_role?(:admin_user)
+        table_content_scope = table_content_scope.where(:user_id  => current_user.available_users.pluck('users.id'))  if @model.columns_hash['user_id']
+        table_content_scope = table_content_scope.where(:group_id => current_user.viewable_group_ids)                 if @model.columns_hash['group_id']
+      end
     end
 
     # Add fixed values
@@ -327,7 +360,7 @@ class PortalController < ApplicationController
     mode_is_absolute_from = date_filtering["absolute_or_relative_from"] == "absolute" ? true : false
     mode_is_absolute_to   = date_filtering["absolute_or_relative_to"]   == "absolute" ? true : false
     table_content_scope   = add_time_condition_to_scope(table_content_scope, table_name, mode_is_absolute_from , mode_is_absolute_to,
-        date_filtering["absolute_from"], date_filtering["absolute_to"], date_filtering["relative_from"], date_filtering["relative_to"], date_filtering["date_attribute"])
+                                                        date_filtering["absolute_from"], date_filtering["absolute_to"], date_filtering["relative_from"], date_filtering["relative_to"], date_filtering["date_attribute"])
 
     # Compute content fetcher
     table_ops = table_op.split(/\W+/).reject { |x| x.blank? }.map { |x| x.to_sym } # 'sum(size)' => [ :sum, :size ]

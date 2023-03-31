@@ -224,8 +224,8 @@ Rails.application.routes.draw do
   get   "/swagger",               :controller => :portal, :action => :swagger
 
   # Licence handling
-  get   '/show_license/*license', :controller => :portal, :action => :show_license
-  post  '/sign_license/*license', :controller => :portal, :action => :sign_license
+  get   '/show_license/:license', :controller => :portal, :action => :show_license
+  post  '/sign_license/:license', :controller => :portal, :action => :sign_license
 
   # Portal log
   get   '/portal_log',            :controller => :portal, :action => :portal_log
@@ -290,7 +290,7 @@ Rails.application.routes.draw do
     get   '/signout'                => 'nh_sessions#destroy'
     get   '/myaccount'              => 'nh_users#myaccount'
 
-    get '/nh_show_license/*license', :controller => :neurohub_portal, :action => :show_license
+    get '/nh_show_license/*license', :controller => :neurohub_portal, :action => :nh_show_license
     post '/nh_sign_license/*license', :controller => :neurohub_portal, :action => :nh_sign_license
 
     # Globus authentication

@@ -29,19 +29,17 @@
   <%- # license - %>
   <div class="card">
     <div class="card-section">
-      <div class="card-heading">
-        License <%= @license_id %>
-      </div>
       <% if is_signed %>
-        <%= render :partial => 'show_license_text' %>
+        <%= render :partial => 'show_license_text', :locals => {is_signed: is_signed} %>
+        you already signed this agreement
       <% else %>
         <div class="nh_form">
           <%= form_tag :action => :nh_sign_license, :license => @license %>
             <%= hidden_field_tag :license, @license %>
-            <%= render 'show_license_text', is_signed: is_signed%>
+            <%= render :partial => 'show_license_text', :locals => {is_signed: is_signed} %>
             <div class="btn-section">
               <%= submit_tag "I agree with the above statement", :name => :agree,     :class => "btn-solid primary m-1" %>
-              <%= submit_tag "I do not agree",               :name => :not_agree, :class => "btn-text primary bg-primary-wash m-1"  %>
+              <%= submit_tag "I do not agree",                   :name => :not_agree, :class => "btn-text primary bg-primary-wash m-1"  %>
             </div>
           </form>
         </div>

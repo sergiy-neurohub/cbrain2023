@@ -175,12 +175,12 @@ class User < ApplicationRecord
 
   # cbrain required licenses
   def cbrain_license_agreement_set
-    license_agreement_set.reject {|l| l.include?('/')}
+    license_agreement_set.reject {|l| l.start_with?('nh-')}
   end
 
   # neurohub license agreement set
   def neurohub_license_agreement_set
-    RemoteResource.current_resource.license_agreements.select {|l| l.start_with?('neurohub/')}
+    RemoteResource.current_resource.license_agreements.select {|l| l.start_with?('nh-')}
   end
 
   # a flag that all required cbrain licenses are signed
@@ -204,6 +204,13 @@ class User < ApplicationRecord
   def neurohub_licenses_signed=(x) #:nodoc:
     self.meta.reload
     self.meta['neurohub_licenses_signed'] = x
+  end
+
+  def accept_license_agreement(license)  # logs and saves signed agreement id (either on cbrain or neurohub side)
+    signed_agreements = self.meta[:signed_license_agreements] || []
+    signed_agreements << license
+    self.meta[:signed_license_agreements] = signed_agreements
+    self.addlog("Signed license agreement '#{@license}'.")
   end
 
 
@@ -641,12 +648,12 @@ class User < ApplicationRecord
   end
 
   # strips prefix in a string array
-  def strip_prefix(a, prefix='neurohub/')
+  def strip_prefix(a, prefix='nh-')
     a.map {|l| l.sub(/\A#{prefix}/, "")}
   end
 
   # add prefix to string array if missing
-  def add_prefix(a, prefix='neurohub/')
+  def add_prefix(a, prefix='nh-')
     a.map do |l|
       if l.start_with? prefix
         l

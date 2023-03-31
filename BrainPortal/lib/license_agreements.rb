@@ -27,14 +27,12 @@
 #
 module LicenseAgreements
 
-  require 'pry'
-
   Revision_info=CbrainFileRevision[__FILE__] #:nodoc:
 
   # Cbrain License texts are stored in public/licenses folder.
-  # Portal license from neurohub subfolder are relevant only to neurohub portal.
-  # Note that licenses which same file name are considered equivalent
-  # that is user who already signed cbrain_1 does not have to sign neurohub/cbrain_1
+  # Portal license with id/filename that starts from nh- are shown only on neurohub portal.
+  # Note that licenses gpl-1 and nh-gpl-1 are considered equivalent.
+  # that is user who already signed nh-gpl-1 does not have to sign gpl_1
   #
   # suffix _info indicates informational page which should be shown just once
   # those pages have 'Continue' button instead of Agree/Disagree

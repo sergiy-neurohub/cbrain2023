@@ -174,6 +174,38 @@
       </div>
     </div>
 
+    <% info_pages, true_licenses  = @user.signed_license_agreements.partition { |x| x.end_with?('_info')} %>
+
+    <% if true_licenses.present? %>
+      <div class="card-row">
+        <div class="card-item">
+          <div>
+            <p class="card-label">Licenses | <%= @current_licenses.count %></p>
+            <div class="card-text pt-2">
+              <% @current_licenses.each do |license| %>
+                <%= link_to "License #{license}", nh_show_license_path(license), :class=>"btn-text primary bg-primary-wash mt-1" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <% if info_pages.present? %>
+      <div class="card-row">
+        <div class="card-item">
+          <div>
+            <p class="card-label">Important Messages Shown to You | <%= @current_licenses.count %></p>
+            <div class="card-text pt-2">
+              <% info_pages.each do |license| %>
+                <%= link_to "License #{license}", nh_show_license_path(license), :class=>"btn-text primary bg-primary-wash mt-1" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <div class="card-row">
       <div class="card-item">
         <div>

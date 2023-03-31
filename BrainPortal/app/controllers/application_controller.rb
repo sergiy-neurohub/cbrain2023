@@ -142,23 +142,18 @@ class ApplicationController < ActionController::Base
     return false
   end
 
-  def need_sign_license #:nodoc:
-    return if current_user.all_licenses_signed.present?
-    license = current_user.cbrain_unsigned_license_agreements&.first
-    current_user.all_licenses_signed = "yes" if license.blank?
-    [license, :portal]
-  end
-
   def check_license_agreements #:nodoc:
+
     current_user.meta.reload
-    # todo not sure why reload if next all_license_signed method reloads meta
-    license_agreement, portal = need_sign_license
-    return true if params[:controller] =~ /portal$/ && params[:action] =~ /license$/
-    return true if params[:controller] =~ /users/  && (params[:action] == "change_password" || params[:action] == "update")
-    if license_agreement.present?
-      if File.exists?(Rails.root + "public/licenses/#{license_agreement}.html")
+    return true if current_user.all_licenses_signed.present?
+    return true if params[:controller] == "portal" && params[:action] =~ /license$/
+    return true if params[:controller] == "users"  && (params[:action] == "change_password" || params[:action] == "update")
+
+    unsigned_agreements = current_user.cbrain_unsigned_license_agreements
+    unless unsigned_agreements.empty?
+      if File.exists?(Rails.root + "public/licenses/#{unsigned_agreements.first}.html")
         respond_to do |format|
-          format.html { redirect_to :controller => portal, :action => :show_license, :license => license_agreement }
+          format.html { redirect_to :controller => :portal, :action => :show_license, :license => unsigned_agreements.first }
           format.json { render :status => 403, :json => { "error" => "Some license agreements are not signed." } }
           format.xml  { render :status => 403, :xml  => { "error" => "Some license agreements are not signed." } }
         end
@@ -166,6 +161,7 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    current_user.all_licenses_signed = "yes"
     return true
   end
 
@@ -328,8 +324,8 @@ class ApplicationController < ActionController::Base
 
   def unread_messages_to_display #:nodoc:
     current_user.messages
-      .where( :read => false, :message_type => [ 'communication', 'notice', 'error', 'system' ] )
-      .order( "last_sent DESC" )
+        .where( :read => false, :message_type => [ 'communication', 'notice', 'error', 'system' ] )
+        .order( "last_sent DESC" )
   end
 
   # Utility method that allows a controller to add
