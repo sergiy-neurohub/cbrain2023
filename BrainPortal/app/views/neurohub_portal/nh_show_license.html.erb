@@ -24,25 +24,29 @@
 
 <% title("License #{@license_id}", '') %>
 
-<div id="nh_show_license" class="nh_content">
+<div id="nh_portal_license" class="nh_content">
   <% is_signed = current_user.signed_license_agreements.include?(@license) %>
   <%- # license - %>
   <div class="card">
     <div class="card-section">
-      <% if is_signed %>
-        <%= render :partial => 'show_license_text', :locals => {is_signed: is_signed} %>
-      <% else %>
         <div class="nh_form">
-          <%= form_tag :action => :nh_sign_license, :license => @license %>
-            <%= hidden_field_tag :license, @license %>
-            <%= render :partial => 'show_license_text', :locals => {is_signed: is_signed} %>
-            <div class="btn-section">
-              <%= submit_tag "I agree with the above statement", :name => :agree,     :class => "btn-solid primary m-1" %>
-              <%= submit_tag "I do not agree",                   :name => :not_agree, :class => "btn-text primary bg-primary-wash m-1"  %>
-            </div>
-          </form>
+
+          <% if ! is_signed %>
+            <%= form_tag :action => :nh_sign_license, :license => @license %>
+              <%= hidden_field_tag :license, @license %>
+          <% end %>
+
+          <%= render :partial => 'show_license_text', :locals => {is_signed: is_signed} %>
+
+          <% if ! is_signed %>
+              <div class="status error"><%= nh_icon_error %> This license agreement is not yet signed. </div>
+              <div class="btn-section">
+                <%= submit_tag "I agree with the above statement", :name => :agree, :class => "btn-solid primary m-1" %>
+                <%= submit_tag "I do not agree", :name => :not_agree, :class => "btn-text primary bg-primary-wash m-1" %>
+              </div>
+            </form>
+          <% end %>
         </div>
-      <% end %>
     </div>
   </div>
 </div>

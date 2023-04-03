@@ -94,9 +94,9 @@ class ApplicationController < ActionController::Base
       Time.zone = ActiveSupport::TimeZone[syszone]
       CbrainRailsPortal::Application.config.time_zone = syszone
       #Rails::Initializer.new(Rails.configuration).initialize_time_zone
-    #else
-    #  testtime = Userfile.first.created_at
-    #  puts "\e[1;33;41mTIME ZONE STAYS SAME: #{syszone} TEST: #{testtime}\e[0m"
+      #else
+      #  testtime = Userfile.first.created_at
+      #  puts "\e[1;33;41mTIME ZONE STAYS SAME: #{syszone} TEST: #{testtime}\e[0m"
     end
     true
   end

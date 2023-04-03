@@ -27,28 +27,34 @@
   <div class="card">
     <div class="card-section">
 
-    <% if !is_signed %>
       <div class="nh_form">
-        <%= form_tag :action => :nh_sign_license, :license => @license %>
-        <%= hidden_field_tag :license, @license %>
-    <% end %>
+        <div class="card-item">
+          <% if !is_signed %>
 
-      <p class="card-label">Carefully read the following important information:</p>
-      <p class="card-text license-text">
-        <% content = File.read(Rails.root +
-                     "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
-        <% content.gsub!(/<input\s/i, "<INPUT DISABLED CHECKED ") if is_signed %>
-        <%= content.html_safe %>
-      </p>
+            <%= form_tag :action => :nh_sign_license, :license => @license %>
+            <%= hidden_field_tag :license, @license %>
+            <p class="card-label">Carefully read the following</p>
+          <% else %>
+            <p class="card-label">This information has been already shown to you</p>
+          <% end %>
 
+          <div class="card-text license-text">
+            <% content = File.read(Rails.root +
+                                       "public/licenses/#{@license}.html") rescue "(Error fetching license text)" %>
+            <% content.gsub!(/<input\s/i, "<INPUT DISABLED CHECKED ") if is_signed %>
+            <%= content.html_safe %>
+          </div>
+
+
+          <% if !is_signed %>
+            <div class="btn-section">
+              <%= submit_tag "I have read this, Continue to NeuroHub", :name => :agree, :class => "btn-solid primary m-1" %>
+            </div>
+            </form>
+          <% end %>
+        </div>
       </div>
-      <div class="btn-section">
-        <%= submit_tag "I have read this, Continue to NeuroHub", :name => :agree, :class => "btn-solid primary m-1" %>
-      </div>
-    <% if !is_signed %>
-      </form>
-    <% end %>
+
     </div>
-
   </div>
 </div>
