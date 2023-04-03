@@ -175,40 +175,10 @@
     </div>
 
     <% info_pages, true_licenses  = @user.signed_license_agreements.partition { |x| x.end_with?('_info')} %>
+    <%= render partial: "neurohub_portal/list_licenses", locals: {licenses: true_licenses, heading: :Licenses} %>
+    <%= render partial: "neurohub_portal/list_licenses", locals: {licenses: info_pages,
+           heading: 'Important Information Pages'} %>
 
-    <% if true_licenses.present? %>
-      <div class="card-row">
-        <div class="card-item">
-          <div>
-            <p class="card-label">Licenses | <%= true_licenses.count %></p>
-            <div class="card-text pt-2">
-              <% true_licenses.each do |license| %>
-                <%= link_to "#{license}", :controller => :neurohub_portal,
-                            :action => :nh_show_license, :license => license,
-                            :class=>"btn-text primary bg-primary-wash mt-1" %>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-
-    <% if info_pages.present? %>
-      <div class="card-row">
-        <div class="card-item">
-          <div>
-            <p class="card-label">Important Messages Shown to You | <%= info_pages.count %></p>
-            <div class="card-text pt-2">
-              <% info_pages.each do |license| %>
-                <%= link_to "#{license}", :controller => :neurohub_portal,
-                            :action => :nh_show_license, :license => license,
-                            :class=>"btn-text primary bg-primary-wash mt-1" %>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
 
     <div class="card-row">
       <div class="card-item">
