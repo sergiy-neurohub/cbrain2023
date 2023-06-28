@@ -249,6 +249,10 @@ class BoutiquesClusterTask < ClusterTask
         self.addlog("Attempting to save result file #{path}")
         name, userfile_class = name_and_type_for_output_file(output, path)
 
+        # Select an alternative and safe output type when guessing it produces a mismatch
+        userfile_class = SingleFile     if File.file?(path)      && !(userfile_class <= SingleFile)
+        userfile_class = FileCollection if File.directory?(path) && !(userfile_class <= FileCollection)
+
         # Save the file (possible overwrite if race condition)
         outfile = safe_userfile_find_or_new(userfile_class, :name => name)
 
@@ -271,7 +275,7 @@ class BoutiquesClusterTask < ClusterTask
           invoke_params[input.id]
         end.compact.uniq
         parent_userfiles = Userfile.where(:id => all_file_input_ids).to_a
-        self.addlog_to_userfiles_these_created_these(parent_userfiles, [outfile]) if parent_userfiles.present?
+        self.addlog_to_userfiles_these_created_these(parent_userfiles, [outfile], "", 2) if parent_userfiles.present?
 
         # If there is only one input file, we move the output under it
         if parent_userfiles.size == 1
@@ -299,7 +303,7 @@ class BoutiquesClusterTask < ClusterTask
         self.addlog "Attempting to update input '#{userfile.name}' on DataProvider '#{userfile.data_provider.name}'"
         userfile.cache_is_newer
         userfile.sync_to_provider
-        self.addlog_to_userfiles_processed(userfile, "(content modified in place)")
+        self.addlog_to_userfiles_processed(userfile, "(content modified in place)", 1)
       end
     end
 

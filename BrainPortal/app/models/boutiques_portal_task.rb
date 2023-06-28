@@ -220,7 +220,7 @@ class BoutiquesPortalTask < PortalTask
     # Check the content of all CbrainFileLists (cbcsv)
     # ------------------------------------------------
     # Get all the input cbcsv files
-    cbcsvs  = self.cbcsv_files
+    cbcsvs  = self.cbcsv_files # [ [input, cbcsv_userfile], [input, cbcsv_userfile], ... ]
     numRows = nil # Keep track of number of files per cbcsv
     # Validate each cbcsv (all columns match per row, user has access to the file)
     for input, cbcsv in cbcsvs
@@ -232,8 +232,8 @@ class BoutiquesPortalTask < PortalTask
       # If the number of rows does not match, error
       # We need only check this for inputs that are not "list".
       if ! input.list
-        currNumRows = (cbcsv.ordered_raw_ids || []).length
-        numRows     = numRows.nil? ? currNumRows : numRows
+        currNumRows   = (cbcsv.ordered_raw_ids || []).length
+        numRows     ||= currNumRows
         if currNumRows != numRows
           params_errors.add(invokename, " does not have the same number of files (#{currNumRows}) as in other present cbcsvs (#{numRows})")
           next
@@ -267,6 +267,12 @@ class BoutiquesPortalTask < PortalTask
     self.addlog(descriptor.file_revision_info.format("%f rev. %s %a %d"))
     valid_input_keys = descriptor.inputs.map(&:id)
 
+    # Add author(s) information
+    authors = Array(descriptor.custom['cbrain:author'])
+    authors = authors.empty? ? "No CBRAIN author information" :
+                                authors.join(", ")
+    self.addlog("CBRAIN Author(s): #{authors}")
+
     # Add information about Boutiques module
     boutiques_module_information().each do |log_info|
        self.addlog(log_info)
@@ -286,16 +292,18 @@ class BoutiquesPortalTask < PortalTask
       input = descriptor.file_inputs.first
 
       fillTask = lambda do |userfile,tsk,extra_params=nil|
-        tsk.invoke_params[input.id] = userfile.id
+        tsk.params[:interface_userfile_ids] |= [ userfile.id.to_s ]
+        tsk.invoke_params[input.id]          = userfile.id
         tsk.sanitize_param(input)
-        tsk.description ||= ''
-        tsk.description  += " #{input.id}: #{userfile.name}"
+        tsk.description = "#{input.id}: #{userfile.name}\n#{tsk.description}".strip
         tsk.invoke_params.merge!(extra_params.slice(*valid_input_keys)) if extra_params
         tsk.description.strip!
         tsk
       end
 
-      tasklist = self.params[:interface_userfile_ids].map do |userfile_id|
+      original_userfiles_ids = self.params[:interface_userfile_ids].dup
+      self.params[:interface_userfile_ids] = [] # zap it; we'll re-introduce each userfile.id as needed
+      tasklist = original_userfiles_ids.map do |userfile_id|
         f = Userfile.find_accessible_by_user( userfile_id, self.user, :access_requested => file_access_symbol() )
 
         # One task for that file
@@ -326,7 +334,7 @@ class BoutiquesPortalTask < PortalTask
     # --------------------------------------
 
     # Grab all the cbcsv input files
-    cbcsvs = self.cbcsv_files(descriptor)
+    cbcsvs = self.cbcsv_files(descriptor) # [ [input, cbcsv_userfile], [input, cbcsv_userfile], ... ]
     cbcsvs.reject! { |pair| pair[0].list } # ignore file inputs with list=true; they just get the CBCSV directly
 
     # Default case: just return self as a single task
@@ -758,7 +766,7 @@ class BoutiquesPortalTask < PortalTask
     integrator_modules.map do |module_name, _|
       module_name = module_name.constantize
       rev_info    = module_name::Revision_info
-      "#{rev_info.basename} rev. #{rev_info.short_commit} #{rev_info.time} (author: #{rev_info.author})"
+      rev_info.format("%f rev. %s %a %d")
     end
   end
 

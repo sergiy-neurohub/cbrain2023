@@ -20,12 +20,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-require 'stringio'
-require 'base64'
-require 'fileutils'
-require 'json'
-require 'json-schema'
-
 #Abstract model representing a job running on a cluster. This is the core class for
 #launching GridEngine/PBS/MOAB/UNIX jobs (etc) using Scir.
 #
@@ -521,14 +515,14 @@ class ClusterTask < CbrainTask
   # and add a log entry to each userfile identifying that
   # it was processed by the current task. An optional
   # comment can be appended to the message.
-  def addlog_to_userfiles_processed(userfiles,comment = "")
+  def addlog_to_userfiles_processed(userfiles, comment = "", caller_level=0)
     userfiles = [ userfiles ] unless userfiles.is_a?(Array)
     myname   = self.fullname
     mylink   = "/tasks/#{self.id}"  # can't use show_task_path() on Bourreau side
     mymarkup = "[[#{myname}][#{mylink}]]"
     userfiles.each do |u|
       next unless u.is_a?(Userfile) && u.id
-      u.addlog_context(self,"Processed by task #{mymarkup} #{comment}",3)
+      u.addlog_context(self,"Processed by task #{mymarkup} #{comment}",3+caller_level)
     end
   end
 
@@ -536,14 +530,14 @@ class ClusterTask < CbrainTask
   # and add a log entry to each userfile identifying that
   # it was created by the current task. An optional
   # comment can be appended to the message.
-  def addlog_to_userfiles_created(userfiles,comment = "")
+  def addlog_to_userfiles_created(userfiles, comment = "", caller_level=0)
     userfiles = [ userfiles ] unless userfiles.is_a?(Array)
     myname   = self.fullname
     mylink   = "/tasks/#{self.id}" # can't use show_task_path() on Bourreau side
     mymarkup = "[[#{myname}][#{mylink}]]"
     userfiles.each do |u|
       next unless u.is_a?(Userfile) && u.id
-      u.addlog_context(self,"Created/updated by #{mymarkup} #{comment}",3)
+      u.addlog_context(self,"Created/updated by #{mymarkup} #{comment}",3+caller_level)
     end
   end
 
@@ -552,7 +546,7 @@ class ClusterTask < CbrainTask
   # and records for each created file what were the creators, and for
   # each creator file what files were created, along with a link
   # to the task itself. An optional comment can be appended to the header message.
-  def addlog_to_userfiles_these_created_these(creatorlist, createdlist, comment = "")
+  def addlog_to_userfiles_these_created_these(creatorlist, createdlist, comment="", caller_level=0)
 
     # Two lists of userfiles. Make sure their contents are OK.
     creatorlist = Array(creatorlist).select { |u| u.is_a?(Userfile) && u.id }
@@ -570,9 +564,9 @@ class ClusterTask < CbrainTask
     # Add an entry to each creator files, listing created files
     creatorlist.each do |creator|
       if createdlist.size == 1 # a common case; create shorter log entry then.
-        creator.addlog_context(self, "Used by task #{mymarkup} to create #{createdMarkups[0]}. #{comment}", 4)
+        creator.addlog_context(self, "Used by task #{mymarkup} to create #{createdMarkups[0]}. #{comment}", 4+caller_level)
       else
-        creator.addlog_context(self, "Used by task #{mymarkup}, list of #{createdlist.size} created files follow. #{comment}", 4)
+        creator.addlog_context(self, "Used by task #{mymarkup}, list of #{createdlist.size} created files follow. #{comment}", 4+caller_level)
         createdMarkups.each_slice(5).each do |files_4|
           creator.addlog(files_4.join(", "))
         end
@@ -582,9 +576,9 @@ class ClusterTask < CbrainTask
     # Add an entry to each created files, listing creators
     createdlist.each do |created|
       if creatorlist.size == 1 # a common case; create shorter log entry then.
-        created.addlog_context(self, "Created/updated by task #{mymarkup} from file #{creatorMarkups[0]}. #{comment}", 4)
+        created.addlog_context(self, "Created/updated by task #{mymarkup} from file #{creatorMarkups[0]}. #{comment}", 4+caller_level)
       else
-        created.addlog_context(self, "Created/updated by task #{mymarkup}, list of #{creatorlist.size} used files follow. #{comment}", 4)
+        created.addlog_context(self, "Created/updated by task #{mymarkup}, list of #{creatorlist.size} used files follow. #{comment}", 4+caller_level)
         creatorMarkups.each_slice(5).each do |files_4|
           created.addlog(files_4.join(", "))
         end
@@ -1784,27 +1778,16 @@ class ClusterTask < CbrainTask
     # Joined version of all the lines in the scientific script
     command_script = commands.join("\n")
 
-    # Add HOME switching back and forth
-    command_script = <<-HOME_SWITCHING
-# Preserve system HOME, then switch it to the task's workdir
-_cbrain_home_="$HOME"
-export HOME=#{self.full_cluster_workdir.bash_escape}
-
-#{command_script}
-
-# Restore system HOME (while preserving the latest exit code)
-_cbrain_status_="$?"
-export HOME="$_cbrain_home_"
-bash -c "exit $_cbrain_status_"
-    HOME_SWITCHING
-
     # In case of Docker or Singularity, we rewrite the scientific script inside
     # yet another wrapper script.
     if self.use_docker?
+      command_script = wrap_new_HOME(command_script, self.full_cluster_workdir)
       command_script = self.docker_commands(command_script)
     elsif self.use_singularity?
       load_singularity_image
-      command_script = self.singularity_commands(command_script)
+      command_script = self.singularity_commands(command_script) # note: invokes wrap_new_HOME itself
+    else
+      command_script = wrap_new_HOME(command_script, self.full_cluster_workdir)
     end
 
     # Create a bash science script out of the text
@@ -1866,13 +1849,38 @@ date '+CBRAIN Task Starting At %s : %F %T' 1>&2
 # Record runtime environment
 bash #{Rails.root.to_s.bash_escape}/vendor/cbrain/bin/runtime_info.sh > #{runtime_info_basename}
 
-# stdout and stderr captured below will be re-substituted in
-# the output and error of this script.
-bash '#{sciencefile}' >> #{science_stdout_basename} 2> #{science_stderr_basename} </dev/null
-status="$?"
+# With apptainer/singularity jobs, we sometimes get an error booting the container,
+# so we try up to five times.
+for singularity_attempts in 1 2 3 4 5 ; do  # note: the number 5 is used a bit below in an 'if'
+  SECONDS=0 # this is a special bash variable, see the doc
 
-echo '__CBRAIN_CAPTURE_PLACEHOLDER__'      # where stdout captured below will be substituted
-echo '__CBRAIN_CAPTURE_PLACEHOLDER__'      1>&2 # where stderr captured below will be substituted
+  # stdout and stderr captured below will be re-substituted in
+  # the output and error of this script here (this one!)
+  bash '#{sciencefile}' >> #{science_stdout_basename} 2>> #{science_stderr_basename} </dev/null
+  status="$?"
+
+  test $status -eq 0 && break # all is good
+
+  # Detect failed boot of singularity container
+  if ! grep -i 'FATAL.*container.*creation.*failed' #{science_stderr_basename} >/dev/null ; then
+    break # move on, for any other error or even non zero successes
+  fi
+
+  # Detect that final attempt to boot failed
+  if test $singularity_attempts -eq 5 ; then
+    echo "Apptainer container boot attempts all failed, giving up."
+    status=99 # why not
+    break
+  fi
+
+  # Cleanup and try again
+  echo "Apptainer boot attempt number $singularity_attempts failed, trying again."
+  grep -v -i 'FATAL.*container.*creation.*failed' < #{science_stderr_basename} > #{science_stderr_basename}.clean
+  mv -f #{science_stderr_basename}.clean #{science_stderr_basename}
+done
+
+echo '__CBRAIN_CAPTURE_PLACEHOLDER__'      # where stdout captured above will be substituted
+echo '__CBRAIN_CAPTURE_PLACEHOLDER__'      1>&2 # where stderr captured above will be substituted
 date "+CBRAIN Task Ending With Status $status After $SECONDS seconds, at %s : %F %T"
 date "+CBRAIN Task Ending With Status $status After $SECONDS seconds, at %s : %F %T" 1>&2
 
@@ -2318,6 +2326,12 @@ docker_image_name=#{full_image_name.bash_escape}
     return self.bourreau.singularity_executable_name.presence || "singularity"
   end
 
+  # Returns true if the admin has configured this option in the
+  # task's ToolConfig attributes.
+  def use_singularity_short_workdir?
+    self.tool_config.singularity_use_short_workdir
+  end
+
   # Returns the command line(s) associated with the task, wrapped in
   # a Singularity call if a Singularity image has to be used. +command_script+
   # is the raw scientific bash script.
@@ -2330,27 +2344,34 @@ docker_image_name=#{full_image_name.bash_escape}
     # Numbers in (paren) correspond to the comment
     # block in the script, well below.
 
-    # (6) The path to the task's work directory
-    task_workdir  = self.full_cluster_workdir # a string
+    # (7) The path to the task's work directory
+    task_workdir   = self.full_cluster_workdir # a string
+    short_workdir  = "/T#{self.id}" # only used in short workdir mode
+    effect_workdir = use_singularity_short_workdir? ? short_workdir : task_workdir
 
     # (1) additional singularity execution command options defined in ToolConfig
     container_exec_args = self.tool_config.container_exec_args.presence
 
     # (2) The root of the DataProvider cache
     cache_dir      = self.bourreau.dp_cache_dir
-    gridshare_dir  = self.bourreau.cms_shared_dir # not mounted explicitely
-    cache_dir_syml = "#{gridshare_dir}/DP_Cache"
 
-    # (3) Ext3 capture mounts, if any.
+    # (3) The root of the GridShare area (all tasks workdirs)
+    gridshare_dir  = self.bourreau.cms_shared_dir # not mounted explicitely
+
+    # (6) Ext3 capture mounts, if any.
     # These will look like "-B .capt_abcd.ext3:/path/workdir/abcd:image-src=/"
     # While we are building these options, we're also creating
     # the ext3 filesystems at the same time, if needed.
     esc_capture_mounts = ext3capture_basenames().inject("") do |sing_opts,(basename,size)|
       fs_name    = ".capt_#{basename}.ext3"      # e.g. .capt_work.ext3
-      mountpoint = "#{task_workdir}/#{basename}" # e.g. /path/to/workdir/work
+      mountpoint = "#{effect_workdir}/#{basename}" # e.g. /path/to/workdir/work or /T123/work
       install_ext3fs_filesystem(fs_name,size)
+      safe_mkdir(basename)
       "#{sing_opts} -B #{fs_name.bash_escape}:#{mountpoint.bash_escape}:image-src=/"
     end
+    # This list will be used to make a device number check: all components
+    # must be on a device different from the one for the work directory.
+    capture_basenames = ext3capture_basenames.map { |basename,_| basename }
 
     # (4) More -B (bind mounts) for all the local data providers.
     # This will be a string "-B path1 -B path2 -B path3" etc.
@@ -2371,8 +2392,27 @@ docker_image_name=#{full_image_name.bash_escape}
       "#{sing_opts} --overlay=#{path.bash_escape}:ro"
     end
 
+    # Wrap new HOME environment
+    command_script = wrap_new_HOME(command_script, effect_workdir)
+
     # Set singularity command
     singularity_commands = <<-SINGULARITY_COMMANDS
+
+# Note to developers:
+# During a standard CBRAIN task, this script is invoked with no arguments
+# at all. For debugging situations, an admin can invoke it with the single
+# argument "shell" to bypass the tool's execution and launch a convenient
+# interactive shell inside the container.
+
+# These two variables control the mode switching at the end of the script.
+mode="exec"
+sing_basename=./#{singularity_wrapper_basename.bash_escape} # note: the ./ is necessary
+
+# In 'shell' mode we replace them with other things.
+if test $# -eq 1 -a "X$1" = "Xshell" ; then
+  mode="shell"
+  sing_basename=""
+fi
 
 # Build a local wrapper script to run in a singularity container
 cat << \"SINGULARITYJOB\" > #{singularity_wrapper_basename.bash_escape}
@@ -2408,6 +2448,34 @@ if test ! -d #{gridshare_dir.bash_escape} ; then
   exit 2
 fi
 
+# CBRAIN internal consistency test 5: short task workdir (optional).
+# It's possible the path below will be the same as the task workdir if no shortening
+# is configured, so the test becomes trivially like test 2.
+if test ! -d #{effect_workdir.bash_escape} ; then
+  echo "Container missing shortened task work directory:" #{effect_workdir.bash_escape}
+  exit 2
+fi
+
+# Make sure we are in the task's workdir now.
+cd #{effect_workdir.bash_escape} || exit 2
+
+# CBRAIN internal consistency test 6: all mounted ext3 filesystems should be
+# on a device different from the task's workdir. Otherwise something went
+# wrong with the mounts. Singularity or Apptainer can sometimes do that
+# if the command is improperly built (order of mounts args etc).
+workdir_devid=$(stat -c %d .)  # dev number of task workdir
+for mount in #{capture_basenames.map(&:bash_escape).join(" ")} ; do
+   mnt_devid=$(stat -c %d $mount 2>/dev/null)
+   if test -z "$mnt_devid" ; then
+     echo "Container missing mount point for '$mount'."
+     exit 2
+   fi
+   if test "$workdir_devid" -eq "$mnt_devid" ; then
+     echo "Container has mount point for '$mount' but it is not mounted to an external filesystem."
+     exit 2
+   fi
+done
+
 # Scientific commands start here
 
 #{command_script}
@@ -2415,29 +2483,31 @@ SINGULARITYJOB
 
 # Make sure it is executable
 chmod 755 #{singularity_wrapper_basename.bash_escape}
-# Other should have executable right on all components
-# of the path in order to be mounted by singularity.
-chmod o+x . .. ../.. ../../..
 
 # Invoke Singularity with our wrapper script above.
 # Tricks used here:
 # 1) we supply (if any) additional options for the exec command
 # 2) we mount the local data provider cache root directory
-# 3) we mount (if any) capture ext3 filesystems
+#   a) at its original cluster full path
+#   b) at /DP_Cache (used only when shortening workdir)
+# 3) we mount the root of the gridshare area (for all tasks)
 # 4) we mount each (if any) of the root directories for local data providers
 # 5) we mount (if any) other fixed file system overlays
-# 6) with -H we set the task's work directory as the singularity $HOME directory
+# 6) we mount (if any) capture ext3 filesystems
+# 7) with -H we set the task's work directory as the singularity $HOME directory
 #{singularity_executable_name}                  \\
-    exec                                        \\
+    $mode                                       \\
     #{container_exec_args}                      \\
     -B #{cache_dir.bash_escape}                 \\
-    -B #{cache_dir_syml.bash_escape}            \\
-    #{esc_capture_mounts}                       \\
+    -B #{cache_dir.bash_escape}:/DP_Cache       \\
+    -B #{gridshare_dir.bash_escape}             \\
     #{esc_local_dp_mountpoints}                 \\
     #{overlay_mounts}                           \\
-    -H #{task_workdir.bash_escape}              \\
+    -B #{task_workdir.bash_escape}:#{effect_workdir.bash_escape} \\
+    #{esc_capture_mounts}                       \\
+    -H #{effect_workdir.bash_escape}            \\
     #{container_image_name.bash_escape}         \\
-    ./#{singularity_wrapper_basename.bash_escape}
+    $sing_basename
 
     SINGULARITY_COMMANDS
 
@@ -2451,6 +2521,24 @@ chmod o+x . .. ../.. ../../..
   ##################################################################
 
   private
+
+  # Add HOME switching back and forth to a bash script;
+  # preserve the status returned by the script too.
+  def wrap_new_HOME(script, new_home)
+    new_home_script = <<-HOME_SWITCHING
+# Preserve system HOME, then switch it
+_cbrain_home_="$HOME"
+export HOME=#{new_home.bash_escape}
+
+#{script}
+
+# Restore system HOME (while preserving the latest exit code)
+_cbrain_status_="$?"
+export HOME="$_cbrain_home_"
+bash -c "exit $_cbrain_status_"
+    HOME_SWITCHING
+    new_home_script
+  end
 
   # Returns an array of directory paths for all
   # online data providers that are local to the current
@@ -2492,7 +2580,7 @@ chmod o+x . .. ../.. ../../..
     end
 
     # Format it. Only works on linux obviously
-    system("echo y | mkfs.ext3 -t ext3 -q -E root_owner  #{filename.bash_escape}")
+    system("echo y | mkfs.ext3 -t ext3 -m 0 -q -E root_owner #{filename.bash_escape}")
     status  = $? # A Process::Status object
     if ! status.success?
       cb_error "Cannot format EXT3 filesystem file '#{filename}': #{status.to_s}"
