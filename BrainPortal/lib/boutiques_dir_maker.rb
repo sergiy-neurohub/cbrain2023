@@ -25,8 +25,8 @@ require 'fileutils'
 # Some tools expect that a directory e.g. results, etc exists in the working directory
 #
 # While traditionally we add to the boutiques command line prefix akin to 'mkdir -p [OUTPUT];'
-# external collaborators might dislike polluting the command line with technical staff
-# or need a clean boutiques descriptor which does not create any new folders
+# external collaborators might dislike polluting the command line with technical details
+# and prefer a clean boutiques descriptor which does not create any new folders
 # The the `cbrain:integrator_modules` section look like:
 #
 #     "BoutiquesDirMaker":
@@ -78,7 +78,7 @@ module BoutiquesDirMaker
 
       # replacing weird and special characters
       if path.gsub!(/[^0-9A-Za-z.\/\-_ ]+|(\.\.+)/, '_')
-        self.addlog("Note, special symbols are encountered in directory name which is replace with '#{path}'")
+        self.addlog("Note that in '#{path}', underscore is used instead of special symbol(s)")
       end
       path
     end
